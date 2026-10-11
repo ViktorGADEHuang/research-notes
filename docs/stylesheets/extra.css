@@ -78,6 +78,8 @@
 @media (prefers-reduced-motion: reduce) { .md-typeset .grid.cards > ul > li, .md-typeset .hero-btn { transition: none; } }
 
 /* Three connected reinforcement-learning sections. */
+.md-typeset p > code, .md-typeset li > code { overflow-wrap: anywhere; }
+.md-typeset .md-typeset__table { max-width: 100%; }
 .md-typeset .rl-badge { display: inline-block; padding: .2rem .6rem; background: var(--research-surface); color: var(--research-accent); border: 1px solid var(--research-border); border-radius: 6px; font-size: .67rem; }
 .md-typeset .arithmatex { overflow-x: auto; overflow-y: hidden; padding-block: .4rem; }
 .md-typeset .arithmatex mjx-container { max-width: 100%; }

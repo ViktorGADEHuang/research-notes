@@ -89,8 +89,8 @@ def main(steps, seed):
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
             # 经验回放容量、开始学习前的采样步数、每批样本数。
             buffer_size=20000, learning_starts=100, batch_size=64,
-        # 决定多频繁学习与每次做多少梯度更新；SAC auto 自动调节熵系数。
-        train_freq=1, gradient_steps=1, action_noise=noise,
+            # 每交互一步后进行一次梯度更新；训练初期先积累经验。
+            train_freq=1, gradient_steps=1, action_noise=noise,
         )
         # 记录未训练策略的评估均值，作为观察起点。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,

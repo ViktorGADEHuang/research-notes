@@ -29,7 +29,7 @@ def main(steps, seed):
         model = A2C(
             # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
-            # 采集长度决定一次更新前收集多少步；PPO 还会分小批量重复更新。
+            # 每个环境先采集 32 步，再用这段数据更新 Actor 与 Critic。
             n_steps=32,
         )
         # 记录未训练策略的评估均值，作为观察起点。

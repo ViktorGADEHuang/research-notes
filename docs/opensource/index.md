@@ -1,6 +1,6 @@
-# 📚 开源学习资料汇总
+# 开源学习资料：带着问题查原始来源
 
-> 汇集机器人、计算机视觉、人工智能等领域的优质开源学习资源，持续整理，不断更新。
+先用本站的图解建立概念，再到原始资料核对公式与接口。资料的用途不同，不必同时读完所有入口。
 
 ---
 
@@ -14,7 +14,19 @@
 **先确定目标**：学理论还是读实现，环境与工具是否匹配；**查原始资料**：官方文档与论文，对照版本与接口；**形成自己的记录**：最小例子与笔记，保留来源与限制。
 
 
-## 🤖 01 · 机器人学习
+## 先按问题选择入口
+
+| 你正在问什么 | 资料入口 | 建议怎么读 |
+| --- | --- | --- |
+| 强化学习算法的目标是什么？ | [Spinning Up](https://spinningup.openai.com/en/latest/spinningup/rl_intro2.html) | 先读关键方程，再把更新步骤与本站公式对照 |
+| 库支持什么动作空间？ | [SB3 算法支持表](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html) | 检查 Discrete / Box，再看对应算法参数；阅读即可 |
+| C++ 的资源由谁负责？ | [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) | 带着所有权、生命周期的问题查条目 |
+| 为什么像素不能直接当成米？ | [OpenCV 相机标定](https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html) | 分清内参、外参、深度与坐标系 |
+| 多文件程序怎样一起编译？ | [CMake 入门](https://cmake.org/cmake/help/latest/guide/tutorial/index.html) | 先理解目标、源文件、配置与构建四个词 |
+
+官方文档可能展示比本教程更新的功能。核对版本、参数默认值和标准要求，不能只根据函数名称复制代码。
+
+## 01 · 机器人学习
 
 ### Robotics Tutorial
 
@@ -38,7 +50,7 @@
 
 ---
 
-## 👁️ 02 · 机器人视觉
+## 02 · 机器人视觉
 
 ### 浙江大学 RoboMaster 视觉组学习资料
 

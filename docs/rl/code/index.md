@@ -52,4 +52,6 @@
 - `learn` 只是触发学习流程，不等于已经学会任务或回报必然增加。
 - 正式比较需要相同环境、训练预算、评估条件和多个训练种子。
 
+`total_timesteps` 是请求的交互步数，部分算法会收完一段数据再停止，因此实际步数可能略多。示例保留 `model.num_timesteps`，帮助区分请求预算与实际采样数量。评估只用 5 幕是为了展示接口，不足以支持可靠的算法排名；确定性评估也不代表已经检验了策略的全部随机行为。细节见 [SB3 的步数与复现说明](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)。
+
 [依赖版本文件](../examples/requirements.txt) · [Gymnasium 环境接口](https://gymnasium.farama.org/api/env/) · [SB3 算法支持表](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)
