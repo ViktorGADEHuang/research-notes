@@ -39,6 +39,10 @@ theme:
 plugins:
   - search
 
+# 内容变动时自动更新资源地址，避免浏览器继续使用旧样式。
+hooks:
+  - hooks/asset_versions.py
+
 nav:
   - 首页: index.md
 
