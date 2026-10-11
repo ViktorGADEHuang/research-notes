@@ -56,3 +56,16 @@ nav:
 
   - 论文阅读:
       - 论文阅读记录: papers/index.md
+
+  - 开源资料: opensource/index.md
+
+
+# Markdown 扩展
+markdown_extensions:
+  - attr_list
+  - md_in_html
+
+# 自定义样式
+extra_css:
+  - stylesheets/extra.css
+
