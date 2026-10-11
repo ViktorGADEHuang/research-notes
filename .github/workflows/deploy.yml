@@ -35,7 +35,7 @@ jobs:
       - name: Build website
         run: mkdocs build --strict
 
-      - name: Check tutorial formatting and downloads
+      - name: Check tutorial formatting and inline examples
         run: python scripts/check_tutorials.py
 
       - name: Configure Pages

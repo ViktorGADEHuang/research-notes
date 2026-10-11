@@ -1,10 +1,9 @@
-"""检查构建后的教程、站内链接与代码包；不导入或执行任何 RL 示例。"""
+"""检查教程、站内链接与正文代码，确保网站没有示例下载资源；不执行 RL。"""
 from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import ast
 import re
-import zipfile
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,7 +77,8 @@ for p in DOCS.rglob('*.svg'):
     diagram = ET.parse(p).getroot()
     check('viewBox' in diagram.attrib, f'{p}: 图示缺少缩放坐标')
 
-python_files = list((DOCS / 'rl/examples').glob('*.py'))
+python_files = list((ROOT / 'examples/rl').glob('*.py'))
+check(len(python_files) == 14, '本地 RL 示例缺失')
 for p in python_files:
     ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
     chapter = DOCS / 'rl/code' / (p.stem + '.md')
@@ -87,14 +87,25 @@ for p in python_files:
         check(p.read_text(encoding='utf-8').strip() in [b.strip() for b in blocks],
               f'网页完整示例与源码不一致: {p.name}')
 
-examples = DOCS / 'programming/cpp/examples'
-with zipfile.ZipFile(examples / 'cpp-examples.zip') as bundle:
-    for p in examples.iterdir():
-        if p.suffix not in ('.cpp', '.txt', '.md'):
-            continue
-        matches = [n for n in bundle.namelist() if Path(n).name == p.name]
-        check(len(matches) == 1 and bundle.read(matches[0]) == p.read_bytes(),
-              f'下载包与源码不一致: {p.name}')
+examples = ROOT / 'examples/cpp'
+check(len(list(examples.glob('*.cpp'))) == 13, '本地 C++ 示例缺失')
+
+# 正文保留模型保存等教学内容，但不发布独立源码文件或压缩包。
+for folder in (DOCS, SITE):
+    for p in folder.rglob('*'):
+        # MkDocs 的压缩站点地图供搜索引擎使用，不是教程下载包。
+        if p.is_file() and p.name != 'sitemap.xml.gz':
+            check(p.suffix.lower() not in {'.zip', '.7z', '.rar', '.tar', '.gz', '.cpp', '.py'},
+                  f'网站仍包含示例下载资源: {p.relative_to(ROOT)}')
+for path, page in pages.items():
+    for link in page.links:
+        check(not re.search(r'/examples/|\.(?:zip|7z|rar|tar|gz|cpp|py)$', urlsplit(link).path, re.I),
+              f'{path.relative_to(ROOT)}: 仍包含示例下载链接 {link}')
+
+cmake = (examples / 'CMakeLists.txt').read_text(encoding='utf-8').strip()
+tooling = (DOCS / 'programming/cpp/tooling.md').read_text(encoding='utf-8')
+check(cmake in [b.strip() for b in re.findall(r'^```cmake\s*\n(.*?)^```', tooling, re.M | re.S)],
+      '网页 CMake 配置与本地源码不一致')
 
 # 独立源码与网页完整示例必须一致；练习片段不参与匹配。
 for p in examples.glob('*.cpp'):
@@ -106,4 +117,4 @@ for p in examples.glob('*.cpp'):
 if errors:
     raise SystemExit('\n'.join(errors))
 print(f'PASS: {len(list(DOCS.rglob("*.md")))} 篇 Markdown、{len(pages)} 个 HTML 页面、'
-      f'{len(python_files)} 个 Python 文件静态语法、C++ 示例与下载包一致；未运行 RL。')
+      f'{len(python_files)} 个 Python 文件静态语法、正文与本地源码一致；无示例下载资源，未运行 RL。')

@@ -3,7 +3,6 @@
 C++ 可以用于机器人节点、传感器接口和性能敏感的数据处理。这里从零解释语法，再讲怎样用现代 C++ 写清接口、管理资源、减少常见错误。示例借用放牧机器人中的距离和位置数据，不代表已经完成相应研究或控制系统。
 
 [从第一个程序开始 →](setup.md){ .md-button .md-button--primary }
-[下载全部代码与 CMake 项目](examples/cpp-examples.zip){ .md-button }
 
 
 ## 看图梳理
@@ -80,7 +79,7 @@ C++ 可以用于机器人节点、传感器接口和性能敏感的数据处理�
 
 这些问题比背英文名更实用。读代码时先找数据创建的位置，再找借用和修改的位置，最后看数据何时销毁；这样能把引用、智能指针和 view 联系起来。
 
-基础与日常示例使用 C++17；cpp20、concurrency、project 使用 C++20；cpp23 使用 C++23。每份 `.cpp` 独立包含 main，不依赖 ROS、仿真器或外部库。示例目录提供 [CMakeLists.txt](examples/CMakeLists.txt)、[运行说明](examples/README.md) 和可选的 C++23 构建开关。
+基础与日常示例使用 C++17；cpp20、concurrency、project 使用 C++20；cpp23 使用 C++23。每份 `.cpp` 独立包含 main，不依赖 ROS、仿真器或外部库。完整代码直接展示在各章正文中；按章节复制到对应 .cpp 文件即可。多文件构建步骤与 CMake 配置见 [第 14 章](tooling.md)，其中提供可选的 C++23 构建开关。
 
 ## 学到这里之后
 

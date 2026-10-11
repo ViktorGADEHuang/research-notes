@@ -1,6 +1,6 @@
 # 第三部分：编程实践
 
-统一使用 **Python**。基础算法直接手写，便于对照公式；深度算法使用成熟库，通过代码认识训练与评估的数据流。每个算法都有完整代码和可下载文件。
+统一使用 **Python**。基础算法直接手写，便于对照公式；深度算法使用成熟库，通过代码认识训练与评估的数据流。每个算法都在正文中展示带注释的完整代码。
 
 !!! tip "没学过 Python，从哪里开始？"
 
@@ -58,4 +58,4 @@
 
 `total_timesteps` 是请求的交互步数，部分算法会收完一段数据再停止，因此实际步数可能略多。示例保留 `model.num_timesteps`，帮助区分请求预算与实际采样数量。评估只用 5 幕是为了展示接口，不足以支持可靠的算法排名；确定性评估也不代表已经检验了策略的全部随机行为。细节见 [SB3 的步数与复现说明](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)。
 
-[依赖版本文件](../examples/requirements.txt) · [Gymnasium 环境接口](https://gymnasium.farama.org/api/env/) · [SB3 算法支持表](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)
+[Gymnasium 环境接口](https://gymnasium.farama.org/api/env/) · [SB3 算法支持表](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)
