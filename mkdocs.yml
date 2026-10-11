@@ -3,13 +3,28 @@ site_name: Viktor's Research Notes
 site_description: 个人科研与技术学习知识库
 site_author: Viktor
 
+
 theme:
   name: material
   language: zh
+
   palette:
-    scheme: default
-    primary: indigo
-    accent: blue
+    # 浅色模式
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: 切换至深色模式
+
+    # 深色模式
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: 切换至浅色模式
+
   features:
     - navigation.tabs
     - navigation.sections
@@ -17,10 +32,27 @@ theme:
     - search.suggest
     - content.code.copy
 
+
 plugins:
   - search
 
 nav:
   - 首页: index.md
+
   - 强化学习:
       - PPO 算法: rl/ppo.md
+
+  - 智能放牧:
+      - 放牧研究概览: herding/index.md
+
+  - 机器人技术:
+      - 机器人学习概览: robotics/index.md
+
+  - 计算机视觉:
+      - 视觉学习概览: vision/index.md
+
+  - 编程技术:
+      - 编程学习概览: programming/index.md
+
+  - 论文阅读:
+      - 论文阅读记录: papers/index.md
