@@ -111,21 +111,52 @@ ready
 
 ## 动手练习
 
-查询编号 2 和 3，分别输出值或 missing，不用 -1 替代缺失值。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
+
+<p class="practice-title">给“查不到”一个明确的输出</p>
+
+正文已经把“位置为 0”与“没有位置”分开。现在沿用 lookup，让调用方分别处理找到和没找到的编号。
+
+**从哪里开始**：在 cpp17.cpp 的 main 中，positions 声明之后加入查询循环；保留 main 外的 lookup 定义。
+
+**按这几步做**：
+
+1. 只查询编号 2 和 3，不修改 positions。
+2. 先检查 optional 是否有值，有值才读取 *x。
+3. 没有值时输出 missing，不用 -1 伪装成位置。
+
+??? tip "需要一点提示？"
+
+    原表只有编号 1 和 2：编号 2 的位置是 3.5，编号 3 没有记录。
+
+??? example "查看参考修改与解释"
+
+    if (auto x = lookup(...)) 检查的是“有没有结果”，不是结果是不是非零。else 分支把缺失明确报告出来。
+
+    **放在哪里**：这是局部修改片段，不是独立完整程序；不要放到 main 外面。
 
     ```cpp
-    // 分别查询两个编号：存在输出数值，不存在输出 missing。
-for (int id : {2, 3}) {
+    // 放在 main 内、positions 声明之后。
+    for (int id : {2, 3}) {
         if (auto x = lookup(positions, id)) {
             std::cout << *x << '\n';
         } else {
             std::cout << "missing\n";
         }
     }
-    // 输出 3.5，然后 missing。
     ```
+
+    **核对这段修改的结果**：只看新增或替换部分的输出；保留的正文演示可能还有其他输出。
+
+    ```text
+    3.5
+    missing
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

@@ -143,11 +143,64 @@ empty frame accepted: false
 
 ## 动手练习
 
-测试单只羊、三只羊重合、重复编号和空帧。预测结果；再把错误原因改成 expected 返回。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    单只羊的中心就是自身、半径 0；全部重合时半径 0 且选第一个编号；重复编号和空帧都返回空。升级 expected 时分别返回 empty frame、duplicate id、non-finite coordinate 等，不要把失败伪装成正常的零半径。
+<p class="practice-title">用边界输入检查统计接口</p>
+
+正文的一帧数据得到正常统计，但真实数据也可能为空、重合或编号重复。先把这些边界情况讲清，再扩展错误报告。
+
+**从哪里开始**：保留 summarize 定义，在 project.cpp 的 main 中增加几个独立测试帧。
+
+**按这几步做**：
+
+1. 先用一只羊判断中心与半径。
+2. 用三只同位置、不同编号的羊判断平局规则。
+3. 比较重复编号与空帧的返回状态；先不引入 C++23。
+
+??? tip "需要一点提示？"
+
+    只有成功的 optional 才能读取 center 和 radius；失败不是“中心为零”。
+
+??? example "查看参考修改与解释"
+
+    单只羊的中心为自身，半径为 0。重合时半径为 0，并保留输入中第一只的编号。重复编号和空帧都无法生成有效统计。
+
+    **放在哪里**：为便于核对输出，用它替换 main 的演示部分；summarize 和数据类型定义保留。
+
+    ```cpp
+    const std::vector<Sheep> one{{7, {2.0, 1.0}}};
+    const std::vector<Sheep> same{
+        {7, {2.0, 1.0}}, {8, {2.0, 1.0}}, {9, {2.0, 1.0}}};
+    const std::vector<Sheep> duplicate{
+        {7, {0.0, 0.0}}, {7, {1.0, 0.0}}};
+    const std::vector<Sheep> empty;
+
+    if (const auto result = summarize(one)) {
+        std::cout << "one radius: " << result->radius_m << '\n';
+    }
+    if (const auto result = summarize(same)) {
+        std::cout << "same farthest: " << result->farthest_id << '\n';
+    }
+    std::cout << std::boolalpha;
+    std::cout << "duplicate accepted: " << summarize(duplicate).has_value() << '\n';
+    std::cout << "empty accepted: " << summarize(empty).has_value() << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    one radius: 0
+    same farthest: 7
+    duplicate accepted: false
+    empty accepted: false
+    ```
+
+    **进阶选做**：读完 C++23 章节后，可将返回类型改为 expected，分别报告 empty frame、duplicate id 等错误。先完成上面的边界检查，再做接口升级。
+
+</div>
+
 
 ## 延伸阅读
 

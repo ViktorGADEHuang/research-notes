@@ -100,11 +100,54 @@ integer: 2, decimal: 2.5
 
 ## 动手练习
 
-把距离改成 `{3.0, 3.1, 8.0}`。严格“大于 3 米”与“大于等于 3 米”分别得到多少？
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    `>` 得到 2；`>=` 得到 3。边界是否算进去由任务定义决定，不是语法帮你决定。
+<p class="practice-title">边界上的 3 米，到底算不算远</p>
+
+正文只统计大于阈值的距离。现在加入刚好等于阈值的样本，看看一个符号怎样改变结果。
+
+**从哪里开始**：在 basics.cpp 的 main 中改距离列表；比较条件分别使用 > 和 >=。
+
+**按这几步做**：
+
+1. 把 distances_m 改成 {3.0, 3.1, 8.0}。
+2. 先在纸上分别标记满足 > 3 和 >= 3 的元素。
+3. 用两个计数器保存结果，其他输入保持相同。
+
+??? tip "需要一点提示？"
+
+    3.0 不大于 3.0，但大于等于 3.0；不要把两种任务定义混在一起。
+
+??? example "查看参考修改与解释"
+
+    严格大于时只统计 3.1 和 8.0，得到 2；包含边界时还统计 3.0，得到 3。
+
+    **放在哪里**：替换 main 内的数据、计数与输出部分；头文件保持原样。
+
+    ```cpp
+    const double threshold_m{3.0};
+    const std::vector<double> distances_m{3.0, 3.1, 8.0};
+    int greater{0};
+    int greater_or_equal{0};
+    for (const double distance_m : distances_m) {
+        if (distance_m > threshold_m) { ++greater; }
+        if (distance_m >= threshold_m) { ++greater_or_equal; }
+    }
+    std::cout << "greater: " << greater << '\n';
+    std::cout << "greater or equal: " << greater_or_equal << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    greater: 2
+    greater or equal: 3
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

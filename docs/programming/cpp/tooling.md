@@ -78,11 +78,44 @@ Sanitizer 是否可用取决于平台和工具链；某些 Windows MinGW 发行�
 
 ## 动手练习
 
-添加一个 `hello.cpp`，在 CMake 中添加目标。故意漏掉定义某个函数的 cpp，观察编译与链接报错的区别。
+<div class="practice-card" markdown="1">
 
-??? tip "参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    在构建文件加 `add_executable(hello hello.cpp)`。头文件声明存在但没有函数定义时，单个文件可能编译成功，最终链接会报未定义引用或相应的未解析符号。
+<p class="practice-title">让构建文件认识一个新程序</p>
+
+正文已经给每个 cpp 建了独立目标。现在新增 hello.cpp，练习源文件与构建目标的对应关系。
+
+**从哪里开始**：在示例目录新增 hello.cpp，再修改同目录 CMakeLists.txt。
+
+**按这几步做**：
+
+1. 用第 01 章的 Hello 程序保存为 hello.cpp。
+2. 在 CMakeLists.txt 的函数定义结束之后增加 hello 目标。
+3. 理解额外情况：只声明函数却漏编实现文件，会在链接阶段失败。
+
+??? tip "需要一点提示？"
+
+    本项目已经有 add_tutorial(name, standard) 帮助函数，可沿用它统一设置标准和警告。
+
+??? example "查看参考修改与解释"
+
+    CMake 配置时读到新目标后，构建步骤才会编译 hello.cpp。函数只有声明、没有定义，不能靠重新 include 头文件解决。
+
+    **放在哪里**：这是 CMakeLists.txt 片段，不是 C++ 代码；先配置构建目录，再构建。
+
+    ```cmake
+    # 放在 add_tutorial 的 endfunction() 后，与其他目标放在一起。
+    add_tutorial(hello 17)
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    hello 目标成功构建后，Hello 程序输出 Hello, C++!
+    ```
+
+</div>
 
 
 ---

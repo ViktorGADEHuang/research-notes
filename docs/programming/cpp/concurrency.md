@@ -89,11 +89,55 @@ samples: 2000
 
 ## 动手练习
 
-把每个线程循环改成 500 次，增加第三个线程；作用域结束后应得到多少？
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    1500。计数器必须比三个线程都活得久，读取最终结果前必须等待三个线程结束。
+<p class="practice-title">等三个线程结束再看总数</p>
+
+原例的两个线程各加 1000 次。这次改变工作量和线程数量，练习用同步条件解释结果，而不是猜哪条线程先完成。
+
+**从哪里开始**：修改 concurrency.cpp 的 collect 循环上限，并在原来的内部作用域中增加第三个 jthread。
+
+**按这几步做**：
+
+1. 把每个线程的循环上限改为 500。
+2. 三个线程调用同一个 collect，并使用同一个 atomic 计数器。
+3. 保留最终输出在内部作用域结束之后。
+
+??? tip "需要一点提示？"
+
+    总数是 3 × 500。计数器先创建、后销毁；线程结束前不要把局部变量释放掉。
+
+??? example "查看参考修改与解释"
+
+    三个 jthread 在内部作用域退出时等待完成，再读取计数得到 1500。atomic 防止加一过程中的竞争，等待保证最终工作都已完成。
+
+    **放在哪里**：用这段替换 main 内的原演示；保留 atomic、iostream、thread 头文件。
+
+    ```cpp
+    std::atomic<int> samples{0};
+    {
+        const auto collect = [&samples] {
+            for (int i = 0; i < 500; ++i) {
+                samples.fetch_add(1);
+            }
+        };
+        std::jthread first{collect};
+        std::jthread second{collect};
+        std::jthread third{collect};
+    } // 三个线程都结束后，才读取最终总数。
+    std::cout << "samples: " << samples.load() << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    samples: 1500
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

@@ -139,3 +139,21 @@
 @media screen and (max-width: 1219px) {
   .reading-toolbar button { display: none; }
 }
+
+/* 练习接续正文：任务、提示、答案有清楚的边界，代码留在答案中。 */
+.md-typeset .practice-card { margin: 1rem 0 1.6rem; padding: 1.15rem 1.25rem; border: 1px solid var(--research-border); border-top: 3px solid var(--research-accent); border-radius: 12px; background: var(--research-surface); }
+.md-typeset .practice-card .practice-kicker { margin: 0 0 .35rem; color: var(--research-muted); font-size: .63rem; }
+.md-typeset .practice-card .practice-title { margin: 0 0 .8rem; color: var(--md-default-fg-color); font-size: 1rem; line-height: 1.5; font-weight: 700; }
+.md-typeset .practice-card ol { margin-left: 1.1rem; }
+.md-typeset .practice-card li { padding-left: .15rem; margin-block: .35rem; }
+.md-typeset .practice-card details { border: 1px solid var(--research-border); background: var(--md-default-bg-color); color: var(--md-default-fg-color); box-shadow: none; font-size: .76rem; margin-top: .9rem; }
+.md-typeset .practice-card details > summary { padding: .6rem .6rem .6rem 1.9rem; background: var(--research-surface); color: var(--research-accent); }
+.md-typeset .practice-card details > summary::before, .md-typeset .practice-card details > summary::after { color: var(--research-accent); }
+.md-typeset .practice-card details > summary::before { background-color: var(--research-accent); }
+.md-typeset .practice-card details:focus-within { border-color: var(--research-accent); box-shadow: none; }
+.md-typeset .practice-card details > summary:focus-visible { outline: 3px solid var(--md-accent-fg-color); outline-offset: 2px; }
+.md-typeset .practice-card .highlight pre { margin-block: .65rem; }
+@media screen and (max-width: 600px) {
+  .md-typeset .practice-card { padding: .9rem .8rem; }
+  .md-typeset .practice-card .practice-title { font-size: .9rem; }
+}

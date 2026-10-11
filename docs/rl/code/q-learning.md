@@ -92,8 +92,22 @@ print("Greedy actions:", [max(range(2), key=lambda a: q[s][a]) for s in range(1,
 
 输出 Q 表与贪心动作。当前设置下，五个状态应学到向右；这不表示所有环境都能用 3000 幕学会。
 
-## 动手修改
+## 阅读练习：不用运行，也能推演
 
-保持相同环境和探索率，只把目标中的 `max` 改成实际下一动作值，比较 SARSA。
+<div class="practice-card" markdown="1">
 
-示例不设置人工回合超时，直到真正到达终点。扩展到有时间限制的环境时，要区分真实终止与外部截断。
+<p class="practice-kicker">把代码与公式接起来</p>
+
+<p class="practice-title">同一条经验，比较两种目标</p>
+
+正文的 max 与实际下一动作可能不同。先用相同数字比较目标，不急着改整个算法。
+
+**沿用这些条件**：奖励 0.1，折扣 0.9；下一 Q 为 0.3、0.9，实际下一动作选中 0.3。
+
+**你的任务**：分别写 Q-learning 与 SARSA 的目标；若要改代码，再读 SARSA 页完整的动作衔接。
+
+??? example "查看推演与解释"
+
+    Q-learning 为 0.91，SARSA 为 0.37。只替换 max 而没选择和沿用 next_action，不是完整的 SARSA 修改。
+
+</div>

@@ -94,8 +94,22 @@ print("Greedy actions:", [max(range(2), key=lambda a: q[s][a]) for s in range(1,
 
 输出 Q 表与贪心动作。固定种子与当前设置下，贪心动作应倾向向右；Q 值仍反映持续探索的影响。
 
-## 动手修改
+## 阅读练习：不用运行，也能推演
 
-把探索概率从 0.15 改到 0.4，再和 Q-learning 比较数值。
+<div class="practice-card" markdown="1">
 
-示例不设置人工回合超时，直到真正到达终点。扩展到有时间限制的环境时，要区分真实终止与外部截断。
+<p class="practice-kicker">把代码与公式接起来</p>
+
+<p class="practice-title">圈出下一步真的执行哪个动作</p>
+
+读懂 SARSA 的关键不只是替换一个数组下标，还要让选定的下一动作在下一步继续执行。
+
+**沿用这些条件**：下一状态 Q 分别为 0.3、0.9，next_action 选中低分动作。
+
+**你的任务**：找到目标中的 q[ns][next_action]，再找到 s, a = ns, next_action。
+
+??? example "查看推演与解释"
+
+    目标用 0.3 对应的实际下一动作；下一轮沿用它，才与这里的 SARSA 数据流程对应。
+
+</div>

@@ -113,11 +113,57 @@ invalid speed
 
 ## 动手练习
 
-增加电量 `battery_percent`，限制在 0～100，构造时拒绝越界输入。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    添加私有 `double battery_percent_`，在初始化列表赋值，再用 `!std::isfinite(battery_percent) || battery_percent < 0 || battery_percent > 100` 检查。不能只检查小于 0，否则 NaN 可能漏过。
+<p class="practice-title">在对象出生时检查电量</p>
+
+类已经拒绝非法速度。把同样的接口约定扩展到电量，练习“数据和检查放在一起”。
+
+**从哪里开始**：修改 Robot 的构造函数，并在 private 部分增加 battery_percent_ 成员。
+
+**按这几步做**：
+
+1. 新增电量参数，约定单位是百分比。
+2. 在成员初始化列表里保存它。
+3. 拒绝非有限数、小于 0 和大于 100 的输入。
+
+??? tip "需要一点提示？"
+
+    需要同时更新参数列表、初始化列表和私有成员声明；不要只改检查条件。
+
+??? example "查看参考修改与解释"
+
+    合法电量范围包含 0 和 100。下面的构造函数替换原构造函数，私有成员声明加在现有成员旁边。之后用 Robot{0.8, 80.0} 创建对象。
+
+    **放在哪里**：这是类成员的修改片段；main 中所有 Robot 构造调用都要补上电量参数。
+
+    ```cpp
+    explicit Robot(double speed_mps, double battery_percent)
+        : speed_mps_{speed_mps}, battery_percent_{battery_percent} {
+        if (!std::isfinite(speed_mps) || speed_mps < 0.0) {
+            throw std::invalid_argument("invalid speed");
+        }
+        if (!std::isfinite(battery_percent)
+            || battery_percent < 0.0 || battery_percent > 100.0) {
+            throw std::invalid_argument("invalid battery");
+        }
+    }
+
+    // 这一行放到 private 区域，不放在构造函数内部。
+    double battery_percent_;
+    ```
+
+    **核对这段修改的结果**：
+
+    | 电量输入 | 应有结果 |
+    | --- | --- |
+    | 0、80、100 | 对象可以创建 |
+    | −1、101、NaN | 拒绝创建，报告 invalid battery |
+
+</div>
+
 
 ## 延伸阅读
 

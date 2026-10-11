@@ -106,11 +106,50 @@ mean: 3
 
 ## 动手练习
 
-把筛选改为 `d >= 3.0`，输出米的平方而不是厘米。再试 `meters_to_centimeters(3)`。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    筛选结果仍是 3 和 5，transform 改为 `[](double d) { return d * d; }`，输出 9 和 25。整数 3 不满足 floating_point 约束，无法编译；传 3.0 可以。
+<p class="practice-title">只替换数据处理的一步</p>
+
+正文用 filter 筛选，再用 transform 将米换成厘米。这次保留管道结构，改成筛选后求距离的平方。
+
+**从哪里开始**：在 cpp20.cpp 的 main 中，替换原 far_cm 定义与其输出循环，保留原始 distances。
+
+**按这几步做**：
+
+1. 把筛选条件改成 d >= 3.0。
+2. 把转换规则改成 d * d，结果单位为平方米。
+3. 用纸笔解释为什么整数 3 不能通过 floating_point 约束。
+
+??? tip "需要一点提示？"
+
+    不要让结果继续叫 far_cm，因为它不再是厘米；名字也要随含义更新。
+
+??? example "查看参考修改与解释"
+
+    列表 {1, 3, 5} 留下 3 和 5，再平方得到 9 和 25。meters_to_centimeters(3) 的整数类型不满足约束；3.0 是浮点类型。
+
+    **放在哪里**：替换原管道和遍历循环；保留非 const 的 view 变量，原 mean 输出可继续保留。
+
+    ```cpp
+    auto squared_distances = distances
+        | std::views::filter([](double d) { return d >= 3.0; })
+        | std::views::transform([](double d) { return d * d; });
+    for (double value : squared_distances) {
+        std::cout << value << ' ';
+    }
+    std::cout << '\n';
+    ```
+
+    **核对这段修改的结果**：只看新增或替换部分的输出；保留的正文演示可能还有其他输出。
+
+    ```text
+    9 25
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

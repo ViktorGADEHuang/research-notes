@@ -95,11 +95,54 @@ first: 1
 
 ## 动手练习
 
-统计严格大于 2 米的数量，并求最大距离。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    条件改为 `[](double d) { return d > 2.0; }` 得到 2；非空列表用 `*std::max_element(distances.begin(), distances.end())` 得到 4。空列表返回 `end()`，不能直接解引用。
+<p class="practice-title">从同一份列表得到两种统计</p>
+
+排序不只是输出好看。标准算法还能帮助你回答“有几只较远、最远距离是多少”。
+
+**从哪里开始**：使用 containers.cpp 中原来的 distances 列表，替换 main 中的统计与输出部分。
+
+**按这几步做**：
+
+1. 用 count_if 统计严格大于 2 米的元素。
+2. 用 max_element 找最大值。
+3. 先检查返回值不是 end，再解引用。
+
+??? tip "需要一点提示？"
+
+    最大元素迭代器是一个位置，不是数值；空列表时它等于 end。
+
+??? example "查看参考修改与解释"
+
+    原列表为 {4, 1, 3, 2}，大于 2 的有两个，最大为 4。即使以后输入变成空列表，下面的判断也避免了解引用 end。
+
+    **放在哪里**：放在 main 的 distances 声明之后；替换原来的排序、统计和输出演示。
+
+    ```cpp
+    const auto far_count = std::count_if(
+        distances.begin(), distances.end(),
+        [](double distance_m) { return distance_m > 2.0; });
+    const auto farthest = std::max_element(distances.begin(), distances.end());
+    std::cout << "far count: " << far_count << '\n';
+    if (farthest != distances.end()) {
+        std::cout << "max distance: " << *farthest << '\n';
+    } else {
+        std::cout << "no distances\n";
+    }
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    far count: 2
+    max distance: 4
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

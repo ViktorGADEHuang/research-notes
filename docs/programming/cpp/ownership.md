@@ -105,11 +105,50 @@ resource expired: true
 
 ## 动手练习
 
-移动后能否再执行 `show(*owner)`？为什么？
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    不能：移动后的这个 `unique_ptr` 为空，解引用属于未定义行为。可以检查是否为空，也可以给它重新赋一个新的资源。
+<p class="practice-title">转交资源后，先检查再访问</p>
+
+正文把资源从 owner 转给 new_owner。这次检查原拥有者的状态，理解智能指针如何表达“已经交出去了”。
+
+**从哪里开始**：在 ownership.cpp 中 auto new_owner = std::move(owner); 后添加判断。
+
+**按这几步做**：
+
+1. 预测 owner 是否还有资源。
+2. 写一个 if，只有非空时才调用 show(*owner)。
+3. 在空分支输出说明，继续用 new_owner 访问资源。
+
+??? tip "需要一点提示？"
+
+    对 unique_ptr，移动后的源指针保证为空；不能在检查之前先解引用。
+
+??? example "查看参考修改与解释"
+
+    原 owner 已经为空，会走 else；new_owner 仍拥有距离为 2.5 的 Sensor。
+
+    **放在哪里**：这是追加片段，放在转移之后；列出的输出只对应新加的片段。
+
+    ```cpp
+    if (owner) {
+        show(*owner); // 非空才解引用。
+    } else {
+        std::cout << "owner is empty\n";
+    }
+    show(*new_owner); // 资源现在由 new_owner 保管。
+    ```
+
+    **核对这段修改的结果**：只看新增或替换部分的输出；保留的正文演示可能还有其他输出。
+
+    ```text
+    owner is empty
+    distance: 2.5
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

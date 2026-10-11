@@ -95,18 +95,55 @@ other number: 2.25
 
 ## 动手练习
 
-写一个 `constexpr` 模板 `cube`，验证 `cube(2) == 8`，再输出 `cube(0.5)`。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
+
+<p class="practice-title">把平方配方改成立方配方</p>
+
+正文的 square 已经是一份类型配方。这次沿用相同结构，练习函数定义与调用应该分别放哪里。
+
+**从哪里开始**：在 templates.cpp 的 main 前新增 cube；验证语句和输出语句放到 main 内。
+
+**按这几步做**：
+
+1. 保留 template<typename T>，把返回表达式改为三个 x 相乘。
+2. 用 static_assert 检查 cube(2) 为 8。
+3. 对 0.5 调用同一函数，预测结果。
+
+??? tip "需要一点提示？"
+
+    模板函数定义不放进 main；static_assert 和演示输出可以放在 main 中。
+
+??? example "查看参考修改与解释"
+
+    整数 2 的立方为 8，浮点 0.5 的立方为 0.125。这里用两段代码分别标明定义和调用位置。
+
+    **放在哪里**：先添加这个函数；main 内的调用见下面第二个代码块。
 
     ```cpp
+    // 放在 main 之前：定义模板函数。
     template<typename T>
-    // 同一配方可用于支持乘法的不同类型。
-constexpr T cube(T x) { return x * x * x; }
-    // 放在 main 中：
-    static_assert(cube(2) == 8);
-    std::cout << cube(0.5) << '\n'; // 0.125
+    constexpr T cube(T x) {
+        return x * x * x;
+    }
     ```
+
+    **再放到 main 里面**：
+
+    ```cpp
+    static_assert(cube(2) == 8);
+    std::cout << cube(0.5) << '\n';
+    ```
+
+    **核对这段修改的结果**：只看新增或替换部分的输出；保留的正文演示可能还有其他输出。
+
+    ```text
+    0.125
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

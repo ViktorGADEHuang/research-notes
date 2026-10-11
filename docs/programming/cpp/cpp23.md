@@ -115,11 +115,48 @@ mode code: 1
 
 ## 动手练习
 
-给 speed 增加最大速度 2 m/s 的要求，超过时返回 speed limit exceeded。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    在返回成功前检查 `if (result > 2.0) return std::unexpected(std::string{"speed limit exceeded"});`。测试 `speed(4.0, 1.0)` 应失败；`speed(4.0, 2.0)` 应成功。
+<p class="practice-title">计算成功，还要检查业务限制</p>
+
+原 speed 函数检查数值是否合法。现在再加入最大速度要求，区分“除法能算”与“结果符合约定”。
+
+**从哪里开始**：在 cpp23.cpp 的 speed 函数中，result 的非有限检查之后、return result; 之前插入限制检查。
+
+**按这几步做**：
+
+1. 约定最大速度为 2 m/s，恰好 2 仍允许。
+2. 大于上限时返回 unexpected，保留已有输入检查。
+3. 比较 speed(4.0, 1.0) 与 speed(4.0, 2.0)。
+
+??? tip "需要一点提示？"
+
+    速度是距离除以时长：4 / 1 = 4，4 / 2 = 2。不要把条件写成 >= 2。
+
+??? example "查看参考修改与解释"
+
+    前者因 4 m/s 超过上限而失败；后者得到有效的 2 m/s。时长为 0 仍应走原来的非法输入分支。
+
+    **放在哪里**：这是 speed 内的插入片段；调用者仍须先检查 expected 的成功状态。
+
+    ```cpp
+    // 放在 result 已检查有限之后，成功返回之前。
+    if (result > 2.0) {
+        return std::unexpected(std::string{"speed limit exceeded"});
+    }
+    ```
+
+    **核对这段修改的结果**：
+
+    | 调用 | 应有结果 |
+    | --- | --- |
+    | `speed(4.0, 1.0)` | 失败，原因是 speed limit exceeded |
+    | `speed(4.0, 2.0)` | 成功，速度为 2 m/s |
+
+</div>
+
 
 ## 延伸阅读
 

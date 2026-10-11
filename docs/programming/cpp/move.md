@@ -97,11 +97,49 @@ recipient: 42
 
 ## 动手练习
 
-尝试写 `auto second = owner;`，为什么不能编译？该怎样转移它？
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    `unique_ptr` 禁用了复制。要转移时写 `auto second = std::move(owner);`，转移前必须确认 `owner` 当前有你要的资源；本例已转给 recipient，再次移动只会得到空指针。
+<p class="practice-title">从一个新的资源开始练习移动</p>
+
+原例已经把 owner 的资源转给 recipient，再移动旧 owner 只会转交空指针。这次重新创建资源，避免混淆练习起点。
+
+**从哪里开始**：在 move.cpp 的 main 中，替换原来的 unique_ptr 演示部分；前面的 vector 演示可保留。
+
+**按这几步做**：
+
+1. 先创建值为 42 的新 unique_ptr。
+2. 只在纸上判断直接复制为什么被拒绝，不把错误语句加入正常示例。
+3. 用 std::move 转交给 second，再检查原指针和新资源。
+
+??? tip "需要一点提示？"
+
+    auto second = owner; 需要复制 unique_ptr，它没有复制构造；移动才允许转移所有权。
+
+??? example "查看参考修改与解释"
+
+    移动后 owner 为空，second 持有 42。强调“允许移动”仍由类型的移动操作实现，不是 std::move 自己搬运资源。
+
+    **放在哪里**：替换原有 owner / recipient 演示，避免在同一作用域重复声明 owner。
+
+    ```cpp
+    auto owner = std::make_unique<int>(42);
+    // 不写 auto second = owner;，unique_ptr 不允许复制。
+    auto second = std::move(owner);
+    std::cout << std::boolalpha << "old owner empty: " << !owner << '\n';
+    std::cout << "new value: " << *second << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    old owner empty: true
+    new value: 42
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

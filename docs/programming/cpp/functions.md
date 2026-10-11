@@ -111,11 +111,49 @@ empty samples
 
 ## 动手练习
 
-将 `shift` 的 `auto&` 改成 `auto`，预测第二行输出。再恢复引用，让它减去 0.5。
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    改成 `auto` 时第二行仍为 `after: 2`。恢复 `auto&` 并调用 `shift(values, -0.5)`，第二行是 `after: 1.5`。
+<p class="practice-title">确认函数修改的是原数据</p>
+
+正文中的 shift 用引用修改列表。这次先理解去掉引用会发生什么，再用原函数完成一次减法。
+
+**从哪里开始**：先看 shift 中的 for (auto& value : values)，再看 main 里怎样调用它。
+
+**按这几步做**：
+
+1. 只在纸上将 auto& 想成 auto，预测原列表会不会改变。
+2. 实际参考修改保留 auto&，让每个元素减去 0.5。
+3. 从原始 {1.0, 2.0, 3.0} 开始，不先执行原例的加 1 操作。
+
+??? tip "需要一点提示？"
+
+    auto 是副本，auto& 是原元素的别名。两次比较必须使用相同初始列表。
+
+??? example "查看参考修改与解释"
+
+    如果循环变量是副本，修改不会留在原列表，平均仍是 2。保留引用并减去 0.5，平均从 2 变成 1.5。
+
+    **放在哪里**：保留 average 与 shift 定义，用这段替换 main 内原来的演示。
+
+    ```cpp
+    // 从原始输入重新开始，避免叠加原例的 +1 修改。
+    std::vector<double> values{1.0, 2.0, 3.0};
+    std::cout << "before: " << average(values) << '\n';
+    shift(values, -0.5);
+    std::cout << "after: " << average(values) << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    before: 2
+    after: 1.5
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

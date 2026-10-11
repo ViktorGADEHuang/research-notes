@@ -91,11 +91,48 @@ above current threshold: 1
 
 ## 动手练习
 
-在创建两个 Lambda 后，把阈值改成 0.5，对 1.0 调用它们会输出什么？
+<div class="practice-card" markdown="1">
 
-??? tip "展开参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    按值捕获仍保存 2.0，所以输出 false；按引用捕获看到 0.5，所以输出 true。
+<p class="practice-title">改了阈值，谁会跟着变化</p>
+
+你已经看过按值与按引用捕获的差别。这次用更小的阈值判断同一距离，确认各自保存的是什么。
+
+**从哪里开始**：沿用 lambdas.cpp 中两个 Lambda 的定义，把创建之后的阈值赋值与输出替换掉。
+
+**按这几步做**：
+
+1. 创建 Lambda 时仍让 threshold 为 2.0。
+2. 随后将外部 threshold 改为 0.5。
+3. 两个 Lambda 都检查距离 1.0，先预测再看答案。
+
+??? tip "需要一点提示？"
+
+    按值捕获保留创建时的 2.0；按引用捕获读取现在的 0.5。
+
+??? example "查看参考修改与解释"
+
+    1.0 不大于 2.0，但大于 0.5，所以按值捕获为 false，按引用捕获为 true。
+
+    **放在哪里**：保留 main 开头的 threshold 和两个 Lambda；替换后面的赋值与演示输出。
+
+    ```cpp
+    threshold = 0.5;
+    std::cout << std::boolalpha;
+    std::cout << "value capture: " << by_value(1.0) << '\n';
+    std::cout << "reference capture: " << by_reference(1.0) << '\n';
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    value capture: false
+    reference capture: true
+    ```
+
+</div>
+
 
 ## 延伸阅读
 

@@ -87,11 +87,47 @@ C++20 示例可改为 `/std:c++20`。C++23 开关与功能支持请按所装 MSV
 
 ## 动手练习
 
-把输出改成两行：实验名称与研究方向。再故意漏掉一个分号，找到编译器报告的第一处错误。
+<div class="practice-card" markdown="1">
 
-??? tip "参考答案"
+<p class="practice-kicker">接着正文做一个小改动</p>
 
-    添加 `std::cout << "Viktor research notes\nHerding robotics\n";`。错误位置有时指向下一行，因此同时检查它的上一行。
+<p class="practice-title">让第一段程序说出你的实验信息</p>
+
+你已经认识了 main 和 cout。这次只改输出文字，练习“编辑源码 → 重新编译 → 查看新结果”。
+
+**从哪里开始**：在 hello.cpp 的 main 里，替换原来的 Hello 输出语句，保留函数括号和 return。
+
+**按这几步做**：
+
+1. 让第一行输出实验名称，第二行输出研究方向。
+2. 先检查每条语句的分号，再重新编译。
+3. 可选：临时漏掉一个分号，观察第一条报错后恢复。
+
+??? tip "需要一点提示？"
+
+    字符串里的 \n 表示换行；编译失败时不要运行上次留下的 exe。
+
+??? example "查看参考修改与解释"
+
+    先让输出正确，再用一个小错误认识编译提示。错误位置有时落在下一行，因此也要检查上一行。
+
+    **放在哪里**：只替换 main 内的输出语句，不另写一个 main。
+
+    ```cpp
+    // 两次输出分别占一行，放在 main 内。
+    std::cout << "Viktor research notes\n";
+    std::cout << "Herding robotics\n";
+    ```
+
+    **核对这段修改的结果**：
+
+    ```text
+    Viktor research notes
+    Herding robotics
+    ```
+
+</div>
+
 
 [继续：变量、判断与循环 →](basics.md)
 
