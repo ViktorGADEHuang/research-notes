@@ -27,8 +27,11 @@ theme:
 
   features:
     - navigation.tabs
-    - navigation.sections
+    - navigation.tabs.sticky
     - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - toc.follow
     - search.suggest
     - content.code.copy
 
@@ -40,7 +43,50 @@ nav:
   - 首页: index.md
 
   - 强化学习:
-      - PPO 算法: rl/ppo.md
+      - 强化学习概览: rl/index.md
+      - 第一部分 · 算法直觉:
+          - 算法直觉导读: rl/intuition/index.md
+          - 价值迭代: rl/intuition/value-iteration.md
+          - 蒙特卡洛（MC）: rl/intuition/mc.md
+          - 时序差分 TD(0): rl/intuition/td.md
+          - SARSA: rl/intuition/sarsa.md
+          - Q-learning: rl/intuition/q-learning.md
+          - DQN: rl/intuition/dqn.md
+          - REINFORCE: rl/intuition/reinforce.md
+          - Actor-Critic / A2C: rl/intuition/a2c.md
+          - PPO: rl/intuition/ppo.md
+          - DDPG: rl/intuition/ddpg.md
+          - TD3: rl/intuition/td3.md
+          - SAC: rl/intuition/sac.md
+      - 第二部分 · 公式讲解:
+          - 公式讲解导读: rl/math/index.md
+          - 价值迭代: rl/math/value-iteration.md
+          - 蒙特卡洛（MC）: rl/math/mc.md
+          - 时序差分 TD(0): rl/math/td.md
+          - SARSA: rl/math/sarsa.md
+          - Q-learning: rl/math/q-learning.md
+          - DQN: rl/math/dqn.md
+          - REINFORCE: rl/math/reinforce.md
+          - Actor-Critic / A2C: rl/math/a2c.md
+          - PPO: rl/math/ppo.md
+          - DDPG: rl/math/ddpg.md
+          - TD3: rl/math/td3.md
+          - SAC: rl/math/sac.md
+      - 第三部分 · 编程实践:
+          - 编程实践导读: rl/code/index.md
+          - 价值迭代: rl/code/value-iteration.md
+          - 蒙特卡洛（MC）: rl/code/mc.md
+          - 时序差分 TD(0): rl/code/td.md
+          - SARSA: rl/code/sarsa.md
+          - Q-learning: rl/code/q-learning.md
+          - DQN: rl/code/dqn.md
+          - REINFORCE: rl/code/reinforce.md
+          - Actor-Critic / A2C: rl/code/a2c.md
+          - PPO: rl/code/ppo.md
+          - DDPG: rl/code/ddpg.md
+          - TD3: rl/code/td3.md
+          - SAC: rl/code/sac.md
+      - PPO 与放牧任务: rl/ppo.md
 
   - 智能放牧:
       - 放牧研究概览: herding/index.md
@@ -64,8 +110,21 @@ nav:
 markdown_extensions:
   - attr_list
   - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
 
 # 自定义样式
 extra_css:
   - stylesheets/extra.css
 
+
+# 数学公式排版
+extra_javascript:
+  - javascripts/mathjax.js
+  - javascripts/rl-learning.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js

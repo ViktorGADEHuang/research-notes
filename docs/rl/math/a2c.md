@@ -1,0 +1,54 @@
+# Actor-Critic / A2C：公式讲解
+
+[算法直觉](../intuition/a2c.md) · [公式讲解](a2c.md) · [Python 实践](../code/a2c.md)
+
+先读 [公共符号与回报](index.md)，再看本页。所有数值例子都只用于说明一次更新。
+
+!!! tip "先用一句人话读公式"
+
+    优势估计 = 回报目标 − 原先状态价值；策略利用优势调整概率，价值模块向回报目标靠近。
+
+
+## 优势：结果比预期好多少
+
+一步版本可以用 TD 误差近似优势：
+
+$$
+\hat A_t=r_{t+1}+\gamma(1-d_t)V_\phi(s_{t+1})-V_\phi(s_t)
+$$
+
+$$
+L_{\mathrm{actor}}=-\frac1B\sum_t\log\pi_\theta(a_t\mid s_t)\,\operatorname{stopgrad}(\hat A_t)
+$$
+
+$$
+L_{\mathrm{critic}}=\frac1B\sum_t(V_\phi(s_t)-\operatorname{stopgrad}(\hat R_t))^2
+$$
+
+## 逐项读懂
+
+$\theta$ 是策略参数，$\phi$ 是价值参数；$B$ 是样本数。$\hat R_t$ 是估计回报目标。`stopgrad` 表示更新策略时把优势当成固定权重，不沿这条路径训练价值函数。前面的负号来自优化器通常做梯度下降，而策略希望提高带正优势动作的概率。
+
+回报目标也要视为固定数字。即使它包含旧价值估计，更新当前 Critic 时也不沿目标项反向传播。优势是带采样噪声的估计，不是对某个动作好坏的精确证明。
+
+## 算一次看看
+
+当前价值 0.2、奖励 0.1、下一价值 0.5、折扣 0.9且未终止，则优势为 0.35。Actor 得到正反馈；Critic 的一步目标为 0.55，也会向这个值靠近。
+
+## 从一步到一段
+
+$$
+\hat R_t=\sum_{k=0}^{n-1}\gamma^k r_{t+k+1}+\gamma^n V_\phi(s_{t+n})
+$$
+
+这是中途未遇到终止时的 n 步目标；若提前真正终止，只累计到终点且不自举。A2C 常按一段 rollout 更新，实际实现也可以用 GAE；不要把一步优势例子误认为代码内部唯一的计算方式。
+
+## 与代码对照
+
+`n_steps=32` 控制收集多少步再更新。当前示例使用 SB3 A2C 默认的 `gae_lambda=1.0`，因此实际优势来自一段采样中的多步回报减旧价值；采样片段结束且未真正终止时，会用末尾价值估计补上后续收益。本页开头的一步 TD 只是帮助理解优势的简化例子。
+
+实现还包含价值损失权重与可选的熵项。Actor-Critic 是方法家族，A2C 是这里使用的具体版本。
+
+## 进一步阅读
+
+[Stable-Baselines3：A2C](https://stable-baselines3.readthedocs.io/en/master/modules/a2c.html)

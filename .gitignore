@@ -12,3 +12,7 @@ __pycache__/
 
 # 编辑器临时文件
 .vscode/
+
+# 强化学习示例的独立环境与训练输出
+.venv-rl/
+rl-output/

@@ -1,0 +1,62 @@
+# 时序差分 TD(0)：公式讲解
+
+[算法直觉](../intuition/td.md) · [公式讲解](td.md) · [Python 实践](../code/td.md)
+
+先读 [公共符号与回报](index.md)，再看本页。所有数值例子都只用于说明一次更新。
+
+!!! tip "先用一句人话读公式"
+
+    目标 = 刚收到的奖励 + 折扣 × 下一状态估计；新分数 = 旧分数 + 学习率 ×（目标 − 旧分数）。
+
+
+## 一步目标与误差
+
+$$
+y_t=r_{t+1}+\gamma(1-d_t)V(s_{t+1})
+$$
+
+$$
+\delta_t=y_t-V(s_t),\qquad V(s_t)\leftarrow V(s_t)+\alpha\delta_t
+$$
+
+## 逐项读懂
+
+- $y_t$：当前要追赶的目标，并非真实完整回报。
+- $d_t$：真正终止时为 1，否则为 0。终止后没有未来价值。
+- $\delta_t$：TD 误差，即“新目标 − 原来预测”。
+- $\alpha$：学习率，控制朝目标移动多少。
+
+## 算一次看看
+
+旧值 0.3、下一状态价值 0.8、奖励 −0.01、折扣 0.95、学习率 0.1，且没有终止。目标为 0.75，误差为 0.45，新值为 0.345。只朝目标走了十分之一，并非立刻覆盖为 0.75。
+
+## 为什么叫自举
+
+当前状态的学习目标使用了下一状态的旧估计。估计帮助更新另一个估计，所以能在回合尚未结束时学习。
+
+## 与代码对照
+
+`target` 对应 $y_t$，`values[state] += alpha * (...)` 对应更新。示例没有人工时间截断。对 Gymnasium，`terminated` 与 `truncated` 都要求重置环境，但时间限制截断通常不应把自举项清零。两者的处理取决于任务本身如何定义终点。
+
+## 自己算一次
+
+<div class="rl-calculator" data-rl-calculator="td">
+<p class="rl-calculator-title">拖动数字，观察一次更新</p>
+<div class="rl-controls">
+<label>当前旧估计 <output data-display="current">0.3</output><input type="range" data-value="current" aria-label="当前旧估计" min="-1" max="2" step="0.01" value="0.3"></label>
+<label>本次奖励 <output data-display="reward">-0.01</output><input type="range" data-value="reward" aria-label="本次奖励" min="-1" max="1" step="0.01" value="-0.01"></label>
+<label>下一状态估计 <output data-display="next">0.8</output><input type="range" data-value="next" aria-label="下一状态估计" min="-1" max="2" step="0.01" value="0.8"></label>
+<label>折扣因子 <output data-display="gamma">0.95</output><input type="range" data-value="gamma" aria-label="折扣因子" min="0" max="1" step="0.01" value="0.95"></label>
+<label>学习率 <output data-display="alpha">0.1</output><input type="range" data-value="alpha" aria-label="学习率" min="0" max="1" step="0.01" value="0.1"></label>
+</div>
+<label class="rl-terminal"><input type="checkbox" data-value="terminal"> 下一状态真正终止</label>
+<p class="rl-calculation" data-result aria-live="polite">目标 0.75 → 误差 0.45 → 新估计 0.345</p>
+<p data-explanation>这是一次更新的演示；滑块改变输入，不会训练机器人。</p>
+<noscript>当前显示默认值。启用浏览器 JavaScript 后可拖动滑块。</noscript>
+</div>
+
+## 进一步阅读
+
+[Sutton 与 Barto 教材，第 6 章](https://incompleteideas.net/book/the-book-2nd.html)
+
+[David Silver 对应课程讲义](https://davidstarsilver.wordpress.com/wp-content/uploads/2025/04/lecture-4-model-free-prediction-.pdf)

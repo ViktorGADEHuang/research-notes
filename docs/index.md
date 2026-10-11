@@ -1,126 +1,113 @@
+---
+ title: 首页
+ hide:
+   - navigation
+   - toc
+---
 
-<div class="research-hero" markdown>
+<div class="research-hero" markdown="1">
 
-# 🤖 Viktor's Research Notes
+<p class="hero-kicker">VIKTOR / RESEARCH NOTEBOOK</p>
 
-**Robotics · Reinforcement Learning · Computer Vision**
+# Viktor’s Research Notes
 
-欢迎来到我的个人科研学习知识库！
+这里记录我的科研与技术学习笔记。目前的研究方向是 **放牧机器人**，同时整理强化学习、机器人技术、计算机视觉与编程方面的学习内容。
 
-这里记录研究生阶段的技术学习、科研探索、开源资料与实验成果。
+<div class="hero-actions" markdown="1">
 
-**持续学习 · 独立思考 · 注重实践**
+[放牧机器人研究 →](herding/index.md){ .hero-btn .hero-btn-primary }
+[浏览学习笔记](#learning-notes){ .hero-btn .hero-btn-outline }
 
 </div>
 
-## 🎯 主要研究方向
-
-### 🐑 基于强化学习的智能放牧机器人
-
-围绕宇树 Go2 四足机器人，研究强化学习在智能放牧任务中的应用。
-
-主要研究内容：
-
-- 羊群行为建模与 MuJoCo 仿真
-- 强化学习放牧决策
-- 机器人自主导航与路径规划
-- 四足机器人运动控制
-- 羊群视觉感知与状态估计
-
-[📖 进入智能放牧研究](herding/index.md)
-
----
-
-## 📚 学习知识库
-
-<div class="grid cards" markdown>
-
--   **🧠 强化学习**
-
-    ---
-
-    Q-learning、DQN、Actor-Critic、PPO、多智能体强化学习。
-
-    [📖 进入强化学习 →](rl/ppo.md)
-
--   **🤖 机器人技术**
-
-    ---
-
-    MuJoCo、宇树 Go2、ROS2、SLAM、路径规划与运动控制。
-
-    [📖 进入机器人技术 →](robotics/index.md)
-
--   **👁️ 计算机视觉**
-
-    ---
-
-    OpenCV、YOLO、实例分割、多目标跟踪与视觉定位。
-
-    [📖 进入计算机视觉 →](vision/index.md)
-
--   **🐑 智能放牧**
-
-    ---
-
-    羊群建模、放牧决策、强化学习环境与仿真实验。
-
-    [📖 进入智能放牧 →](herding/index.md)
-
--   **💻 编程技术**
-
-    ---
-
-    Python、C++、STM32、嵌入式通信与机器人软件开发。
-
-    [📖 进入编程技术 →](programming/index.md)
-
--   **📄 论文阅读**
-
-    ---
-
-    整理学术论文的研究背景、核心方法、创新点和实验结果。
-
-    [📖 进入论文阅读 →](papers/index.md)
+<p class="hero-bottom">科研记录 · 学习笔记 · 论文阅读 · 开源资料</p>
 
 </div>
 
----
+<div class="section-heading" markdown="1">
 
-## 🔗 优质开源学习资源
+## 当前研究方向
 
-持续收集机器人、计算机视觉与人工智能领域的优秀开源教程。
-
-<div class="grid cards" markdown>
-
--   **🤖 Robotics Tutorial**
-
-    ---
-
-    系统学习机器人数学基础、SLAM、规划控制与具身智能。
-
-    [GitHub 原始项目 →](https://github.com/Michael-Jetson/Robotics_Tutorial)
-
--   **👁️ 浙江大学 RoboMaster 视觉教程**
-
-    ---
-
-    学习 OpenCV、相机标定、目标跟踪和机器人视觉系统。
-
-    [在线阅读教程 →](https://hello-world-vision.github.io/Vision_Website/induction-training/)
+放牧机器人：研究机器人如何引导羊群到达目标区域。
 
 </div>
 
----
+<div class="research-feature" markdown="1">
 
-## 📝 关于本站
+<span class="eyebrow">放牧机器人</span>
 
-本站采用 **MkDocs Material + GitHub Pages** 搭建。
+### 放牧机器人研究
 
-用于记录科研过程中积累的知识、阅读的论文、编写的代码与完成的实验。
+围绕羊群行为建模、仿真环境、放牧策略与机器人控制，整理研究思路、相关方法和实验记录。
 
-希望通过长期积累，逐步建立完整的机器人技术知识体系。
+[查看研究问题与实验路线 →](herding/index.md)
 
----
+</div>
 
-*不断学习，不断实践，不断进步。*
+## 学习笔记 {#learning-notes}
+
+按主题整理学习内容，方便查阅与持续补充。
+
+<div class="grid cards" markdown="1">
+
+-   
+
+    **强化学习**
+
+    算法直觉、公式讲解与 Python 实践，涵盖基础价值方法、策略梯度和连续控制。
+
+    [进入强化学习 →](rl/index.md)
+
+-   
+
+    **机器人技术**
+
+    串联坐标系、仿真、导航和运动控制，建立从决策到执行的链路。
+
+    [查看学习路线 →](robotics/index.md)
+
+-   
+
+    **计算机视觉**
+
+    OpenCV、目标检测、图像分割、目标跟踪与相机标定。
+
+    [查看感知路线 →](vision/index.md)
+
+-   
+
+    **智能放牧**
+
+    明确任务边界、设计仿真环境，并用统一指标比较放牧策略。
+
+    [进入研究专题 →](herding/index.md)
+
+-   
+
+    **编程技术**
+
+    围绕科研代码组织、数据处理与机器人通信积累工程实践。
+
+    [查看实践清单 →](programming/index.md)
+
+-   
+
+    **论文阅读**
+
+    用问题、方法、证据和局限整理文献，让阅读服务于实验设计。
+
+    [使用阅读框架 →](papers/index.md)
+
+</div>
+
+<div class="resource-callout" markdown="1">
+
+### 开源学习资料
+
+收集机器人、计算机视觉等领域的教程与开源项目，作为日常学习的参考。
+
+[浏览开源学习资料 →](opensource/index.md)
+
+</div>
+
+笔记持续整理与更新。

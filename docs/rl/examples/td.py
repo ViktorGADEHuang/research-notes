@@ -1,0 +1,29 @@
+"""标准库教学示例；运行本文件即可，不需要安装第三方依赖。"""
+import math
+import random
+
+rng = random.Random(7)
+gamma, alpha = 0.95, 0.1
+
+def step(state, action):
+    ns = state + (1 if action == 1 else -1)
+    done = ns in (0, 6)
+    reward = 1.0 if ns == 6 else -1.0 if ns == 0 else -0.01
+    return ns, reward, done
+
+def choose(q, state, epsilon=0.15):
+    if rng.random() < epsilon:
+        return rng.randrange(2)
+    best = max(q[state])
+    return rng.choice([a for a in range(2) if q[state][a] == best])
+
+values = [0.0] * 7
+for _ in range(10000):
+    s = 3
+    while s not in (0, 6):
+        a = rng.randrange(2)  # 与 MC 使用同一随机策略
+        ns, reward, done = step(s, a)
+        target = reward + (0.0 if done else gamma * values[ns])
+        values[s] += alpha * (target - values[s])
+        s = ns
+print("Random-policy values:", [round(x, 3) for x in values[1:6]])
