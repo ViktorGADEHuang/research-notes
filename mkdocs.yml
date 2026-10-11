@@ -1,0 +1,26 @@
+
+site_name: Viktor's Research Notes
+site_description: 个人科研与技术学习知识库
+site_author: Viktor
+
+theme:
+  name: material
+  language: zh
+  palette:
+    scheme: default
+    primary: indigo
+    accent: blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+
+plugins:
+  - search
+
+nav:
+  - 首页: index.md
+  - 强化学习:
+      - PPO 算法: rl/ppo.md

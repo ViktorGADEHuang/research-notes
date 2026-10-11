@@ -1,0 +1,14 @@
+
+# Python 虚拟环境
+.venv/
+
+# MkDocs 生成的网站文件
+site/
+
+# Python 缓存
+__pycache__/
+*.pyc
+.cache/
+
+# 编辑器临时文件
+.vscode/
