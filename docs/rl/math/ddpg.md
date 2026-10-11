@@ -9,6 +9,16 @@
     Critic 目标 = 奖励 + 折扣 × 目标网络对下一动作的评分；Actor 尝试输出让当前 Critic 评分更高的动作。
 
 
+
+## 看图梳理
+
+![DDPG · 公式关系](../../assets/learning/rl-math-ddpg.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-ddpg.svg)
+
+**确定性 Actor**：输出连续动作，采样时加探索噪声；**Critic 估计 Q**：从回放池采样，目标网络构造目标；**更新与软同步**：Actor 借 Q 的梯度学习，缓慢更新目标参数。
+
+
 ## Critic 学什么
 
 $$

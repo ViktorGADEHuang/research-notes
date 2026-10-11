@@ -4,6 +4,16 @@
 
 Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留下来”这种短规则，用 Lambda 就不用跳到另一个文件找函数定义。
 
+
+## 看图梳理
+
+![Lambda 如何使用外部变量](../../assets/learning/cpp-lambdas.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-lambdas.svg)
+
+**按值捕获**：[threshold]，保存创建时的副本；**按引用捕获**：[＆threshold]，使用外部当前值；**生命周期**：稍后调用的回调，引用对象不能先销毁。
+
+
 ## 一行语法拆开看
 
 `[threshold](double d) { return d > threshold; }`
@@ -23,16 +33,25 @@ Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留�
 #include <iostream>
 #include <vector>
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
     double threshold{2.0};
+    // 保存此刻阈值的副本，之后外部修改不会同步进去。
     const auto by_value = [threshold](double d) { return d > threshold; };
+    // 借用外部阈值，使用时必须确保原变量还活着。
     const auto by_reference = [&threshold](double d) { return d > threshold; };
+    // 修改原变量，用来展示两种捕获方式的差别。
     threshold = 4.0;
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << std::boolalpha;
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "value capture: " << by_value(3.0) << '\n';
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "reference capture: " << by_reference(3.0) << '\n';
     const std::vector<double> distances{1.0, 3.0, 5.0};
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "above current threshold: "
+              // 算法会调用传入的 Lambda 检查每个元素。
               << std::count_if(distances.begin(), distances.end(), by_reference)
               << '\n';
 }

@@ -4,6 +4,16 @@
 
 把变量理解成“有名字、有类型的盒子”。类型决定可以放什么，变量名告诉别人这份数据是什么。
 
+
+## 看图梳理
+
+![处理一组距离](../../assets/learning/cpp-basics.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-basics.svg)
+
+**输入**：带单位的距离，只读阈值 3 米；**判断与循环**：逐个比较 distance > 3，满足条件才加一；**结果**：输出计数，检查等于阈值的边界。
+
+
 ## 先认识几个基本工具
 
 | 写法 | 通俗解释 | 例子 |
@@ -27,18 +37,28 @@
 #include <string>
 #include <vector>
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 实验名初始化后不修改。
     const std::string experiment{"herding-demo"};
+    // 距离阈值，单位米；用名字说明物理含义。
     const double threshold_m{3.0};
+    // 列表拥有三个距离元素，数量由容器管理。
     const std::vector<double> distances_m{1.2, 4.5, 2.0};
     int far_count{0};
+    // 范围循环，每次读取一个距离。
     for (const double distance_m : distances_m) {
+        // 严格大于阈值才计数，等于阈值不计入。
         if (distance_m > threshold_m) {
+            // 当前这一只满足条件，计数加一。
             ++far_count;
         }
     }
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << experiment << '\n';
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "far sheep: " << far_count << '\n';
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "integer: " << 5 / 2 << ", decimal: " << 5.0 / 2 << '\n';
 }
 ```

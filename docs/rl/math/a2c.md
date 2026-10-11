@@ -9,6 +9,16 @@
     优势估计 = 回报目标 − 原先状态价值；策略利用优势调整概率，价值模块向回报目标靠近。
 
 
+
+## 看图梳理
+
+![Actor-Critic / A2C · 公式关系](../../assets/learning/rl-math-a2c.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-a2c.svg)
+
+**Actor 决定动作**：按策略采样，收集多步经验；**Critic 评价状态**：构造回报目标，优势说明好于估计多少；**两边共同学习**：Actor 提高较好动作概率，Critic 减小价值误差。
+
+
 ## 优势：结果比预期好多少
 
 一步版本可以用 TD 误差近似优势：

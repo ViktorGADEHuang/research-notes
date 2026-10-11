@@ -1,38 +1,56 @@
-"""标准库教学示例；运行本文件即可，不需要安装第三方依赖。"""
+"""标准库教学代码：对照注释理解更新过程，无需运行。"""
 import math
 import random
 
+# 固定随机数起点，便于对照不同步骤；随机种子不保证跨硬件完全一致。
 rng = random.Random(7)
+# gamma 给未来奖励打折；alpha 决定每次向目标修正多少。
 gamma, alpha = 0.95, 0.1
 
+# 小走廊模型：输入当前位置与动作，返回下一位置、奖励、终止标记。
 def step(state, action):
+    # 动作 1 向右一步，动作 0 向左一步。
     ns = state + (1 if action == 1 else -1)
+    # 走到两端才是真正终止；终止状态没有后续奖励。
     done = ns in (0, 6)
+    # 右端奖励 +1、左端 -1，其余每步 -0.01，鼓励尽快到达右端。
     reward = 1.0 if ns == 6 else -1.0 if ns == 0 else -0.01
     return ns, reward, done
 
+# epsilon-greedy：少量随机探索，多数时候选择当前高分动作。
 def choose(q, state, epsilon=0.15):
+    # 以 epsilon 的概率探索，防止一直停在当前看起来最好的选择。
     if rng.random() < epsilon:
         return rng.randrange(2)
+    # 取当前状态的最高 Q 值；相同分数的动作随机打破平局。
     best = max(q[state])
     return rng.choice([a for a in range(2) if q[state][a] == best])
 
+# V 表按状态存分数；两个终止位置也占位，但不更新它们。
 values = [0.0] * 7
+# 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(10000):
+    # 复制上一轮的 V；本轮所有目标都使用旧表，进行同步更新。
     old = values[:]
     for s in range(1, 6):
         candidates = []
         for a in range(2):
+            # 走到两端才是真正终止；终止状态没有后续奖励。
             ns, reward, done = step(s, a)
+            # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
             candidates.append(reward + (0.0 if done else gamma * old[ns]))
+        # 价值迭代选择当前最大的候选目标，逼近最优状态价值。
         values[s] = max(candidates)
+    # 比较新旧表的最大变化；足够小则停止迭代。
     if max(abs(x - y) for x, y in zip(values, old)) < 1e-10:
         break
 policy = []
 for s in range(1, 6):
     candidates = []
     for a in range(2):
+        # 走到两端才是真正终止；终止状态没有后续奖励。
         ns, reward, done = step(s, a)
+        # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
         candidates.append(reward + (0.0 if done else gamma * values[ns]))
     policy.append(max(range(2), key=lambda a: candidates[a]))
 print("Values:", [round(x, 3) for x in values[1:6]])

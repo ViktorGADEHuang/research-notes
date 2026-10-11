@@ -4,6 +4,16 @@
 
 容器负责装数据，算法负责处理数据。优先组合标准库工具，通常比自己维护数组容量和排序循环更容易检查。
 
+
+## 看图梳理
+
+![容器装数据，算法做处理](../../assets/learning/cpp-containers.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-containers.svg)
+
+**选择容器**：动态列表：vector，固定数量：array；**调用算法**：排序、筛选、累加，区间是 [begin, end)；**注意边界**：end 不能解引用，扩容可能使引用失效。
+
+
 ## 先选合适的容器
 
 | 容器 | 适合的场景 | 注意 |
@@ -23,18 +33,26 @@
 #include <numeric>
 #include <vector>
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
     std::vector<double> distances{4.0, 1.0, 3.0, 2.0};
+    // 对半开区间 [begin, end) 排序，修改原容器。
     std::sort(distances.begin(), distances.end());
+    // 统计满足条件的元素，不生成另一个列表。
     const auto close_count = std::count_if(
         distances.begin(), distances.end(),
+        // 无捕获 Lambda：每个距离小于等于 2 才算接近。
         [](double d) { return d <= 2.0; });
+    // 初值 0.0 让累加保持浮点类型。
     const double sum = std::accumulate(
         distances.begin(), distances.end(), 0.0);
     for (const auto distance : distances) {
+        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << distance << ' ';
     }
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "\nclose: " << close_count << ", sum: " << sum << '\n';
+    // at 带范围检查，非法位置会抛异常。
     std::cout << "first: " << distances.at(0) << '\n';
 }
 ```

@@ -11,6 +11,16 @@
 
 先记住：$\mu_\theta(s)$ 是 Actor 输出的确定性动作，$Q_{\phi_i}$ 是第 $i$ 个 Critic，横线表示目标网络参数。$\sigma$ 是目标噪声的标准差，$I$ 是单位矩阵，表示各动作维度使用独立同尺度的高斯噪声。
 
+
+## 看图梳理
+
+![TD3 · 公式关系](../../assets/learning/rl-math-td3.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-td3.svg)
+
+**继承 DDPG 框架**：连续动作与经验回放，目标动作添加平滑噪声；**两个 Critic**：目标用两者较小值，减少过高估计；**延迟策略更新**：Critic 更新更频繁，Actor 和目标延迟更新。
+
+
 ## 平滑目标动作
 
 $$

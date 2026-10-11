@@ -3,6 +3,16 @@
 
 PPO 的系统笔记已按三部分整理：[算法直觉](intuition/ppo.md) · [公式讲解](math/ppo.md) · [完整 Python 实践](code/ppo.md)。本页保留它与放牧任务的联系。
 
+
+## 看图梳理
+
+![PPO 与放牧任务的连接](../assets/learning/rl-ppo.svg){ .learning-figure }
+
+[打开大图](../assets/learning/rl-ppo.svg)
+
+**设计任务**：状态、动作、奖励，终止与约束定义；**学习策略**：采样与优势估计，按 PPO 目标优化；**验证迁移**：多条件独立评估，仿真不等于实机成功。
+
+
 ## 1. PPO 是什么？
 
 PPO（Proximal Policy Optimization，近端策略优化）是一种策略梯度方法。它利用当前策略采集的数据更新策略，并通过限制更新幅度来减小训练不稳定的风险。
@@ -41,11 +51,7 @@ PPO（Proximal Policy Optimization，近端策略优化）是一种策略梯度�
 
 ## 4. Python 实践
 
-完整可运行代码见 [PPO 编程实践](code/ppo.md)，包含环境创建、训练、保存和独立评估。在安装好依赖的 Python 环境中，从项目根目录运行：
-
-```bash
-python docs/rl/examples/ppo.py --steps 10000
-```
+带中文注释的学习代码见 [PPO 编程实践](code/ppo.md)，展示环境创建、训练调用、保存和独立评估的顺序。阅读即可，不需要创建 RL 环境或执行训练。
 
 示例使用 CartPole 讲解训练流程。接入放牧仿真需要先实现自己的环境，再替换示例环境。
 

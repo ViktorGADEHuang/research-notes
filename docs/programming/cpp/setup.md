@@ -2,6 +2,16 @@
 
 写 C++ 需要两类工具：编辑器负责写代码，编译器把代码变成可执行程序。VS Code 是编辑器，安装 C++ 扩展不等于已经安装编译器。
 
+
+## 看图梳理
+
+![从代码到程序](../../assets/learning/cpp-setup.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-setup.svg)
+
+**编辑源文件**：hello.cpp，检查括号与分号；**编译与链接**：选择 C++ 标准，把定义组成程序；**启动程序**：执行生成的文件，核对输出与错误。
+
+
 ## 选择一条安装路线
 
 | 平台 | 一条常见路线 | 检查 |
@@ -23,7 +33,9 @@ PowerShell 找不到 g++ 时，把实际安装目录的 `ucrt64/bin` 加入 PATH
 #include <iostream>
 
 int main() {
+    // cout 输出文字，\n 表示换行。
     std::cout << "Hello, C++!\n";
+    // 返回 0 告诉操作系统：程序正常结束。
     return 0;
 }
 ```

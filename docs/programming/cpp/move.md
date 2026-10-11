@@ -4,6 +4,16 @@
 
 复制像把一份资料重新抄一遍；移动像允许另一对象接手原来的资料。移动可能减少分配和复制，但只有类型提供合适的移动操作时才能得到这个效果。
 
+
+## 看图梳理
+
+![复制与移动的区别](../../assets/learning/cpp-move.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-move.svg)
+
+**复制**：创建独立副本，两个对象各自管理数据；**允许移动**：std::move 是转换，构造或赋值执行转移；**移动之后**：源对象仍需按约定用，不要假定所有类型为空。
+
+
 ## std::move 到底做了什么
 
 `std::move(x)` 本身不搬数据，它把表达式转换成允许被移动的形式（通常称为右值引用形式）。之后的构造或赋值才决定执行移动还是复制。
@@ -20,19 +30,31 @@
 #include <utility>
 #include <vector>
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
     std::vector<int> original{1, 2, 3};
+    // 复制出独立容器，修改副本不影响原列表。
     auto copy = original;
+    // 只修改副本的第一个元素。
     copy[0] = 9;
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "original first: " << original[0] << '\n';
+    // 只修改副本的第一个元素。
     std::cout << "copy first: " << copy[0] << '\n';
+    // std::move 允许移动构造，实际转移由 vector 完成。
     auto moved = std::move(original);
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "moved size: " << moved.size() << '\n';
+    // 不依赖移动后内容；先清空，再把源对象用于新数据。
     original.clear(); // Valid regardless of its unspecified contents.
+    // 移动后的 vector 仍有效，可重新使用。
     original.push_back(7);
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "reused original: " << original[0] << '\n';
     auto owner = std::make_unique<int>(42);
+    // unique_ptr 禁止复制，但可移动转交资源。
     auto recipient = std::move(owner);
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "recipient: " << *recipient << '\n';
 }
 ```

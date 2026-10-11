@@ -9,6 +9,16 @@
     参数改变量 = 学习率 × 各时刻的折扣权重 × 回报 × 提高采样动作概率的梯度，最后把各时刻贡献相加。
 
 
+
+## 看图梳理
+
+![REINFORCE · 公式关系](../../assets/learning/rl-math-reinforce.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-reinforce.svg)
+
+**按当前策略采样**：概率分布选择动作，记录完整一幕；**计算回报与梯度**：折扣奖励得到 G，G 乘 log 概率梯度；**整体更新策略**：先在旧参数算梯度，再执行梯度上升。
+
+
 ## 目标与更新
 
 考虑折扣的起点回报目标 $J(\theta)=\mathbb E[G_0]$，其一幕采样的更新估计为：

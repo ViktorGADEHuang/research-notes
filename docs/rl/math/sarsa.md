@@ -9,6 +9,16 @@
     目标 = 奖励 + 折扣 × 实际下一动作的 Q 值；当前 Q 向目标挪一点。
 
 
+
+## 看图梳理
+
+![SARSA · 公式关系](../../assets/learning/rl-math-sarsa.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-sarsa.svg)
+
+**当前策略采样**：执行动作 a，在下一状态选 a 下一步；**用实际动作估计**：奖励 + 折扣 Q 下一步，下一步按该动作执行；**更新一格 Q**：目标减去旧 Q，属于同策略学习。
+
+
 ## 核心公式
 
 $$

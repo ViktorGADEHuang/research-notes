@@ -9,6 +9,16 @@
     目标 = 奖励 + 折扣 × 下一状态的最大 Q 值；当前 Q 向目标挪一点。
 
 
+
+## 看图梳理
+
+![Q-learning · 公式关系](../../assets/learning/rl-math-q-learning.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-q-learning.svg)
+
+**行为策略采样**：随机探索或贪心，得到奖励和下一状态；**目标用最大 Q**：不依赖实际下一动作，真正终止无后续项；**更新一格 Q**：学习贪心目标策略，属于异策略学习。
+
+
 ## 核心公式
 
 $$

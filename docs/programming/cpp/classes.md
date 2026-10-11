@@ -4,6 +4,16 @@
 
 类把相关数据和操作放到一起。RAII 的直觉是：让对象替你保管资源，对象离开作用域时自动归还。资源可以是内存、文件、锁，也可以是设备连接。
 
+
+## 看图梳理
+
+![类怎样维持合法状态](../../assets/learning/cpp-classes.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-classes.svg)
+
+**构造时**：初始化成员，拒绝非法速度；**使用时**：公开受控接口，只读操作加 const；**销毁时**：成员自动析构，资源跟随生命周期。
+
+
 ## 构造、析构与不变量
 
 **构造函数**在对象创建时执行；**析构函数**在对象正常销毁时执行。私有成员不能被外部代码随意改写。下面的类让“机器人速度必须有限且非负”一直成立，这种要求叫不变量。
@@ -22,31 +32,46 @@
 #include <stdexcept>
 #include <vector>
 
+// 把机器人数据与合法操作封装在一起。
 class Robot {
 public:
+    // 构造时直接初始化成员；explicit 避免意外隐式转换。
     explicit Robot(double speed_mps) : speed_mps_{speed_mps} {
+        // 拒绝 NaN/无穷大，也检查物理量不为负。
         if (!std::isfinite(speed_mps) || speed_mps < 0.0) {
+            // 输入不符合函数约定，报告原因而不继续计算。
             throw std::invalid_argument("invalid speed");
         }
     }
+    // 末尾 const 表示这个操作不修改普通成员。
     double distance(double seconds) const {
+        // 拒绝 NaN/无穷大，也检查物理量不为负。
         if (!std::isfinite(seconds) || seconds < 0.0) {
+            // 输入不符合函数约定，报告原因而不继续计算。
             throw std::invalid_argument("invalid duration");
         }
+        // 米/秒乘秒得到米。
         return speed_mps_ * seconds;
     }
+// 外部代码不能绕过接口随意修改速度。
 private:
     double speed_mps_;
+    // 容器自动管理内存，不需要自定义 delete 或析构。
     std::vector<double> observations_; // Automatically releases its memory.
 };
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
     const Robot robot{0.8};
+    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "distance: " << robot.distance(5.0) << " m\n";
     try {
         const Robot invalid{-1.0};
+        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << invalid.distance(1.0) << '\n';
+    // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
+        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << error.what() << '\n';
     }
 }

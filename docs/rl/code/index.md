@@ -1,6 +1,16 @@
 # 第三部分：编程实践
 
-统一使用 **Python**。基础算法直接手写，便于对照公式；深度算法使用成熟库，先建立可以运行的训练与评估闭环。每个算法都有完整代码和可下载文件。
+统一使用 **Python**。基础算法直接手写，便于对照公式；深度算法使用成熟库，通过代码认识训练与评估的数据流。每个算法都有完整代码和可下载文件。
+
+
+## 看图梳理
+
+![阅读 RL 代码的顺序](../../assets/learning/rl-code-index.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-code-index.svg)
+
+**背景与输入**：状态和动作的含义，基础手写或库调用；**学习步骤**：目标值或回报，找到更新语句；**检查与输出**：终止处理、独立评估，只阅读，无需 RL 环境。
+
 
 ## 两类示例
 
@@ -12,41 +22,13 @@
 
 基础脚本真的执行价值或策略更新；深度脚本真的调用训练、保存并重新加载模型。使用库实现不等于从零实现深度算法，各页会标明这一点。
 
-## 配置独立环境
+## 按数据流阅读，不需要运行
 
-推荐 Python 3.12，将科研算法依赖与网站构建环境分开。在项目根目录运行：
+本部分只提供 **Python 学习代码**：不需要创建 RL 虚拟环境，也不需要安装训练依赖。网页和构建过程不会执行这些示例。
 
-```powershell
-py -3.12 -m venv .venv-rl
-.venv-rl/Scripts/python.exe -m pip install -r docs/rl/examples/requirements.txt
-```
+先读输入、环境和变量，再找目标值或 learn 调用，最后读输出与资源释放。中文注释解释关键变量、公式对应关系、终止处理和库负责的部分。
 
-不使用 Windows 时，把第一行改为 `python3.12 -m venv .venv-rl`，环境解释器使用 `.venv-rl/bin/python`。
-
-需要节省 GPU 依赖时，可以先按照 [PyTorch 官方安装说明](https://pytorch.org/get-started/locally/) 安装 CPU 版本，再安装上述依赖。脚本本身默认在 CPU 上运行，不需要 MuJoCo，也不弹出渲染窗口。
-
-## 快速运行
-
-基础脚本不需要安装第三方包：
-
-```powershell
-python docs/rl/examples/q-learning.py
-```
-
-深度算法使用安装好依赖的环境：
-
-```powershell
-.venv-rl/Scripts/python.exe docs/rl/examples/ppo.py --steps 10000 --seed 7
-```
-
-也可使用合并入口，方便更换算法：
-
-```powershell
-python docs/rl/examples/tabular.py sarsa
-.venv-rl/Scripts/python.exe docs/rl/examples/deep_rl.py sac --steps 10000
-```
-
-如果单独下载页面里的 Python 文件，命令中的文件路径改为实际保存路径即可。
+基础六种算法展示手写更新；深度六种算法展示库调用流程，算法内部更新请配合公式篇阅读。依赖名称用于说明代码来源，不是学习前的安装任务。
 
 ## 每个算法的代码
 
@@ -63,10 +45,10 @@ python docs/rl/examples/tabular.py sarsa
 - [TD3：Python 实践](td3.md)
 - [SAC：Python 实践](sac.md)
 
-## 先检查运行，再判断学会没有
+## 阅读后检查是否理解
 
-- 基础例子先观察价值、动作或概率是否符合环境直觉。
-- 深度算法输出训练前后评估均值，以及保存的模型位置。
+- 基础例子用纸笔代入一次更新，检查价值、动作或概率如何改变。
+- 深度例子指出哪行创建模型、哪行触发训练、哪行单独评估。
 - 短时间运行主要检查流程，不代表收敛，也不保证回报增加。
 - 正式比较需要相同环境、训练预算、评估条件和多个训练种子。
 

@@ -2,6 +2,16 @@
 
 先不急着记公式。先弄清楚：算法学什么、用什么反馈、什么时候更新、如何选动作。
 
+
+## 看图梳理
+
+![算法家族先认路](../../assets/learning/rl-intuition-index.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-intuition-index.svg)
+
+**价值与模型**：价值迭代、MC、TD，SARSA、Q-learning、DQN；**直接学习策略**：REINFORCE，Actor-Critic、PPO；**连续动作**：DDPG、TD3，随机策略 SAC。
+
+
 ## 先看一次学习发生了什么
 
 ![强化学习从观察到动作再到反馈的循环](../assets/interaction-loop.svg){ .rl-figure loading=lazy }

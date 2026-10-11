@@ -5,6 +5,16 @@ C++ 可以用于机器人节点、传感器接口和性能敏感的数据处理�
 [从第一个程序开始 →](setup.md){ .md-button .md-button--primary }
 [下载全部代码与 CMake 项目](examples/cpp-examples.zip){ .md-button }
 
+
+## 看图梳理
+
+![C++ 学习路线](../../assets/learning/cpp-index.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-index.svg)
+
+**读懂基础**：变量与控制流程，函数与引用；**写好日常代码**：容器与资源责任，模板、回调、移动；**进入现代 C++**：17 / 20 / 23，并发与项目实践。
+
+
 ## “现代 C++”具体学什么
 
 现代 C++ 不只是某个版本号，更是一套写法：优先使用标准容器；用 RAII 和智能指针表达资源责任；用 const、明确类型和编译期约束表达接口；确有需要时才处理底层细节。这些原则参考 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)。

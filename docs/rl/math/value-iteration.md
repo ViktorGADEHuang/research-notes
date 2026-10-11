@@ -9,6 +9,16 @@
     枚举动作 → 按发生概率平均各结果 → 取最高分 → 更新状态分数。
 
 
+
+## 看图梳理
+
+![价值迭代 · 公式关系](../../assets/learning/rl-math-value-iteration.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-value-iteration.svg)
+
+**已知模型**：每个动作到哪里，获得多少奖励；**反复更新**：奖励 + 折扣后续价值，各动作中取最大；**得到结果**：最优价值估计，从价值提取贪心动作。
+
+
 ## 核心公式
 
 $$

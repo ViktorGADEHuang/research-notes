@@ -9,6 +9,16 @@
     Critic 学习“奖励 + 折扣后的未来评分与熵”；Actor 同时追求高 Q 与策略熵；温度决定两者怎么权衡。
 
 
+
+## 看图梳理
+
+![SAC · 公式关系](../../assets/learning/rl-math-sac.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/rl-math-sac.svg)
+
+**随机策略采样**：连续动作概率密度，经验回放；**奖励与熵目标**：兼顾回报和探索，双 Q 帮助减少偏差；**更新策略与价值**：Actor、Critic 分别优化，auto 可调熵温度。
+
+
 ## 回报里加上熵
 
 $$

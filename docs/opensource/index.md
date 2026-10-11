@@ -4,6 +4,16 @@
 
 ---
 
+
+## 看图梳理
+
+![资源要带着问题用](../assets/learning/opensource-index.svg){ .learning-figure }
+
+[打开大图](../assets/learning/opensource-index.svg)
+
+**先确定目标**：学理论还是读实现，环境与工具是否匹配；**查原始资料**：官方文档与论文，对照版本与接口；**形成自己的记录**：最小例子与笔记，保留来源与限制。
+
+
 ## 🤖 01 · 机器人学习
 
 ### Robotics Tutorial

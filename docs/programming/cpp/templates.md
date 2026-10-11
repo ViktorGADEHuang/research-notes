@@ -4,6 +4,16 @@
 
 模板像带“类型空位”的函数配方。你写一份逻辑，编译器在调用时根据类型生成对应版本。它不是运行时自动猜类型。
 
+
+## 看图梳理
+
+![一份配方，多个类型](../../assets/learning/cpp-templates.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-templates.svg)
+
+**定义模板**：template 的 T，写清支持的操作；**编译时**：推导类型并实例化，if constexpr 选分支；**检查要求**：static_assert，类型正确仍可能溢出。
+
+
 ## 从模板到编译期判断
 
 `template<typename T>` 引入类型参数 `T`。例如 `square(3)` 推导 `T` 为 `int`，`square(1.5)` 推导为 `double`。
@@ -18,21 +28,30 @@ C++17 的 `if constexpr` 根据编译期条件选择分支，在模板实例化�
 #include <iostream>
 #include <type_traits>
 
+// T 是编译期类型参数，可复用同一份配方。
 template<typename T>
+// 满足常量表达式要求时可在编译期求值，也可运行时计算。
 constexpr T square(T value) {
+    // 要求类型支持乘法；整数溢出仍需另外考虑。
     return value * value;
 }
 
+// T 是编译期类型参数，可复用同一份配方。
 template<typename T>
 void describe(T value) {
+    // 按类型选择分支，在模板实例化时丢弃另一分支。
     if constexpr (std::is_integral_v<T>) {
+        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "integer: " << value << '\n';
     } else {
+        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "other number: " << value << '\n';
     }
 }
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 编译时检查结论；条件不满足时无法生成程序。
     static_assert(square(3) == 9);
     describe(square(3));
     describe(square(1.5));
@@ -77,7 +96,8 @@ other number: 2.25
 
     ```cpp
     template<typename T>
-    constexpr T cube(T x) { return x * x * x; }
+    // 同一配方可用于支持乘法的不同类型。
+constexpr T cube(T x) { return x * x * x; }
     // 放在 main 中：
     static_assert(cube(2) == 8);
     std::cout << cube(0.5) << '\n'; // 0.125

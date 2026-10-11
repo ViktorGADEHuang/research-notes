@@ -4,6 +4,16 @@
 
 并发让多项工作在时间上交错推进。线程可能并行执行，但线程越多不一定越快；共享数据如果没有协调，还可能得到错误结果。
 
+
+## 看图梳理
+
+![线程先安全，再谈性能](../../assets/learning/cpp-concurrency.svg){ .learning-figure }
+
+[打开大图](../../assets/learning/cpp-concurrency.svg)
+
+**生命周期**：jthread 持有任务，等待完成再读最终结果；**共享数据**：atomic 计数，多个字段可用锁保护；**停止与性能**：停止请求需要合作，线程更多不一定更快。
+
+
 ## 先保证生命周期，再保护共享数据
 
 `std::jthread` 在析构时请求停止并等待线程结束，减少忘记 `join` 的风险。但停止请求是合作式的：工作函数必须主动检查停止标记，不能强制打断任意阻塞操作。
@@ -19,17 +29,24 @@
 #include <iostream>
 #include <thread>
 
+// 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 共享计数器，用原子操作避免竞争导致的丢失更新。
     std::atomic<int> samples{0};
     {
+        // 引用捕获计数器；计数器必须比工作线程活得久。
         const auto collect = [&samples] {
             for (int i = 0; i < 1000; ++i) {
+                // 原子的读—改—写，默认使用顺序一致的内存序。
                 samples.fetch_add(1); // Default sequentially consistent ordering.
             }
         };
+        // 启动工作；对象析构会请求停止并等待线程结束。
         std::jthread first{collect};
+        // 启动工作；对象析构会请求停止并等待线程结束。
         std::jthread second{collect};
     } // Both jthreads join before reading the final count.
+    // 内部作用域已结束，两个线程完成后读取最终计数。
     std::cout << "samples: " << samples.load() << '\n';
 }
 ```
