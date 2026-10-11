@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 180" role="img">
+<rect width="840" height="180" rx="16" fill="#f3f6f2"/>
+<rect x="24" y="36" width="240" height="104" rx="12" fill="#24463c"/>
+<text x="144" y="77" text-anchor="middle" font-family="sans-serif" font-size="21" fill="white">进入作用域</text>
+<text x="144" y="111" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#deedc7">构造对象，取得资源</text>
+<path d="M269 88 h24 m-8 -6 8 6 -8 6" fill="none" stroke="#638575" stroke-width="3"/>
+<rect x="300" y="36" width="240" height="104" rx="12" fill="#24463c"/>
+<text x="420" y="77" text-anchor="middle" font-family="sans-serif" font-size="21" fill="white">使用对象</text>
+<text x="420" y="111" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#deedc7">成员保管内存或文件</text>
+<path d="M545 88 h24 m-8 -6 8 6 -8 6" fill="none" stroke="#638575" stroke-width="3"/>
+<rect x="576" y="36" width="240" height="104" rx="12" fill="#24463c"/>
+<text x="696" y="77" text-anchor="middle" font-family="sans-serif" font-size="21" fill="white">离开作用域</text>
+<text x="696" y="111" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#deedc7">析构成员，释放资源</text>
+</svg>

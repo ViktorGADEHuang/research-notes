@@ -103,6 +103,23 @@ nav:
 
   - 编程技术:
       - 编程学习概览: programming/index.md
+      - C++ 与现代 C++:
+          - 学习路线与示例下载: programming/cpp/index.md
+          - 01 · 环境与第一个程序: programming/cpp/setup.md
+          - 02 · 变量、判断与循环: programming/cpp/basics.md
+          - 03 · 函数、引用与 const: programming/cpp/functions.md
+          - 04 · 类与 RAII: programming/cpp/classes.md
+          - 05 · 容器与标准算法: programming/cpp/containers.md
+          - 06 · 指针与智能指针: programming/cpp/ownership.md
+          - 07 · 模板与泛型编程: programming/cpp/templates.md
+          - 08 · Lambda 与回调: programming/cpp/lambdas.md
+          - 09 · 移动语义: programming/cpp/move.md
+          - 10 · C++17 常用工具: programming/cpp/cpp17.md
+          - 11 · C++20 概念与范围: programming/cpp/cpp20.md
+          - 12 · C++23 错误处理: programming/cpp/cpp23.md
+          - 13 · 并发与线程: programming/cpp/concurrency.md
+          - 14 · CMake 与调试: programming/cpp/tooling.md
+          - 15 · 放牧数据处理小项目: programming/cpp/project.md
 
   - 论文阅读:
       - 论文阅读记录: papers/index.md
