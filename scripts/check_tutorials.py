@@ -70,6 +70,9 @@ for p in DOCS.rglob('*.md'):
     text = p.read_text(encoding='utf-8')
     check(text.count('```') % 2 == 0, f'{p}: 未闭合代码围栏')
     check('\ufffd' not in text, f'{p}: 存在乱码替换字符')
+    # 仅解析语法，包括需要正文提供输入的阅读片段；不导入，不执行。
+    for block in re.findall(r'^```python\s*\n(.*?)^```', text, re.M | re.S):
+        ast.parse(block, filename=str(p))
 
 for p in DOCS.rglob('*.svg'):
     diagram = ET.parse(p).getroot()

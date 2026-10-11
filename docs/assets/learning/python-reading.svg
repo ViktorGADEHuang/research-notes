@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+<title id="title">Python 从输入到结果的阅读路线</title><desc id="desc">依次找到变量与列表、判断与循环、函数与结果，再对照算法更新。</desc>
+<rect width="960" height="360" rx="20" fill="#f3f6f0"/>
+<g font-family="Microsoft YaHei, sans-serif" text-anchor="middle" fill="#24463c">
+<text x="480" y="55" font-size="27" font-weight="700">先找到数据，再追踪它怎样改变</text>
+<g fill="#fff" stroke="#b8cbbd"><rect x="35" y="105" width="260" height="160" rx="12"/><rect x="350" y="105" width="260" height="160" rx="12"/><rect x="665" y="105" width="260" height="160" rx="12"/></g>
+<g font-size="24" font-weight="700"><text x="165" y="145">① 输入放在哪里</text><text x="480" y="145">② 怎样处理</text><text x="795" y="145">③ 结果代表什么</text></g>
+<g font-size="21"><text x="165" y="192">变量 · 列表 · 记录</text><text x="165" y="232">当前位置与分数</text><text x="480" y="192">判断 · 循环 · 函数</text><text x="480" y="232">算目标，再更新一格</text><text x="795" y="192">返回值 · 输出</text><text x="795" y="232">分数不等于概率</text></g>
+<g font-size="30"><text x="322" y="190">→</text><text x="637" y="190">→</text></g>
+<text x="480" y="320" font-size="22">阅读与纸笔推演即可，无需创建 RL 环境</text>
+</g></svg>

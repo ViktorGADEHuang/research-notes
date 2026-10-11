@@ -23,7 +23,7 @@ for _ in range(10000):
     for s in range(1, 6):
         candidates = []
         for a in range(2):
-            # 执行一次动作，获得下一状态、奖励和真正终止的标记。
+            # 用已知规则计算候选动作的结果；这里是在枚举，不是采样。
             ns, reward, done = step(s, a)
             # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
             candidates.append(reward + (0.0 if done else gamma * old[ns]))
@@ -36,7 +36,7 @@ policy = []
 for s in range(1, 6):
     candidates = []
     for a in range(2):
-        # 执行一次动作，获得下一状态、奖励和真正终止的标记。
+        # 用已知规则计算候选动作的结果；这里是在枚举，不是采样。
         ns, reward, done = step(s, a)
         # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
         candidates.append(reward + (0.0 if done else gamma * values[ns]))

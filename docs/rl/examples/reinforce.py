@@ -44,7 +44,7 @@ for _ in range(3000):
     for t in reversed(range(len(episode))):
         total = episode[t][2] + gamma * total
         returns[t] = total
-    # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
+    # 为这一幕创建梯度累积表；先不改变策略偏好。
     grad = [[0.0, 0.0] for _ in range(7)]
     for t, (s, a, _) in enumerate(episode):
         probs = softmax(logits[s])

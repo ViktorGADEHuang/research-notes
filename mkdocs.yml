@@ -104,6 +104,7 @@ nav:
 
   - 编程技术:
       - 编程学习概览: programming/index.md
+      - Python 阅读入门 · 看懂 RL 代码: programming/python-reading.md
       - C++ 与现代 C++:
           - 学习路线与示例下载: programming/cpp/index.md
           - 01 · 环境与第一个程序: programming/cpp/setup.md

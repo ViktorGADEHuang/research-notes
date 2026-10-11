@@ -112,7 +112,7 @@ def run(algorithm, episodes=3000, seed=7):
             # 同一幕内用集合标记出现过的状态，保证首次访问 MC 不重复计数。
             visited = set()
             # REINFORCE 梯度都在采样时的策略上计算，然后整体更新。
-            # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
+            # 为这一幕创建梯度累积表；先不改变策略偏好。
             gradients = [[0.0, 0.0] for _ in range(7)]
             for t, (s, a, _) in enumerate(trajectory):
                 if algorithm == "mc" and s not in visited:
