@@ -4,8 +4,6 @@ import argparse
 from pathlib import Path
 # 环境接口库：提供 reset 开始一局、step 执行动作。
 import gymnasium as gym
-# 数组计算工具；这里主要用于连续动作的探索噪声。
-import numpy as np
 # 神经网络库；本示例的网络与梯度计算由 SB3 调用它完成。
 import torch
 # 导入库实现的算法；调用库并不等于从零实现算法内部。

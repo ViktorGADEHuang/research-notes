@@ -5,6 +5,13 @@
 Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留下来”这种短规则，用 Lambda 就不用跳到另一个文件找函数定义。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    比较按值捕获和按引用捕获，并找出生命周期要求。
+
+    **先会这些就够了**：函数、引用。
+
+
 ## 看图梳理
 
 ![Lambda 如何使用外部变量](../../assets/learning/cpp-lambdas.svg){ .learning-figure }
@@ -42,14 +49,10 @@ int main() {
     const auto by_reference = [&threshold](double d) { return d > threshold; };
     // 修改原变量，用来展示两种捕获方式的差别。
     threshold = 4.0;
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << std::boolalpha;
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "value capture: " << by_value(3.0) << '\n';
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "reference capture: " << by_reference(3.0) << '\n';
     const std::vector<double> distances{1.0, 3.0, 5.0};
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "above current threshold: "
               // 算法会调用传入的 Lambda 检查每个元素。
               << std::count_if(distances.begin(), distances.end(), by_reference)

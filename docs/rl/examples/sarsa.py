@@ -1,5 +1,4 @@
 """标准库教学代码：对照注释理解更新过程，无需运行。"""
-import math
 import random
 
 # 固定随机数起点，便于对照不同步骤；随机种子不保证跨硬件完全一致。
@@ -34,7 +33,7 @@ for _ in range(3000):
     a = choose(q, s)
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
-        # 走到两端才是真正终止；终止状态没有后续奖励。
+        # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # SARSA 用下一步实际准备执行的动作；终止时的占位动作不参与目标。
         next_action = choose(q, ns) if not done else 0

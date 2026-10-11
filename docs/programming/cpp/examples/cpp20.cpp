@@ -33,9 +33,7 @@ int main() {
         | std::views::transform([](double d) { return meters_to_centimeters(d); });
     // 开始遍历才触发延迟筛选与转换。
     for (double value : far_cm) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << value << ' ';
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "\nmean: " << mean(distances) << '\n';
 }

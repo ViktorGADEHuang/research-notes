@@ -19,10 +19,7 @@ int main() {
             ++far_count;
         }
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << experiment << '\n';
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "far sheep: " << far_count << '\n';
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "integer: " << 5 / 2 << ", decimal: " << 5.0 / 2 << '\n';
 }

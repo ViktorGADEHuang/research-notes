@@ -5,6 +5,13 @@
 模板像带“类型空位”的函数配方。你写一份逻辑，编译器在调用时根据类型生成对应版本。它不是运行时自动猜类型。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    分清编译期类型配方与运行时变量。
+
+    **先会这些就够了**：函数、基本类型。
+
+
 ## 看图梳理
 
 ![一份配方，多个类型](../../assets/learning/cpp-templates.svg){ .learning-figure }
@@ -41,10 +48,8 @@ template<typename T>
 void describe(T value) {
     // 按类型选择分支，在模板实例化时丢弃另一分支。
     if constexpr (std::is_integral_v<T>) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "integer: " << value << '\n';
     } else {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "other number: " << value << '\n';
     }
 }

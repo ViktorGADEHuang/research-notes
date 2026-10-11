@@ -17,10 +17,8 @@ int main() {
     const double sum = std::accumulate(
         distances.begin(), distances.end(), 0.0);
     for (const auto distance : distances) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << distance << ' ';
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "\nclose: " << close_count << ", sum: " << sum << '\n';
     // at 带范围检查，非法位置会抛异常。
     std::cout << "first: " << distances.at(0) << '\n';

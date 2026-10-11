@@ -8,6 +8,7 @@ ASSETS = (
     "stylesheets/extra.css",
     "javascripts/mathjax.js",
     "javascripts/rl-learning.js",
+    "javascripts/tutorial-reading.js",
 )
 ATTRIBUTE = re.compile(r'(?P<start>\b(?:href|src)=")(?P<url>[^\"]+)(?P<end>")')
 

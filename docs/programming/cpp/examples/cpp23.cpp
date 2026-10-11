@@ -33,7 +33,6 @@ int main() {
         const auto result = speed(4.0, seconds);
         // 先确认成功，成功时才能使用 *result。
         if (result) {
-            // 把结果输出到终端，便于与正文中的示例结果对照。
             std::cout << "speed: " << *result << " m/s\n";
         } else {
             // 只在失败分支读取错误原因。

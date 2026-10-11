@@ -34,15 +34,12 @@ private:
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
     const Robot robot{0.8};
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "distance: " << robot.distance(5.0) << " m\n";
     try {
         const Robot invalid{-1.0};
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << invalid.distance(1.0) << '\n';
     // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << error.what() << '\n';
     }
 }

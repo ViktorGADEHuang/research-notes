@@ -3,6 +3,13 @@
 [算法直觉](../intuition/td3.md) · [公式讲解](../math/td3.md) · [Python 实践](td3.md)
 
 
+!!! tip "读完这页，你应该能做到"
+
+    找到输入、目标或训练调用，再对照公式解释关键注释。
+
+    **先会这些就够了**：DDPG 的 Actor / Critic。
+
+
 ## 看图梳理
 
 ![TD3 · 代码数据流](../../assets/learning/rl-code-td3.svg){ .learning-figure }

@@ -5,6 +5,13 @@
 C++20 让类型要求更清楚，让数据处理更像描述步骤。concepts 限制“谁能调用”，ranges 组织“怎么处理”，span 表示“借用哪一段”。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    分别说出 concepts、ranges、span 解决什么问题。
+
+    **先会这些就够了**：模板、Lambda、容器。
+
+
 ## 看图梳理
 
 ![C++20 的三个常用工具](../../assets/learning/cpp-cpp20.svg){ .learning-figure }
@@ -60,10 +67,8 @@ int main() {
         | std::views::transform([](double d) { return meters_to_centimeters(d); });
     // 开始遍历才触发延迟筛选与转换。
     for (double value : far_cm) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << value << ' ';
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "\nmean: " << mean(distances) << '\n';
 }
 ```

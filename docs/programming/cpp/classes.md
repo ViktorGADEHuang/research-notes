@@ -5,6 +5,13 @@
 类把相关数据和操作放到一起。RAII 的直觉是：让对象替你保管资源，对象离开作用域时自动归还。资源可以是内存、文件、锁，也可以是设备连接。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    解释构造检查和成员自动清理为什么能减少资源错误。
+
+    **先会这些就够了**：函数、const。
+
+
 ## 看图梳理
 
 ![类怎样维持合法状态](../../assets/learning/cpp-classes.svg){ .learning-figure }
@@ -63,15 +70,12 @@ private:
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
     const Robot robot{0.8};
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "distance: " << robot.distance(5.0) << " m\n";
     try {
         const Robot invalid{-1.0};
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << invalid.distance(1.0) << '\n';
     // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << error.what() << '\n';
     }
 }

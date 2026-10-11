@@ -5,6 +5,13 @@
 函数把一件事包装成可以重复调用的步骤。参数是输入，返回值是输出；引用则是给已有对象起一个别名。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    指出哪些函数只读数据，哪些会修改调用者的对象。
+
+    **先会这些就够了**：变量、循环。
+
+
 ## 看图梳理
 
 ![函数的输入与修改责任](../../assets/learning/cpp-functions.svg){ .learning-figure }
@@ -58,18 +65,14 @@ void shift(std::vector<double>& values, double offset) {
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
     std::vector<double> values{1.0, 2.0, 3.0};
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "before: " << average(values) << '\n';
     shift(values, 1.0);
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "after: " << average(values) << '\n';
     try {
         const std::vector<double> empty;
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << average(empty) << '\n';
     // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << error.what() << '\n';
     }
 }

@@ -3,6 +3,13 @@
 [算法直觉](../intuition/q-learning.md) · [公式讲解](../math/q-learning.md) · [Python 实践](q-learning.md)
 
 
+!!! tip "读完这页，你应该能做到"
+
+    找到输入、目标或训练调用，再对照公式解释关键注释。
+
+    **先会这些就够了**：Q 表、贪心选择。
+
+
 ## 看图梳理
 
 ![Q-learning · 代码数据流](../../assets/learning/rl-code-q-learning.svg){ .learning-figure }
@@ -32,7 +39,6 @@
 
 ```python
 """标准库教学代码：对照注释理解更新过程，无需运行。"""
-import math
 import random
 
 # 固定随机数起点，便于对照不同步骤；随机种子不保证跨硬件完全一致。
@@ -67,7 +73,7 @@ for _ in range(3000):
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
         a = choose(q, s)
-        # 走到两端才是真正终止；终止状态没有后续奖励。
+        # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # 目标 = 本步奖励 + 折扣后的后续估计；done 时后续项归零。
         target = reward + (0.0 if done else gamma * max(q[ns]))

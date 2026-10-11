@@ -3,6 +3,13 @@
 [算法直觉](../intuition/sac.md) · [公式讲解](../math/sac.md) · [Python 实践](sac.md)
 
 
+!!! tip "读完这页，你应该能做到"
+
+    找到输入、目标或训练调用，再对照公式解释关键注释。
+
+    **先会这些就够了**：双 Q、随机策略；熵可先按“分布的分散程度”理解。
+
+
 ## 看图梳理
 
 ![SAC · 代码数据流](../../assets/learning/rl-code-sac.svg){ .learning-figure }
@@ -49,8 +56,6 @@ import argparse
 from pathlib import Path
 # 环境接口库：提供 reset 开始一局、step 执行动作。
 import gymnasium as gym
-# 数组计算工具；这里主要用于连续动作的探索噪声。
-import numpy as np
 # 神经网络库；本示例的网络与梯度计算由 SB3 调用它完成。
 import torch
 # 导入库实现的算法；调用库并不等于从零实现算法内部。

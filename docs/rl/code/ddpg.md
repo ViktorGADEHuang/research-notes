@@ -3,6 +3,13 @@
 [算法直觉](../intuition/ddpg.md) · [公式讲解](../math/ddpg.md) · [Python 实践](ddpg.md)
 
 
+!!! tip "读完这页，你应该能做到"
+
+    找到输入、目标或训练调用，再对照公式解释关键注释。
+
+    **先会这些就够了**：Q 网络、连续动作。
+
+
 ## 看图梳理
 
 ![DDPG · 代码数据流](../../assets/learning/rl-code-ddpg.svg){ .learning-figure }

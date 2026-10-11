@@ -48,6 +48,7 @@ nav:
 
   - 强化学习:
       - 强化学习概览: rl/index.md
+      - 入门第一课 · 用一次经历理解学习: rl/start.md
       - 第一部分 · 算法直觉:
           - 算法直觉导读: rl/intuition/index.md
           - 价值迭代: rl/intuition/value-iteration.md
@@ -148,4 +149,5 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - javascripts/rl-learning.js
+  - javascripts/tutorial-reading.js
   - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js

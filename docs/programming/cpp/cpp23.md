@@ -5,6 +5,13 @@
 “计算成功得到速度”与“计算失败得到原因”是两种结果。`std::expected<T, E>` 把它们放进同一个返回类型：成功装 T，失败装 E。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    只在成功分支取值，只在失败分支读取错误原因。
+
+    **先会这些就够了**：optional、判断分支。
+
+
 ## 看图梳理
 
 ![expected 的两条结果路径](../../assets/learning/cpp-cpp23.svg){ .learning-figure }
@@ -64,7 +71,6 @@ int main() {
         const auto result = speed(4.0, seconds);
         // 先确认成功，成功时才能使用 *result。
         if (result) {
-            // 把结果输出到终端，便于与正文中的示例结果对照。
             std::cout << "speed: " << *result << " m/s\n";
         } else {
             // 只在失败分支读取错误原因。

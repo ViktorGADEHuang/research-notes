@@ -103,3 +103,39 @@
 /* Let long inline equations wrap to their own scrollable line on phones. */
 .md-typeset span.arithmatex { display: inline-block; max-width: 100%; vertical-align: middle; padding: 0; }
 .md-typeset div.arithmatex { max-width: 100%; }
+
+/* 教程以正文为中心，保持代码、图示与正文有清楚的阅读层次。 */
+.md-typeset .reading-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; padding: .6rem .8rem; margin: -.5rem 0 1.4rem; border: 1px solid var(--research-border); border-radius: 10px; background: var(--research-surface); color: var(--research-muted); font-size: .66rem; }
+.reading-toolbar button, .figure-dialog button { border: 1px solid var(--research-border); border-radius: 6px; padding: .3rem .65rem; background: var(--md-default-bg-color); color: var(--research-accent); font: inherit; font-weight: 650; cursor: pointer; }
+.reading-toolbar button:hover, .figure-dialog button:hover { border-color: var(--research-accent); }
+.reading-toolbar button:focus-visible, .figure-dialog button:focus-visible, .figure-dialog-scroll:focus-visible, .md-typeset img[role="button"]:focus-visible { outline: 3px solid var(--md-accent-fg-color); outline-offset: 3px; }
+.md-typeset img[role="button"] { cursor: zoom-in; }
+.md-typeset .highlight pre { border: 1px solid var(--research-border); border-radius: 10px; }
+.md-typeset .highlight pre code { font-size: .68rem; line-height: 1.75; }
+.md-typeset .highlight .c1, .md-typeset .highlight .cm { color: var(--research-muted); }
+.md-typeset details { border-radius: 9px; }
+.md-typeset .admonition { border-radius: 9px; }
+.md-typeset h2 { scroll-margin-top: 5rem; }
+.figure-dialog { width: min(1100px, 94vw); max-width: 94vw; max-height: 90vh; padding: 1rem; border: 1px solid var(--research-border); border-radius: 14px; background: var(--md-default-bg-color); color: var(--md-default-fg-color); box-shadow: 0 18px 80px #0005; }
+.figure-dialog::backdrop { background: #10251dcc; }
+.figure-dialog-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; margin-bottom: .7rem; }
+.figure-dialog-header p { margin: 0; font-size: .8rem; font-weight: 700; }
+.figure-dialog-controls { display: flex; gap: .5rem; font-size: .7rem; }
+.figure-dialog-scroll { overflow: auto; max-height: 70vh; border-radius: 10px; }
+.figure-dialog-scroll img { display: block; width: 100%; max-width: none; height: auto; }
+.figure-dialog.is-zoomed .figure-dialog-scroll img { width: max(100%, 1200px); }
+.figure-dialog-hint { display: none; margin: .2rem 0 .65rem; color: var(--research-muted); font-size: .65rem; }
+.figure-dialog.is-zoomed .figure-dialog-hint { display: block; }
+@media screen and (min-width: 1220px) {
+  .reading-focus .md-sidebar { display: none; }
+  .reading-focus .md-content { max-width: 980px; margin-inline: auto; }
+}
+@media screen and (max-width: 600px) {
+  .md-typeset { line-height: 1.9; }
+  .md-typeset h1 { font-size: 1.45rem; }
+  .figure-dialog { padding: .65rem; }
+  .md-typeset .highlight pre code { font-size: .65rem; }
+}
+@media screen and (max-width: 1219px) {
+  .reading-toolbar button { display: none; }
+}

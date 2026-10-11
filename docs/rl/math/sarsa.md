@@ -10,6 +10,13 @@
 
 
 
+!!! tip "读完这页，你应该能做到"
+
+    指出目标中使用的是下一步实际选择的动作。
+
+    **先会这些就够了**：Q 表、epsilon-greedy。
+
+
 ## 看图梳理
 
 ![SARSA · 公式关系](../../assets/learning/rl-math-sarsa.svg){ .learning-figure }
@@ -67,6 +74,14 @@ $$
 <p data-explanation>这是一次更新的演示；滑块改变输入，不会训练机器人。</p>
 <noscript>当前显示默认值。启用浏览器 JavaScript 后可拖动滑块。</noscript>
 </div>
+
+## 不看答案，自己判断一次
+
+下一状态两个动作的 Q 是 0.3 与 0.9，但下一步选了 0.3 对应的动作，SARSA 使用哪一个？
+
+??? success "查看推理与答案"
+
+    使用 0.3。SARSA 目标跟随实际选定的下一动作；它不是每次都替换成最高分动作。
 
 ## 进一步阅读
 

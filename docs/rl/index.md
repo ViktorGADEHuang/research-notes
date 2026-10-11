@@ -27,6 +27,11 @@
 </div>
 
 
+!!! tip "第一次接触强化学习？"
+
+    先读[入门第一课](start.md)：用一条走廊分清奖励、回报、价值和策略，再算一次更新。不必先背公式。
+
+
 ## 看图梳理
 
 ![强化学习的三条学习线](../assets/learning/rl-index.svg){ .learning-figure }

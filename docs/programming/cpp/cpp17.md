@@ -5,6 +5,13 @@
 C++17 有一批实用工具，让接口更准确地表达“可能没有结果”“几种结果之一”和“只读地看一段文字”。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    分清“有效值是 0”和“没有结果”，检查字符串借用的有效期。
+
+    **先会这些就够了**：引用、容器。
+
+
 ## 看图梳理
 
 ![C++17 让接口表达更准确](../../assets/learning/cpp-cpp17.svg){ .learning-figure }
@@ -50,20 +57,16 @@ int main() {
     const std::map<int, double> positions{{1, 0.0}, {2, 3.5}};
     // 结构化绑定拆出键和值，并以引用避免复制。
     for (const auto& [id, x] : positions) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "sheep " << id << ": " << x << '\n';
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "missing fallback: " << lookup(positions, 9).value_or(-1.0) << '\n';
     // 检查有没有值，而不是里面的数是不是非零。
     if (auto x = lookup(positions, 1)) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "valid zero: " << *x << '\n';
     }
     const std::string name{"herding"};
     // 只借看 name 的字符，name 必须保持有效。
     const std::string_view view{name};
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "view: " << view << '\n';
     // 当前保存一种类型，不是同时存两种结果。
     const std::variant<int, std::string> message{std::string{"ready"}};

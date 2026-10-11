@@ -61,21 +61,15 @@ int main() {
     // 示例帧，不是实时采集或机器人控制输入。
     const std::vector<Sheep> frame{{1, {0.0, 0.0}}, {2, {2.0, 0.0}}, {3, {4.0, 3.0}}};
     if (const auto result = summarize(frame)) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << std::fixed << std::setprecision(3);
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "center: (" << result->center.x_m << ", "
                   << result->center.y_m << ") m\n";
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "farthest id: " << result->farthest_id << '\n';
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "radius: " << result->radius_m << " m\n";
     } else {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "invalid frame\n";
     }
     const std::vector<Sheep> empty;
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "empty frame accepted: " << std::boolalpha
               << summarize(empty).has_value() << '\n';
 }

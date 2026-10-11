@@ -20,7 +20,7 @@
 | 库实现训练 | DQN、A2C、PPO | CartPole-v1 | Gymnasium、Stable-Baselines3、PyTorch |
 | 库实现训练 | DDPG、TD3、SAC | Pendulum-v1 | Gymnasium、Stable-Baselines3、PyTorch |
 
-基础脚本真的执行价值或策略更新；深度脚本真的调用训练、保存并重新加载模型。使用库实现不等于从零实现深度算法，各页会标明这一点。
+基础代码展示价值或策略怎样更新；深度代码展示训练、保存和恢复的调用顺序。使用库实现不等于从零实现深度算法，各页会标明这一点。
 
 ## 按数据流阅读，不需要运行
 
@@ -49,7 +49,7 @@
 
 - 基础例子用纸笔代入一次更新，检查价值、动作或概率如何改变。
 - 深度例子指出哪行创建模型、哪行触发训练、哪行单独评估。
-- 短时间运行主要检查流程，不代表收敛，也不保证回报增加。
+- `learn` 只是触发学习流程，不等于已经学会任务或回报必然增加。
 - 正式比较需要相同环境、训练预算、评估条件和多个训练种子。
 
 [依赖版本文件](../examples/requirements.txt) · [Gymnasium 环境接口](https://gymnasium.farama.org/api/env/) · [SB3 算法支持表](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html)

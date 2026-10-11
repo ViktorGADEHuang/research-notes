@@ -4,8 +4,8 @@ import random
 
 # 固定随机数起点，便于对照不同步骤；随机种子不保证跨硬件完全一致。
 rng = random.Random(7)
-# gamma 给未来奖励打折；alpha 决定每次向目标修正多少。
-gamma, alpha = 0.95, 0.1
+# gamma 给未来奖励打折；本算法的更新步长在更新语句中定义。
+gamma = 0.95
 
 # 小走廊模型：输入当前位置与动作，返回下一位置、奖励、终止标记。
 def step(state, action):
@@ -17,14 +17,6 @@ def step(state, action):
     reward = 1.0 if ns == 6 else -1.0 if ns == 0 else -0.01
     return ns, reward, done
 
-# epsilon-greedy：少量随机探索，多数时候选择当前高分动作。
-def choose(q, state, epsilon=0.15):
-    # 以 epsilon 的概率探索，防止一直停在当前看起来最好的选择。
-    if rng.random() < epsilon:
-        return rng.randrange(2)
-    # 取当前状态的最高 Q 值；相同分数的动作随机打破平局。
-    best = max(q[state])
-    return rng.choice([a for a in range(2) if q[state][a] == best])
 
 # 将动作偏好转换成概率；先减最大值可减少指数溢出的风险。
 def softmax(row):
@@ -42,7 +34,7 @@ for _ in range(3000):
     while s not in (0, 6):
         probs = softmax(logits[s])
         a = rng.choices([0, 1], weights=probs)[0]
-        # 走到两端才是真正终止；终止状态没有后续奖励。
+        # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # 保存这一时刻的数据，方便在结束后从后往前计算回报。
         episode.append((s, a, reward))

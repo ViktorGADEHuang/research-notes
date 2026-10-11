@@ -5,6 +5,13 @@
 容器负责装数据，算法负责处理数据。优先组合标准库工具，通常比自己维护数组容量和排序循环更容易检查。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    选出合适容器，分清元素数量、容量和末尾迭代器。
+
+    **先会这些就够了**：循环、函数。
+
+
 ## 看图梳理
 
 ![容器装数据，算法做处理](../../assets/learning/cpp-containers.svg){ .learning-figure }
@@ -47,10 +54,8 @@ int main() {
     const double sum = std::accumulate(
         distances.begin(), distances.end(), 0.0);
     for (const auto distance : distances) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << distance << ' ';
     }
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "\nclose: " << close_count << ", sum: " << sum << '\n';
     // at 带范围检查，非法位置会抛异常。
     std::cout << "first: " << distances.at(0) << '\n';

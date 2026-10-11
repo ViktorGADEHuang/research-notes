@@ -14,10 +14,8 @@ template<typename T>
 void describe(T value) {
     // 按类型选择分支，在模板实例化时丢弃另一分支。
     if constexpr (std::is_integral_v<T>) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "integer: " << value << '\n';
     } else {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "other number: " << value << '\n';
     }
 }

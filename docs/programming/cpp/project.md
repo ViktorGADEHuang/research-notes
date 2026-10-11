@@ -5,6 +5,13 @@
 把前面知识串起来：输入一帧羊的位置，检查数据，算羊群中心和最远的羊。这个程序用于练习数据处理接口，不直接生成机器人控制指令。
 
 
+!!! tip "读完这页，你应该能做到"
+
+    手算一帧数据的中心与最远个体，检查无效输入。
+
+    **先会这些就够了**：span、optional、容器。
+
+
 ## 看图梳理
 
 ![一帧羊的位置怎样变成统计结果](../../assets/learning/cpp-project.svg){ .learning-figure }
@@ -88,21 +95,15 @@ int main() {
     // 示例帧，不是实时采集或机器人控制输入。
     const std::vector<Sheep> frame{{1, {0.0, 0.0}}, {2, {2.0, 0.0}}, {3, {4.0, 3.0}}};
     if (const auto result = summarize(frame)) {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << std::fixed << std::setprecision(3);
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "center: (" << result->center.x_m << ", "
                   << result->center.y_m << ") m\n";
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "farthest id: " << result->farthest_id << '\n';
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "radius: " << result->radius_m << " m\n";
     } else {
-        // 把结果输出到终端，便于与正文中的示例结果对照。
         std::cout << "invalid frame\n";
     }
     const std::vector<Sheep> empty;
-    // 把结果输出到终端，便于与正文中的示例结果对照。
     std::cout << "empty frame accepted: " << std::boolalpha
               << summarize(empty).has_value() << '\n';
 }

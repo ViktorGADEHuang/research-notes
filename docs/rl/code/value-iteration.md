@@ -3,6 +3,13 @@
 [算法直觉](../intuition/value-iteration.md) · [公式讲解](../math/value-iteration.md) · [Python 实践](value-iteration.md)
 
 
+!!! tip "读完这页，你应该能做到"
+
+    找到输入、目标或训练调用，再对照公式解释关键注释。
+
+    **先会这些就够了**：已知模型、奖励、价值。
+
+
 ## 看图梳理
 
 ![价值迭代 · 代码数据流](../../assets/learning/rl-code-value-iteration.svg){ .learning-figure }
@@ -32,13 +39,9 @@
 
 ```python
 """标准库教学代码：对照注释理解更新过程，无需运行。"""
-import math
-import random
 
-# 固定随机数起点，便于对照不同步骤；随机种子不保证跨硬件完全一致。
-rng = random.Random(7)
-# gamma 给未来奖励打折；alpha 决定每次向目标修正多少。
-gamma, alpha = 0.95, 0.1
+# gamma 给未来奖励打折；价值迭代每轮直接采用最大的动作目标。
+gamma = 0.95
 
 # 小走廊模型：输入当前位置与动作，返回下一位置、奖励、终止标记。
 def step(state, action):
@@ -50,14 +53,6 @@ def step(state, action):
     reward = 1.0 if ns == 6 else -1.0 if ns == 0 else -0.01
     return ns, reward, done
 
-# epsilon-greedy：少量随机探索，多数时候选择当前高分动作。
-def choose(q, state, epsilon=0.15):
-    # 以 epsilon 的概率探索，防止一直停在当前看起来最好的选择。
-    if rng.random() < epsilon:
-        return rng.randrange(2)
-    # 取当前状态的最高 Q 值；相同分数的动作随机打破平局。
-    best = max(q[state])
-    return rng.choice([a for a in range(2) if q[state][a] == best])
 
 # V 表按状态存分数；两个终止位置也占位，但不更新它们。
 values = [0.0] * 7
@@ -68,7 +63,7 @@ for _ in range(10000):
     for s in range(1, 6):
         candidates = []
         for a in range(2):
-            # 走到两端才是真正终止；终止状态没有后续奖励。
+            # 执行一次动作，获得下一状态、奖励和真正终止的标记。
             ns, reward, done = step(s, a)
             # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
             candidates.append(reward + (0.0 if done else gamma * old[ns]))
@@ -81,7 +76,7 @@ policy = []
 for s in range(1, 6):
     candidates = []
     for a in range(2):
-        # 走到两端才是真正终止；终止状态没有后续奖励。
+        # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # 比较两种动作的“一步奖励 + 下一状态价值”，不是随机采样。
         candidates.append(reward + (0.0 if done else gamma * values[ns]))

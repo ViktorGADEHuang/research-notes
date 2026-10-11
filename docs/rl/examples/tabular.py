@@ -58,7 +58,7 @@ def run(algorithm, episodes=3000, seed=7):
             for state in range(1, 6):
                 targets = []
                 for action in range(2):
-                    # 走到两端才是真正终止；终止状态没有后续奖励。
+                    # 执行一次动作，获得下一状态、奖励和真正终止的标记。
                     ns, reward, done = step(state, action)
                     targets.append(reward + (0.0 if done else gamma * old[ns]))
                 values[state] = max(targets)
@@ -82,7 +82,7 @@ def run(algorithm, episodes=3000, seed=7):
                 action = rng.choices([0, 1], weights=probs)[0]
             elif algorithm == "q-learning":
                 action = choose(q, state, rng)
-            # 走到两端才是真正终止；终止状态没有后续奖励。
+            # 执行一次动作，获得下一状态、奖励和真正终止的标记。
             ns, reward, done = step(state, action)
             # 记下状态、动作与奖励，MC/REINFORCE 要在一幕结束后回看。
             trajectory.append((state, action, reward))
