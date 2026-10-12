@@ -52,6 +52,54 @@
 
 `auto` 让编译器从初始值推导类型，不是让变量随时换类型。`auto n = 3;` 的类型仍然是 `int`。
 
+## 从一个数开始，把变量的变化看清楚
+
+下面是**阅读片段**：如果想试，把它放进已包含 `<iostream>` 的 main 内，不要另加一套 main。
+
+```cpp
+int count{0};             // 创建一个整数变量，初始值为 0。
+count = 2;                // 赋值：覆盖旧值，现在 count 为 2。
+count = count + 1;        // 先算右边 2 + 1，再把 3 写回左边。
+const bool enough{count >= 3}; // 比较：得到 true，不会改变 count。
+std::cout << count << '\n';    // 输出 3。
+std::cout << std::boolalpha << enough << '\n'; // 输出 true。
+```
+
+`count = count + 1` 不是数学方程。它是一条操作指令，右侧先求值、左侧再接收结果。`++count` 是“把 count 增加 1”的简写；这章把它单独写成一句，不需要讨论复杂表达式里的先后顺序。
+
+`int count{0}` 同时做了“创建变量”和“给初始值”两件事；之后的 `count = 2` 只修改已有变量。`const` 的变量必须在创建时确定值，后面不能再通过这个变量赋新值。
+
+## 再让判断和循环接起来
+
+`if (条件) { 要做的事 }` 的条件得到 true 时才执行花括号内语句；false 时跳过。要描述另外一种情况，可接 `else { 另一件事 }`。常见条件先记下面几个：
+
+| 写法 | 人话 | 对 3.0 和阈值 3.0 的结果 |
+| --- | --- | --- |
+| `distance_m > threshold_m` | 严格大于 | false |
+| `distance_m >= threshold_m` | 大于或等于 | true |
+| `distance_m == threshold_m` | 两者相等 | true |
+| `distance_m != threshold_m` | 两者不相等 | false |
+
+范围循环 `for (const double distance_m : distances_m)` 从冒号右边的列表逐个取值，交给左边的局部变量。每轮执行同一段花括号；列表读完，才接着执行循环后面的输出。这里 `distance_m` 是一个小数副本，修改计数器不会改原距离列表。
+
+也会遇到按次数重复的写法。这段同样放在 main 内，每行注释按实际执行顺序读：
+
+```cpp
+// i 从 0 开始；每次先检查 i < 3；本轮结束后再执行 ++i。
+for (int i{0}; i < 3; ++i) {
+    std::cout << i << '\n'; // 依次输出 0、1、2，不会输出 3。
+}
+```
+
+| 当前 i | 检查 i < 3 | 这一轮做什么 | 轮末 i |
+| --- | --- | --- | --- |
+| 0 | true | 输出 0 | 1 |
+| 1 | true | 输出 1 | 2 |
+| 2 | true | 输出 2 | 3 |
+| 3 | false | 退出，不再执行循环体 | 3 |
+
+本章只处理已经给出的有限、非负距离。`double` 可以出现 NaN、无穷大，也可能有舍入误差；“类型是小数”不等于“传感器数据合法”。第 15 章会把输入检查单独做出来。计数只演示三个元素，不把 int 当作无限大的整数。
+
 ## 完整示例
 
 ```cpp
@@ -67,6 +115,7 @@ int main() {
     const double threshold_m{3.0};
     // 列表拥有三个距离元素，数量由容器管理。
     const std::vector<double> distances_m{1.2, 4.5, 2.0};
+    // 计数器放在循环外，才能记住前面已经数到多少只。
     int far_count{0};
     // 范围循环，每次读取一个距离。
     for (const double distance_m : distances_m) {
@@ -76,15 +125,17 @@ int main() {
             ++far_count;
         }
     }
+    // << 把右侧内容交给输出流；字符 '\n' 让下一次输出换行。
     std::cout << experiment << '\n';
     std::cout << "far sheep: " << far_count << '\n';
+    // 5 / 2 先按整数做除法；5.0 / 2 中有小数，结果才保留小数部分。
     std::cout << "integer: " << 5 / 2 << ", decimal: " << 5.0 / 2 << '\n';
 }
 ```
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./basics.exe` 换成 `./basics`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `basics.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./basics.exe` 换成 `./basics`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic basics.cpp -o basics.exe

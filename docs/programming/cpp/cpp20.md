@@ -44,6 +44,45 @@ mean 借到的是原始三个距离，所以平均是 (1 + 3 + 5) / 3 = 3 米，
 
 **span** 借用连续内存，同时保存元素数量，不拥有数据。`span<const double>` 不能通过它修改元素；原数据仍必须有效。它并不是自动管理生命周期的智能指针。
 
+## 先用你熟悉的循环表达同一个任务
+
+在完整程序 main 内创建 distances 之后，下面这段可以替代 far_cm 管道和相应输出循环。先理解普通循环，再把相同意图写成 views：
+
+```cpp
+for (double distance_m : distances) {
+    if (distance_m > 2.0) {             // 第一步：不够远就跳过。
+        const double distance_cm = distance_m * 100.0; // 第二步：换算单位。
+        std::cout << distance_cm << ' '; // 依次输出 300 和 500。
+    }
+}
+std::cout << '\n';
+```
+
+views 版本把“取哪些”和“怎样变换”分别写成 filter 与 transform。这不是另一套数学，筛选条件、换算公式和输出顺序都能用上面的循环解释。管道符在这里被库定义为组合操作，离开这个语境不要把所有 `|` 都理解为数据处理管道。
+
+## 延迟计算：没有遍历，就还没有结果列表
+
+本例定义 far_cm 后，尚未建立一份拥有 300、500 的新 vector。遍历它时，底层的数据会按筛选与转换规则被访问。得到的是一种访问方式，生命周期仍与原 distances 有关系。
+
+所以不要在生成 view 后随意改变原容器结构，也不要把依赖局部 vector 的 view 返回到函数外继续使用。若任务要求保存一份独立结果，可以显式遍历并逐项放进新的 vector；“view”与“独立存储”需要按实际用途选择。
+
+## span 为什么不是另一种 vector
+
+| 问题 | vector | 本章的 span |
+| --- | --- | --- |
+| 谁保管元素存储 | 容器自己 | 原数组或容器 |
+| 是否知道元素数量 | 是 | 是 |
+| 能不能 push_back | 可以 | 不可以，它只描述已有一段 |
+| 源数据销毁后还能否使用 | 自己销毁前通常仍拥有数据 | 不可以，借用已经失效 |
+
+`mean(std::span<const double> values)` 的 const 在 double 前，表示不通过该 span 修改元素。若写 `const std::span<double>`，限制的是 span 对象本身，并不等于把 double 元素变成只读；初学表示只读输入时选前一种写法。
+
+## concepts 拒绝的是类型，不是“不好的数值”
+
+`meters_to_centimeters(3.0)` 推导 T 为 double，满足 floating_point；`meters_to_centimeters(3)` 推导 T 为 int，所以约束不满足，不能靠“3 也能表示米”蒙混过去。显式用小数表达输入，是此示例接口的要求。
+
+反过来，double 类型的 −3.0、NaN、无穷大仍然满足 floating_point。concepts 不会自动检查距离非负或单位是否是米；本例只演示类型约束、普通有限数的转换与均值。mean 只检查空输入，遇到异常测量值还需另外验证。
+
 ## 完整示例
 
 ```cpp
@@ -57,6 +96,7 @@ mean 借到的是原始三个距离，所以平均是 (1 + 3 + 5) / 3 = 3 米，
 // concepts 约束 T 为浮点类型，整数调用会被拒绝。
 template<std::floating_point T>
 T meters_to_centimeters(T meters) {
+    // T{100} 将 100 写成同一个浮点类型；这里仍由调用方保证单位是米。
     return meters * T{100};
 }
 
@@ -67,6 +107,7 @@ double mean(std::span<const double> values) {
         throw std::invalid_argument("empty samples");
     }
     double total{0.0};
+    // 先累计原始距离，再除以数量；并未对筛选后的厘米结果求平均。
     for (double value : values) { total += value; }
     return total / static_cast<double>(values.size());
 }
@@ -84,13 +125,14 @@ int main() {
     for (double value : far_cm) {
         std::cout << value << ' ';
     }
+    // 这里传原来的 vector，隐式建立只读 span，元素并未被复制一份。
     std::cout << "\nmean: " << mean(distances) << '\n';
 }
 ```
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./cpp20.exe` 换成 `./cpp20`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `cpp20.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./cpp20.exe` 换成 `./cpp20`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++20 -Wall -Wextra -Wpedantic cpp20.cpp -o cpp20.exe

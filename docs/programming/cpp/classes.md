@@ -46,6 +46,43 @@ RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用�
 
 `struct` 默认成员公开，`class` 默认成员私有。不是“struct 不能有函数”，而是默认访问权限不同。
 
+## 冒号、下划线和 const，到底各管什么
+
+先看这一行：`explicit Robot(double speed_mps) : speed_mps_{speed_mps}`。它不是普通返回值函数，名字与类名 Robot 相同，叫构造函数，任务是让新对象带着合适的初始数据出现。
+
+| 部分 | 通俗解释 |
+| --- | --- |
+| `Robot(double speed_mps)` | 创建 Robot 时需要一个速度参数 |
+| `speed_mps` | 本次创建操作收到的临时参数名 |
+| `speed_mps_` | 对象内部保存速度的成员名；末尾下划线只是命名习惯 |
+| `: speed_mps_{speed_mps}` | 用右边参数初始化左边成员；初始化先于构造函数体执行 |
+| `explicit` | 要求明确表达这次构造，减少把 double 意外当 Robot 的情况 |
+| `public` | 外部代码可以使用的接口 |
+| `private` | 对象内部的数据和实现细节，外部不能直接访问 |
+
+用 `Robot robot{0.8};` 创建对象后，构造函数的参数不需要一直存在，速度已经保存在 robot 自己的成员里。再创建另一个 `Robot other{1.0};`，它会保存自己的 1.0，两个对象互不覆盖。
+
+`double distance(double seconds) const` 末尾的 const 修饰这次成员函数操作：它不通过这个接口修改普通成员。因此 `const Robot robot{0.8};` 也可以调用 distance。参数中的 const 与函数末尾的 const 所处位置不同，不能只看它们长得一样。
+
+## 为什么“自动清理”不用每个类都写 delete
+
+可以把对象看作一只带清单的箱子：Robot 里有一个 double 和一个 vector。销毁 Robot 时，它的成员也依次被销毁；vector 知道如何释放自己管理的存储，所以 Robot 不必重复写这套工作。这就是优先组合现成资源管理类型的理由。
+
+本例的 observations_ 初始为空，只用于说明“成员也有自己的生命周期”，没有在这里实现采集或保存测量值。实际需要数据时再增加接口；不要为了演示 RAII，先堆入没有用途的手动 new/delete。
+
+| 本例的两次创建 | 会经过哪些步骤 | main 接着做什么 |
+| --- | --- | --- |
+| `Robot{0.8}` | 初始化成员 → 检查通过 → 对象可用 | 调用 distance(5.0)，得到 4 |
+| `Robot{-1.0}` | 初始化成员 → 检查失败 → 抛异常 | 跳到 catch，显示 invalid speed |
+
+第二种情况下，完整 Robot 没有构造成功，不能拿来用；已经构造好的成员会清理自身。这也解释了为什么检查失败后那句 `invalid.distance(...)` 不会执行。
+
+### 输入检查的范围要说清楚
+
+`std::isfinite` 表示“不是 NaN，也不是正负无穷大”；`!` 表示取反，`||` 表示任一条件成立。速度为 0、时长为 0 在本例都是合法输入，表示没有走过距离；负输入会被拒绝。
+
+本例用速度乘时间演示成员函数，假设输入在普通教学数值范围。它没有检查乘积是否超出 double 的范围，也没有描述加减速；有限的两个极大数相乘仍可能得到非有限结果。真实距离计算需要补充结果检查和任务所要求的运动模型。
+
 ## 完整示例
 
 ```cpp
@@ -58,6 +95,7 @@ RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用�
 class Robot {
 public:
     // 构造时直接初始化成员；explicit 避免意外隐式转换。
+    // speed_mps 是本次传入的参数，speed_mps_ 是对象一直保存的成员。
     explicit Robot(double speed_mps) : speed_mps_{speed_mps} {
         // 拒绝 NaN/无穷大，也检查物理量不为负。
         if (!std::isfinite(speed_mps) || speed_mps < 0.0) {
@@ -75,22 +113,24 @@ public:
         // 米/秒乘秒得到米。
         return speed_mps_ * seconds;
     }
-// 外部代码不能绕过接口随意修改速度。
+    // 外部代码不能绕过接口随意修改速度。
 private:
     double speed_mps_;
     // 容器自动管理内存，不需要自定义 delete 或析构。
-    std::vector<double> observations_; // Automatically releases its memory.
+    std::vector<double> observations_;
 };
 
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 创建一个自己的 Robot 对象，保存速度 0.8 米/秒。
     const Robot robot{0.8};
     std::cout << "distance: " << robot.distance(5.0) << " m\n";
     try {
         const Robot invalid{-1.0};
+        // 上面的构造已经抛出异常，本行不会执行。
         std::cout << invalid.distance(1.0) << '\n';
-    // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
+        // 不让失败继续冒出 main，在这里显示构造失败的原因。
         std::cout << error.what() << '\n';
     }
 }
@@ -98,7 +138,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./classes.exe` 换成 `./classes`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `classes.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./classes.exe` 换成 `./classes`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic classes.cpp -o classes.exe

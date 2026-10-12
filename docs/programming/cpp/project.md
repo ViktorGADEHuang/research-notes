@@ -45,6 +45,56 @@
 
 `struct` 表示简单数据；`span<const Sheep>` 借用整帧；`optional` 表示“这帧无法得到统计结果”；`hypot(dx, dy)` 计算二维距离。本例拒绝空帧、非有限坐标和重复编号，计算后也检查非有限结果。
 
+## 数据怎么一层层装起来，先不要急着看计算
+
+`struct` 是把相关字段放在一起的一种类型。这里三层含义各不相同：Point 是位置，Sheep 是有身份的位置记录，Summary 是整帧计算结果。
+
+| 写法 | 对应哪份数据 | 可以怎样读 |
+| --- | --- | --- |
+| `Point{4.0, 3.0}` | 一个位置 | x 为 4 米，y 为 3 米 |
+| `Sheep{3, {4.0, 3.0}}` | 一只羊的记录 | 编号 3，位置是上面那个点 |
+| `frame[2]` | 列表的第三个位置 | 这次恰好保存编号 3，但下标与编号没有必然关系 |
+| `frame[2].position.x_m` | 记录中的位置中的 x | 本例为 4.0 |
+| `result->center.x_m` | optional 中 Summary 的中心的 x | 成功时为 2.0，读取前先检查状态 |
+
+花括号按成员声明顺序提供初值。`{3, {4.0, 3.0}}` 的外层是 Sheep，内层是 Point；理解这两层以后，完整输入就只是三条同样格式的记录组成一个 vector。
+
+## 第一遍为什么还要放一个编号集合
+
+容器 unordered_set 只保存不重复的编号。`ids.insert(item.id)` 返回一组信息，其中 second 是“这次是否新插入”：第一次看到编号 7 为 true，再看到 7 为 false。取反后，就能把重复编号当成拒绝条件。
+
+代码使用 `||` 把“x 非有限”“y 非有限”“编号重复”连起来；任何一项成立都退回空 optional。这个运算是短路的，前面条件已成立时后面不必再执行。在本例里发现任何坏坐标就整帧返回，因此不需要再记录这一条编号。
+
+## 第二遍真的比较了哪些数
+
+中心已经确定为 (2, 1) 后，才开始逐个比较到它的距离。减去中心坐标，得到横向差 dx 与纵向差 dy；hypot 用两者算直线距离。
+
+| 编号 | 位置 | dx、dy | 到中心的距离 | 当前最远编号 |
+| --- | --- | --- | --- | --- |
+| 1 | (0, 0) | −2、−1 | √5，约 2.236 | 1 |
+| 2 | (2, 0) | 0、−1 | 1 | 仍为 1 |
+| 3 | (4, 3) | 2、2 | √8，约 2.828 | 改为 3 |
+
+`radius_m` 保存已看到的最大距离，不是把所有距离相加。初值 −1 只在函数内部用来确保第一条有效距离能被选中；它不是向调用者返回的“失败半径”。失败路径用 nullopt，成功的半径应非负。
+
+## 检查数据的结果，先写成你能预测的表
+
+| 输入变化 | 为什么这样判断 | 本程序应该怎样回答 |
+| --- | --- | --- |
+| 一只羊在 (2,1) | 中心就是它自身，到中心距离为 0 | 成功，半径 0 |
+| 三只不同编号的羊重合 | 三个到中心距离相同 | 成功，选输入中第一只 |
+| 两条记录编号相同 | 不能确认是不是把同一只重复算了两次 | 失败，空 optional |
+| 一个坐标为 NaN | 无法进行可靠几何计算 | 失败，空 optional |
+| 列表为空 | 没有可求平均的对象 | 失败，空 optional |
+
+这些是接口的明确约定，不是编译器帮你猜出的规则。后面的练习就是把表中前三类小改动放进 main，先预测、再对照；不必一上来改计算函数。
+
+### 这份统计还做不到什么
+
+所有坐标都有限仍不代表任意极端输入都能稳健求平均；本例先求和再除，极端值可能让中间和超范围，随后会被有限性检查拒绝。它没有采用专门的高精度或补偿求和，也没有验证坐标系名称、时间戳或定位误差。
+
+三个小数位只是输出格式，不能据此宣称传感器精确到毫米。这个结果可作为后续算法的输入之一；要制定放牧动作，还需要任务约定、环境观测以及运动与安全约束。
+
 ## 完整示例
 
 ```cpp
@@ -58,13 +108,14 @@
 
 // 同一个二维坐标系中的位置，单位米。
 struct Point { double x_m; double y_m; };
+// 一条个体记录：编号与它的二维位置绑在一起。
 struct Sheep { int id; Point position; };
 // 统计结果：中心、最远个体编号、到中心的距离。
 struct Summary { Point center; int farthest_id; double radius_m; };
 
 // 只读借用一帧，无法统计时返回没有值。
 std::optional<Summary> summarize(std::span<const Sheep> sheep) {
-    // 返回“没有结果”，不要把缺失数据当作有效的零值。
+    // 一只羊也没有时没有中心，不能继续除以数量。
     if (sheep.empty()) { return std::nullopt; }
     Point center{0.0, 0.0};
     // 用集合检查编号唯一，不依赖数据先排序。
@@ -74,7 +125,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
             || !std::isfinite(item.position.y_m)
             // insert 的 second 表示是否新插入；重复编号会得到 false。
             || !ids.insert(item.id).second) {
-            // 返回“没有结果”，不要把缺失数据当作有效的零值。
+            // 这一帧含有坏坐标或重复编号，整帧拒绝，避免重复计数。
             return std::nullopt;
         }
         // 累加所有 x 坐标，之后除以数量得到平均值。
@@ -86,7 +137,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
     center.x_m /= count;
     center.y_m /= count;
     if (!std::isfinite(center.x_m) || !std::isfinite(center.y_m)) {
-        // 返回“没有结果”，不要把缺失数据当作有效的零值。
+        // 极端坐标可能让累加溢出；不把无穷大当作有效中心。
         return std::nullopt;
     }
     // 半径从 -1 开始，即使全部重合也能选出第一个编号。
@@ -95,7 +146,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
         // 用二维坐标差计算欧氏距离。
         const double distance = std::hypot(
             item.position.x_m - center.x_m, item.position.y_m - center.y_m);
-        // 返回“没有结果”，不要把缺失数据当作有效的零值。
+        // 坐标相减或距离计算也可能超出数值范围，单独检查这一关。
         if (!std::isfinite(distance)) { return std::nullopt; }
         // 发现更远个体才替换；平局保留输入中先出现的个体。
         if (distance > result.radius_m) {
@@ -111,6 +162,7 @@ int main() {
     // 示例帧，不是实时采集或机器人控制输入。
     const std::vector<Sheep> frame{{1, {0.0, 0.0}}, {2, {2.0, 0.0}}, {3, {4.0, 3.0}}};
     if (const auto result = summarize(frame)) {
+        // fixed 与 setprecision(3) 只改变显示，内部计算仍使用 double。
         std::cout << std::fixed << std::setprecision(3);
         std::cout << "center: (" << result->center.x_m << ", "
                   << result->center.y_m << ") m\n";
@@ -127,7 +179,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./project.exe` 换成 `./project`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `project.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./project.exe` 换成 `./project`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++20 -Wall -Wextra -Wpedantic project.cpp -o project.exe

@@ -28,13 +28,15 @@ void shift(std::vector<double>& values, double offset) {
 int main() {
     std::vector<double> values{1.0, 2.0, 3.0};
     std::cout << "before: " << average(values) << '\n';
+    // 调用结束后原列表变为 {2.0, 3.0, 4.0}，所以第二次平均值是 3。
     shift(values, 1.0);
     std::cout << "after: " << average(values) << '\n';
+    // try 圈出需要处理失败的操作；异常发生后不会继续执行该路径剩余语句。
     try {
         const std::vector<double> empty;
         std::cout << average(empty) << '\n';
-    // 处理对应类型的异常；通过 const 引用避免复制异常对象。
     } catch (const std::invalid_argument& error) {
+        // catch 接住前面报告的非法输入，what() 读取说明文字。
         std::cout << error.what() << '\n';
     }
 }

@@ -44,6 +44,41 @@ atomic 的 fetch_add 把这次读、改、写组成一个原子操作：其他�
 
 两个线程没有同步地读写同一普通变量，且至少一个写，可能构成数据竞争，这是未定义行为。不要凭“只加一下”判断它安全。
 
+## 一条主线程，怎么变成三条执行路线
+
+程序进入 main 时已有一条主线程。创建 first 启动一条工作线程，创建 second 再启动一条；工作线程执行 collect，主线程继续往下走。它们的先后顺序不是按屏幕上“先写 first、再写 second”就能完整决定的。
+
+```text
+主线程：创建 samples → 启动 first → 启动 second → 等待两者 → 输出总数
+first：                 collect：累计 1000 次 ─────完成
+second：                              collect：累计 1000 次 ──完成
+```
+
+图中的宽度只是示意，不是耗时测量。两份 collect 可能交错，也可能在不同 CPU 核心并行；不能根据图推断哪一份一定先结束。
+
+## 程序里每个新动作都有一项责任
+
+| 写法 | 它保证什么 | 它没有保证什么 |
+| --- | --- | --- |
+| `std::atomic<int> samples{0}` | 这个对象支持原子访问操作 | 不让其他任意变量自动线程安全 |
+| `samples.fetch_add(1)` | 一次加一作为不可分割的更新完成 | 不表示整个工作函数已结束 |
+| `[&samples]` | 两条工作路线访问同一个计数器 | 不自动延长计数器生命周期 |
+| `std::jthread first{collect}` | 启动执行 collect 的线程并管理它 | 不保证立刻跑完，也不保证提速 |
+| 内层 `}` | 销毁仍可连接的 jthread，请求停止并等待 | 不会强制中断工作函数 |
+| `samples.load()` | 以原子读取取得当前值 | 若没等工作结束，只能说是当时的值 |
+
+jthread 的等待行为来自 [标准草案中的析构约定](https://eel.is/c++draft/thread.jthread.class)：当它仍可连接时先请求停止，再 join。停止请求需要工作函数配合；本例没有接收停止令牌，两个有限循环都会正常跑完。
+
+## 为什么不能把加一拆成“读取再写入”
+
+即使 samples 是 atomic，先 load，再根据旧值 store，也不等于 fetch_add：两条线程可能各自读到相同旧值，再写回相同新值，造成逻辑上的丢失更新。要做“给同一个总数加一”，这里选的是一次完整的原子读改写操作。
+
+普通 int 的无同步冲突访问更严重：在 C++ 规则下可能构成数据竞争，程序行为没有定义。不能以“我试了几次刚好是 2000”证明安全，也不应把某个编译器上的偶然结果写成必然输出。
+
+当任务涉及一组字段，例如同时修改位置和时间戳，单独的原子计数不能保持整组数据一致。那时通常需要把整段相关操作放在同一把 mutex 保护下；lock_guard 帮助把加锁与解锁绑定到作用域。初学先理解本例一个计数器，再扩展到更大的共享状态。
+
+若只是两次小循环顺序累加，完全可以不用线程。这里的目标是看懂生命周期、共享访问和等待三件事，实际项目是否值得并发还应测量耗时与协调成本。
+
 ## 完整示例
 
 ```cpp
@@ -60,14 +95,14 @@ int main() {
         const auto collect = [&samples] {
             for (int i = 0; i < 1000; ++i) {
                 // 原子的读—改—写，默认使用顺序一致的内存序。
-                samples.fetch_add(1); // Default sequentially consistent ordering.
+                samples.fetch_add(1);
             }
         };
         // 启动工作；对象析构会请求停止并等待线程结束。
         std::jthread first{collect};
-        // 启动工作；对象析构会请求停止并等待线程结束。
+        // 再启动一份相同工作，两份工作借用同一个 samples。
         std::jthread second{collect};
-    } // Both jthreads join before reading the final count.
+    } // 先等待 second，再等待 first；两份工作都结束后才往下走。
     // 内部作用域已结束，两个线程完成后读取最终计数。
     std::cout << "samples: " << samples.load() << '\n';
 }
@@ -75,7 +110,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./concurrency.exe` 换成 `./concurrency`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `concurrency.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./concurrency.exe` 换成 `./concurrency`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++20 -Wall -Wextra -Wpedantic -pthread concurrency.cpp -o concurrency.exe

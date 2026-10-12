@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 510" role="img" aria-labelledby="title desc">
+<title id="title">同一个目标，世界坐标与机身坐标的读法</title>
+<desc id="desc">世界坐标 x 向东，y 向北。机器人在世界坐标 2,1，面朝北，目标在 2,3。目标相对向量在世界坐标是 0,2，在机身坐标是 2,0，也就是前方两米。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#397b68"/></marker><marker id="blue" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#346c92"/></marker></defs>
+<rect width="900" height="510" rx="16" fill="#f2f6f1"/>
+<g font-family="'Microsoft YaHei',sans-serif" fill="#24463c">
+<text x="35" y="48" font-size="25" font-weight="700">坐标的数字，要和坐标轴一起读</text>
+<rect x="30" y="75" width="405" height="359" rx="12" fill="#fff" stroke="#b7cbbb"/>
+<text x="52" y="110" font-size="21" font-weight="700">世界坐标：x 东，y 北</text>
+<path d="M85 369H390M85 369V137" fill="none" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M85 369H390" fill="none" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="363" y="397" font-size="17">x 东</text><text x="98" y="151" font-size="17">y 北</text>
+<path d="M235 310V190" stroke="#346c92" stroke-width="3" marker-end="url(#blue)"/>
+<circle cx="235" cy="310" r="10" fill="#24463c"/><circle cx="235" cy="190" r="10" fill="#c98d39"/>
+<text x="254" y="319" font-size="17">机器人 (2, 1)</text>
+<text x="254" y="191" font-size="17">目标 (2, 3)</text>
+<text x="109" y="262" font-size="16" fill="#346c92">向北 2 米</text>
+<text x="53" y="415" font-size="17">相减：(2, 3) − (2, 1) = (0, 2)</text>
+<rect x="465" y="75" width="405" height="359" rx="12" fill="#fff" stroke="#b7cbbb"/>
+<text x="487" y="110" font-size="21" font-weight="700">机身坐标：x 前，y 左</text>
+<path d="M675 322V145M675 322H503" stroke="#397b68" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M675 322V145" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="690" y="154" font-size="17">x 前</text><text x="500" y="352" font-size="17">y 左</text>
+<circle cx="675" cy="322" r="10" fill="#24463c"/><circle cx="675" cy="205" r="10" fill="#c98d39"/>
+<text x="699" y="328" font-size="17">机身原点</text><text x="697" y="210" font-size="17">目标 (2, 0)</text>
+<text x="529" y="261" font-size="16" fill="#346c92">前方 2 米</text>
+<text x="488" y="386" font-size="17">机器人朝北：机身前方就是世界北方</text>
+<text x="488" y="415" font-size="17">按朝向换轴后，相对位置变成 (2, 0)</text>
+<text x="35" y="476" font-size="20" font-weight="700">只是相减不会旋转坐标轴；朝向改变后，同一向量的坐标会改变。</text>
+</g></svg>

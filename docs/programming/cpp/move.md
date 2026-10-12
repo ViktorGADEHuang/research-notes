@@ -45,6 +45,35 @@
 
 对标准库对象，移动后通常处于**有效但未指定的状态**，除非相应类型另有保证。`unique_ptr` 有明确的空指针保证；不能把它推广成“所有容器移动后一定为空”。
 
+## 用同一份列表追踪：到底哪个对象发生了变化
+
+后面完整程序按下表顺序执行。表中的“未作内容假设”不是对象坏了，而是教程选择不依赖它移动后的具体内容：
+
+| 刚执行完的语句 | original | copy | moved |
+| --- | --- | --- | --- |
+| 创建 original | 1、2、3 | 尚未创建 | 尚未创建 |
+| `auto copy = original` | 1、2、3 | 1、2、3 | 尚未创建 |
+| `copy[0] = 9` | 1、2、3 | 9、2、3 | 尚未创建 |
+| `auto moved = std::move(original)` | 未作内容假设 | 9、2、3 | 1、2、3 |
+| `original.clear()` | 空 | 9、2、3 | 1、2、3 |
+| `original.push_back(7)` | 7 | 9、2、3 | 1、2、3 |
+
+`auto copy = original` 中虽然出现等号，但 copy 正在被创建，所以这里调用的是**复制构造**；若 copy 早已存在，再写 `copy = original`，才是复制赋值。移动也有相同区别：创建新对象与覆盖已有对象走不同操作。
+
+## “有效但未指定”应该怎样使用
+
+有效意味着它仍然是一个可以按类型规则操作、最终可以销毁的对象；未指定意味着你不要依赖某一种内容。对这里的标准容器，可以调用 clear，把它置空，再加入新数据。也可以查询 empty，但不能无条件用 `[0]` 假设还有第一个元素。
+
+如果想读移动后源容器的第一项，至少先确认它确实非空；不过当前任务本来就是把旧数据交给 moved，直接从 moved 读取更清楚。对自定义类型，要看该类型自己承诺的移动后状态，不能机械套用某个容器的结论。
+
+std::move 写上去也不代表程序完成了某种“通用搬家”。它是一个转换，接收方是否有合适的移动构造/赋值、是否允许从这个源类型移动，才决定后续动作。标准库对移动后状态的总体规则可查 [标准库类型要求](https://eel.is/c++draft/lib.types.movedfrom)。
+
+### 不要把 const 与“允许拿走”放在一起猜
+
+常见移动操作需要改动源对象，所以通常接收非 const 源。`std::move` 不会去掉 const；对 const vector 使用它，通常只能匹配复制构造。指针拥有关系、引用与 const 都是在表达约定，不能为了追求“看起来更快”而无差别添加 std::move。
+
+这章先掌握读现成类型的移动。手写移动构造涉及异常保证、资源状态等更多规则；用 vector、string、unique_ptr 组合类时，通常可以先让成员完成这些工作。
+
 ## 完整示例
 
 ```cpp
@@ -61,16 +90,17 @@ int main() {
     // 只修改副本的第一个元素。
     copy[0] = 9;
     std::cout << "original first: " << original[0] << '\n';
-    // 只修改副本的第一个元素。
+    // 对照输出：副本变为 9，上一行输出的原列表仍为 1。
     std::cout << "copy first: " << copy[0] << '\n';
     // std::move 允许移动构造，实际转移由 vector 完成。
     auto moved = std::move(original);
     std::cout << "moved size: " << moved.size() << '\n';
     // 不依赖移动后内容；先清空，再把源对象用于新数据。
-    original.clear(); // Valid regardless of its unspecified contents.
+    original.clear();
     // 移动后的 vector 仍有效，可重新使用。
     original.push_back(7);
     std::cout << "reused original: " << original[0] << '\n';
+    // 新建一个值为 42 的整数，交给唯一拥有者管理。
     auto owner = std::make_unique<int>(42);
     // unique_ptr 禁止复制，但可移动转交资源。
     auto recipient = std::move(owner);
@@ -80,7 +110,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./move.exe` 换成 `./move`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `move.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./move.exe` 换成 `./move`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic move.cpp -o move.exe

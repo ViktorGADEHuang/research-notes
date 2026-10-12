@@ -49,6 +49,52 @@ Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留�
 
 `auto` 可以保存具体 Lambda 类型。`std::function` 可以保存符合签名的不同可调用对象，但有类型擦除开销，有些情况还会动态分配，别无条件套一层。
 
+## 定义一条规则，与执行一次规则，是两个动作
+
+以下片段放在 main 内，已有 `<iostream>` 即可。先故意不用任何捕获，认识最短的 Lambda：
+
+```cpp
+const auto is_far = [](double distance_m) {
+    return distance_m > 2.0; // 这里描述规则；定义时还没有具体距离。
+};                          // Lambda 表达式赋给变量，整条声明需要分号。
+std::cout << std::boolalpha;
+std::cout << is_far(1.0) << '\n'; // 这才调用，输出 false。
+std::cout << is_far(3.0) << '\n'; // 再调用一次，输出 true。
+```
+
+这里 auto 推导的是编译器生成的可调用对象类型，并不是 bool。**调用它之后返回的结果**才是 bool。可以把 is_far 理解为存了一张处理规则，每次递给它一个距离，它回给你“是”或“否”。
+
+## 捕获变量与传入参数，为什么需要两处括号
+
+把固定的 2.0 改成外部 threshold 后，这条规则要同时认识两件东西：长期记住或借用的阈值、每次调用收到的新距离。
+
+| 部分 | 什么时候确定 | 可以想成什么 |
+| --- | --- | --- |
+| `[threshold]` | 创建 Lambda 的这一刻 | 把阈值抄在规则纸上 |
+| `[&threshold]` | 创建时建立借用，调用时读当前值 | 记住去哪里看原阈值 |
+| `(double d)` | 每次调用时 | 这次要检查的那个距离 |
+| `return d > threshold` | 每次调用执行时 | 按规则算出这一次的真假 |
+
+原例里 by_value 创建时把 2.0 留在内部副本里；后来外部 threshold 改为 4.0，只影响原变量。by_reference 看同一个原变量，因此会看到 4.0。按值与按引用都没有“自动比较哪个值更新”这种机制。
+
+## count_if 是怎么调用你的规则的
+
+`std::count_if(..., by_reference)` 的第三个参数是**规则本身**，没有写 `by_reference(...)`。算法会取出列表中的元素，再代你调用。下面是理解用的等价计数过程，放在原例 distances 声明之后即可，结果也是 1：
+
+```cpp
+int count{0};
+for (double distance_m : distances) {
+    if (by_reference(distance_m)) { // 算法内部需要的正是这种判断。
+        ++count;
+    }
+}
+std::cout << count << '\n';
+```
+
+这里“交给别人调用”就是回调，并不意味着必须等待很久、必须开线程或必须联网。count_if 会在这次调用期间完成检查。事件系统或线程以后才调用的回调，则需要另外考虑被捕获对象的生命周期。
+
+初学优先写清具体捕获名。`[=]`、`[&]` 这样的默认捕获更省字符，却容易把不该延长借用的局部变量带进回调。是否按值保存、是否借用，先根据数据是否需要更新、调用发生在何时来决定。
+
 ## 完整示例
 
 ```cpp
@@ -65,12 +111,14 @@ int main() {
     const auto by_reference = [&threshold](double d) { return d > threshold; };
     // 修改原变量，用来展示两种捕获方式的差别。
     threshold = 4.0;
+    // boolalpha 让判断结果显示为 true / false，便于对照纸上推演。
     std::cout << std::boolalpha;
     std::cout << "value capture: " << by_value(3.0) << '\n';
     std::cout << "reference capture: " << by_reference(3.0) << '\n';
     const std::vector<double> distances{1.0, 3.0, 5.0};
+    // count_if 遍历距离，每次调用 by_reference(当前距离)。
+    // 只有 5.0 大于现在的 4.0，所以最终计数是 1。
     std::cout << "above current threshold: "
-              // 算法会调用传入的 Lambda 检查每个元素。
               << std::count_if(distances.begin(), distances.end(), by_reference)
               << '\n';
 }
@@ -78,7 +126,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./lambdas.exe` 换成 `./lambdas`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `lambdas.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./lambdas.exe` 换成 `./lambdas`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic lambdas.cpp -o lambdas.exe

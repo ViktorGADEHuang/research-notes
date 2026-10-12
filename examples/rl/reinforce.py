@@ -32,13 +32,17 @@ for _ in range(3000):
     s, episode = 3, []
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
+        # logits[s] 是当前状态的偏好；softmax 才把它转换为左右选择概率。
         probs = softmax(logits[s])
+        # choices 返回列表；[0] 取出这一次抽到的动作编号，并非取最高概率。
         a = rng.choices([0, 1], weights=probs)[0]
         # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # 保存这一时刻的数据，方便在结束后从后往前计算回报。
         episode.append((s, a, reward))
+        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
         s = ns
+    # 只创建本局的回报表；最后一步之后回报为 0，便于从末尾递推。
     returns, total = [0.0] * len(episode), 0.0
     # 从最后一步倒推 G：当前奖励 + gamma × 后面已经算好的回报。
     for t in reversed(range(len(episode))):
@@ -47,6 +51,7 @@ for _ in range(3000):
     # 为这一幕创建梯度累积表；先不改变策略偏好。
     grad = [[0.0, 0.0] for _ in range(7)]
     for t, (s, a, _) in enumerate(episode):
+        # logits[s] 是当前状态的偏好；softmax 才把它转换为左右选择概率。
         probs = softmax(logits[s])
         for j in range(2):
             # softmax 的 log 概率梯度是“是否选了 j - j 的概率”，再乘折扣权重与回报。

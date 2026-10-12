@@ -25,7 +25,7 @@
 
 **语言：Python 3.12；实现方式：使用 Stable-Baselines3 的真实算法实现。**
 
-本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现，完整脚本可运行，但它不是从零手写算法。
+本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现。完整脚本用于阅读训练、保存与评估的调用顺序，内部算法细节要与前两部分对照。
 
 
 本页以阅读代码为主，不要求安装依赖或运行训练。
@@ -56,6 +56,31 @@
 
 先给这四个配置分别标注“收集经验、平滑目标、限制目标噪声、更新节奏”，再读完整流程。其余保存与评估步骤与 DDPG 相似。
 
+## 先拆开目标噪声、双 Q 与共同目标
+
+```python
+# 假设在归一化动作坐标 [-1, 1] 中计算，不是环境扭矩单位。
+target_action, noise, noise_limit = 0.9, 0.4, 0.2
+bounded_noise = min(max(noise, -noise_limit), noise_limit)  # 0.2。
+smoothed_action = min(max(target_action + bounded_noise, -1.0), 1.0)  # 1.0。
+# 将这个相同动作送给两个目标 Critic；这里直接给出假想网络预测。
+target_q1, target_q2 = 2.4, 1.8
+reward, gamma = 0.1, 0.9
+target = reward + gamma * min(target_q1, target_q2)  # 未终止时目标 1.72。
+# 两个当前 Critic 都对齐 target；Actor 的更新通常使用当前 Q1 的梯度。
+```
+
+完整训练中，smoothed_action 只供计算目标，不能拿它替换回放记录中的实际动作。回放记录描述已经发生的经验；目标动作描述对未来的估计，是不同字段。
+
+| 完整代码参数 | 管哪件事 | 在哪里起作用 |
+| --- | --- | --- |
+| `action_noise` | 交互时试一试别的动作 | 改变真正送入环境的控制量 |
+| `target_policy_noise` | 目标动作平滑噪声的标准差 | 算未来 Q 之前 |
+| `target_noise_clip` | 限制目标噪声幅度 | 先裁噪声，后裁动作 |
+| `policy_delay=2` | Critic 更新两次后再更新策略和目标网络 | 按训练更新计数 |
+
+本例 Pendulum 观测 3 维、动作 1 维，两个 Critic 各输出一个 Q 分数。`batch_size=64` 表示一批 64 条经验；每条经验都形成自己的目标，再汇总误差，不是先把 64 个状态平均成一个。
+
 ## 完整代码
 
 ```python
@@ -79,6 +104,7 @@ from stable_baselines3.common.noise import NormalActionNoise
 def main(steps, seed):
     # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
     torch.set_num_threads(1)
+    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
     output = Path("rl-output/td3")
     # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
     output.mkdir(parents=True, exist_ok=True)
@@ -87,6 +113,7 @@ def main(steps, seed):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make("Pendulum-v1"))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     dim = train_env.action_space.shape[0]
     # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
@@ -103,6 +130,7 @@ def main(steps, seed):
             policy_delay=2, target_policy_noise=0.2, target_noise_clip=0.5,
         )
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
                                    deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
@@ -114,6 +142,7 @@ def main(steps, seed):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
                                     deterministic=True)
         print(f"Actual training steps: {model.num_timesteps}")
@@ -131,6 +160,7 @@ if __name__ == "__main__":
     # steps 是训练预算示例，不是预期学会任务所需的精确步数。
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

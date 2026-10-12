@@ -44,6 +44,32 @@ episode 先保存每步的状态、动作与奖励；returns 保存对应回报�
 
 这一幕所有梯度算完，最后两个循环才修改 logits。这样前后几步使用的是同一套采样策略；如果边算边改，后面的梯度就可能用上不同策略的概率。
 
+## 先读一个动作给偏好带来的贡献
+
+```python
+# 当前状态向左、向右的概率均为 0.5，这次抽到了右（编号 1）。
+probs = [0.5, 0.5]
+action, total_return, learning_rate = 1, 1.0, 0.02
+preference_change = []
+for j in range(2):
+    selected = 1.0 if j == action else 0.0  # 选中的动作为 1，其余为 0。
+    direction = selected - probs[j]        # 左 -0.5，右 +0.5。
+    preference_change.append(learning_rate * total_return * direction)
+# 结果为 [-0.01, 0.01]，是偏好的变化量，还需要 softmax 才得到新概率。
+# 此处只看 t=0 的一项贡献，所以 gamma**t = 1；完整代码保留该时间权重。
+```
+
+| 完整代码变量 | 内容 | 生命周期 |
+| --- | --- | --- |
+| `logits` | 7×2 的动作偏好；不是 Q，也不是概率 | 跨回合保留的策略参数 |
+| `probs` | 某状态两个动作概率，和为 1 | 使用当前参数临时计算 |
+| `episode`、`returns` | 一局经历与每个时刻之后的回报 | 每局重建 |
+| `grad` | 这局对每个偏好的累计梯度 | 每局归零，算完整局后用于更新 |
+
+完整代码的 `(j == a)` 是布尔判断，在 Python 算术中 True、False 分别按 1、0 参与计算，对应上面更直白的 selected。`rng.choices(...)[0]` 先返回只含一个采样结果的列表，再取第一个元素。
+
+先收集完整一局，再算回报，再累计 grad，最后改 logits。这个顺序确保本局所有梯度都基于生成这局经历时的同一套概率，而不是边计算边换基准。
+
 ## 完整代码
 
 ```python
@@ -81,13 +107,17 @@ for _ in range(3000):
     s, episode = 3, []
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
+        # logits[s] 是当前状态的偏好；softmax 才把它转换为左右选择概率。
         probs = softmax(logits[s])
+        # choices 返回列表；[0] 取出这一次抽到的动作编号，并非取最高概率。
         a = rng.choices([0, 1], weights=probs)[0]
         # 执行一次动作，获得下一状态、奖励和真正终止的标记。
         ns, reward, done = step(s, a)
         # 保存这一时刻的数据，方便在结束后从后往前计算回报。
         episode.append((s, a, reward))
+        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
         s = ns
+    # 只创建本局的回报表；最后一步之后回报为 0，便于从末尾递推。
     returns, total = [0.0] * len(episode), 0.0
     # 从最后一步倒推 G：当前奖励 + gamma × 后面已经算好的回报。
     for t in reversed(range(len(episode))):
@@ -96,6 +126,7 @@ for _ in range(3000):
     # 为这一幕创建梯度累积表；先不改变策略偏好。
     grad = [[0.0, 0.0] for _ in range(7)]
     for t, (s, a, _) in enumerate(episode):
+        # logits[s] 是当前状态的偏好；softmax 才把它转换为左右选择概率。
         probs = softmax(logits[s])
         for j in range(2):
             # softmax 的 log 概率梯度是“是否选了 j - j 的概率”，再乘折扣权重与回报。

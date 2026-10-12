@@ -8,13 +8,14 @@
 
 // 同一个二维坐标系中的位置，单位米。
 struct Point { double x_m; double y_m; };
+// 一条个体记录：编号与它的二维位置绑在一起。
 struct Sheep { int id; Point position; };
 // 统计结果：中心、最远个体编号、到中心的距离。
 struct Summary { Point center; int farthest_id; double radius_m; };
 
 // 只读借用一帧，无法统计时返回没有值。
 std::optional<Summary> summarize(std::span<const Sheep> sheep) {
-    // 返回“没有结果”，不要把缺失数据当作有效的零值。
+    // 一只羊也没有时没有中心，不能继续除以数量。
     if (sheep.empty()) { return std::nullopt; }
     Point center{0.0, 0.0};
     // 用集合检查编号唯一，不依赖数据先排序。
@@ -24,7 +25,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
             || !std::isfinite(item.position.y_m)
             // insert 的 second 表示是否新插入；重复编号会得到 false。
             || !ids.insert(item.id).second) {
-            // 返回“没有结果”，不要把缺失数据当作有效的零值。
+            // 这一帧含有坏坐标或重复编号，整帧拒绝，避免重复计数。
             return std::nullopt;
         }
         // 累加所有 x 坐标，之后除以数量得到平均值。
@@ -36,7 +37,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
     center.x_m /= count;
     center.y_m /= count;
     if (!std::isfinite(center.x_m) || !std::isfinite(center.y_m)) {
-        // 返回“没有结果”，不要把缺失数据当作有效的零值。
+        // 极端坐标可能让累加溢出；不把无穷大当作有效中心。
         return std::nullopt;
     }
     // 半径从 -1 开始，即使全部重合也能选出第一个编号。
@@ -45,7 +46,7 @@ std::optional<Summary> summarize(std::span<const Sheep> sheep) {
         // 用二维坐标差计算欧氏距离。
         const double distance = std::hypot(
             item.position.x_m - center.x_m, item.position.y_m - center.y_m);
-        // 返回“没有结果”，不要把缺失数据当作有效的零值。
+        // 坐标相减或距离计算也可能超出数值范围，单独检查这一关。
         if (!std::isfinite(distance)) { return std::nullopt; }
         // 发现更远个体才替换；平局保留输入中先出现的个体。
         if (distance > result.radius_m) {
@@ -61,6 +62,7 @@ int main() {
     // 示例帧，不是实时采集或机器人控制输入。
     const std::vector<Sheep> frame{{1, {0.0, 0.0}}, {2, {2.0, 0.0}}, {3, {4.0, 3.0}}};
     if (const auto result = summarize(frame)) {
+        // fixed 与 setprecision(3) 只改变显示，内部计算仍使用 double。
         std::cout << std::fixed << std::setprecision(3);
         std::cout << "center: (" << result->center.x_m << ", "
                   << result->center.y_m << ") m\n";

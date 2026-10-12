@@ -25,7 +25,7 @@
 
 **语言：Python 3.12；实现方式：使用 Stable-Baselines3 的真实算法实现。**
 
-本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现，完整脚本可运行，但它不是从零手写算法。
+本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现。完整脚本用于阅读训练、保存与评估的调用顺序，内部算法细节要与前两部分对照。
 
 
 本页以阅读代码为主，不要求安装依赖或运行训练。
@@ -56,6 +56,34 @@
 
 第一次评估、learn、保存、再评估是使用流程；Actor 和 Critic 内部损失仍要结合公式篇理解。每步 TD 的数字例子只是铺垫，当前库示例使用一段采样中的多步目标。
 
+## 先用普通数字拆开 Actor 与 Critic
+
+```python
+import math
+
+# 这是一条未终止样本的一步示意；完整 A2C 用采样片段计算多步目标。
+reward, gamma, next_value = 0.1, 0.9, 0.5
+old_value = 0.2
+return_target = reward + gamma * next_value  # 0.55。
+advantage = return_target - old_value        # 0.35，比旧预期好。
+action_probability = 0.4                     # 当前策略给采样动作的概率。
+actor_loss = -math.log(action_probability) * advantage  # 约 0.321。
+critic_loss = (old_value - return_target)**2             # 0.1225。
+# 在神经网络版中，优化 Actor 时把 advantage 当固定权重；
+# 优化 Critic 时把 return_target 当固定目标，分别保留预测侧的梯度。
+```
+
+这里是损失数值的演算，没有梯度框架，也不更新策略。读懂后再看 `n_steps=32`：库会先收集一个环境的 32 步，算好这段中各时刻的回报与优势，再做一轮更新；不要求 32 步刚好是一局。
+
+| 量 | 单条记录是什么 | 一段数据是什么 |
+| --- | --- | --- |
+| 观测 | CartPole 的 4 个数 | 32 条观测 |
+| Actor 输出 | 左、右两个动作的分布参数 | 每条观测一组 |
+| Critic 输出 | 当前状态的一个 V | 每条观测一个 |
+| 回报目标与优势 | 各一个数 | 都与采样时刻一一对应 |
+
+完整代码采用库默认的 `gae_lambda=1.0`，因此与上面一步演算的区别在于怎样算 return_target。Actor、Critic 各自要优化的含义相同。库的内部数组还可能带一个环境数量维度，这不意味着观测突然增加了新内容。
+
 ## 完整代码
 
 ```python
@@ -76,6 +104,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 def main(steps, seed):
     # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
     torch.set_num_threads(1)
+    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
     output = Path("rl-output/a2c")
     # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
     output.mkdir(parents=True, exist_ok=True)
@@ -84,6 +113,7 @@ def main(steps, seed):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make("CartPole-v1"))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     try:
         # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
@@ -94,6 +124,7 @@ def main(steps, seed):
             n_steps=32,
         )
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
                                    deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
@@ -105,6 +136,7 @@ def main(steps, seed):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
                                     deterministic=True)
         print(f"Actual training steps: {model.num_timesteps}")
@@ -122,6 +154,7 @@ if __name__ == "__main__":
     # steps 是训练预算示例，不是预期学会任务所需的精确步数。
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

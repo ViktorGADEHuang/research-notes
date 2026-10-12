@@ -4,26 +4,28 @@
 #include <string>
 #include <utility>
 
+// 给工作状态起名字；它是状态标签，不参与速度计算。
 enum class Mode : unsigned { idle = 0, tracking = 1 };
 
 // 成功时装速度，失败时装字符串原因。
 std::expected<double, std::string> speed(double distance_m, double seconds) {
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 距离允许为 0，但不允许负数、NaN 或无穷大。
     if (!std::isfinite(distance_m) || distance_m < 0.0) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"invalid distance"});
     }
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 时长必须严格大于 0，通过本关之后才执行除法。
     if (!std::isfinite(seconds) || seconds <= 0.0) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"duration must be positive"});
     }
     const double result = distance_m / seconds;
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 两个输入有限，也不能保证相除后的结果一定在 double 可表示范围内。
     if (!std::isfinite(result)) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"speed overflow"});
     }
+    // 返回普通 double，由 expected 包装为“成功并持有速度”。
     return result;
 }
 

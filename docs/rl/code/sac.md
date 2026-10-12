@@ -25,7 +25,7 @@
 
 **语言：Python 3.12；实现方式：使用 Stable-Baselines3 的真实算法实现。**
 
-本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现，完整脚本可运行，但它不是从零手写算法。
+本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现。完整脚本用于阅读训练、保存与评估的调用顺序，内部算法细节要与前两部分对照。
 
 
 本页以阅读代码为主，不要求安装依赖或运行训练。
@@ -56,6 +56,30 @@
 
 SAC 的随机策略本身提供探索，本例没有配置 DDPG/TD3 那种 action_noise。先看创建模型的差异，再对照公式找温度项。5 幕评估只展示接口，还不能支持算法优劣结论。
 
+## 把带熵的目标翻译成几行 Python
+
+```python
+# 下一动作由当前随机策略采样，两个目标 Critic 给它评分。
+next_q1, next_q2 = 1.8, 1.5
+next_log_density = -0.7  # 已包含动作变换修正后的对数密度，假想数值。
+temperature = 0.2       # 本段固定用 0.2 演算；完整代码使用 auto 学温度。
+soft_future = min(next_q1, next_q2) - temperature * next_log_density  # 1.64。
+reward, gamma, terminated = -1.0, 0.9, False
+target = reward + (0.0 if terminated else gamma * soft_future)  # 0.476。
+# 真正终止时，不把后续 Q 或后续熵加进目标；target 只剩 reward。
+```
+
+这里没有从概率中减掉熵，改的是用于学习的目标。next_log_density 对应刚才采样的**那个下一动作**，不能随便换另一个动作的密度，也不能用一个尚未经过压缩变换的高斯密度代替。
+
+| 数据或配置 | 通俗解释 | 在本例中 |
+| --- | --- | --- |
+| Actor 分布参数 | 决定动作往哪里集中、分散多少 | 每个观测产生连续动作分布 |
+| 采样动作 | 从分布抽出的实际数值 | Pendulum 的一维扭矩 |
+| 两个 Q | 对给定观测、动作的两份评分 | 各一个数，目标取小 |
+| `ent_coef="auto"` | 学习熵项的权重 | 温度不是始终 0.2 |
+
+SAC 的随机性来自策略本身；完整代码没有像 DDPG 那样必须另配 NormalActionNoise。评估使用 deterministic=True 是另一种选择动作方式，用于观察确定性评估表现，不能代表随机执行时所有可能的表现。
+
 ## 完整代码
 
 ```python
@@ -76,6 +100,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 def main(steps, seed):
     # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
     torch.set_num_threads(1)
+    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
     output = Path("rl-output/sac")
     # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
     output.mkdir(parents=True, exist_ok=True)
@@ -84,6 +109,7 @@ def main(steps, seed):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make("Pendulum-v1"))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     try:
         # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
@@ -96,6 +122,7 @@ def main(steps, seed):
             train_freq=1, gradient_steps=1, ent_coef="auto",
         )
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
                                    deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
@@ -107,6 +134,7 @@ def main(steps, seed):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
                                     deterministic=True)
         print(f"Actual training steps: {model.num_timesteps}")
@@ -124,6 +152,7 @@ if __name__ == "__main__":
     # steps 是训练预算示例，不是预期学会任务所需的精确步数。
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

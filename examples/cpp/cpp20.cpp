@@ -8,6 +8,7 @@
 // concepts 约束 T 为浮点类型，整数调用会被拒绝。
 template<std::floating_point T>
 T meters_to_centimeters(T meters) {
+    // T{100} 将 100 写成同一个浮点类型；这里仍由调用方保证单位是米。
     return meters * T{100};
 }
 
@@ -18,6 +19,7 @@ double mean(std::span<const double> values) {
         throw std::invalid_argument("empty samples");
     }
     double total{0.0};
+    // 先累计原始距离，再除以数量；并未对筛选后的厘米结果求平均。
     for (double value : values) { total += value; }
     return total / static_cast<double>(values.size());
 }
@@ -35,5 +37,6 @@ int main() {
     for (double value : far_cm) {
         std::cout << value << ' ';
     }
+    // 这里传原来的 vector，隐式建立只读 span，元素并未被复制一份。
     std::cout << "\nmean: " << mean(distances) << '\n';
 }

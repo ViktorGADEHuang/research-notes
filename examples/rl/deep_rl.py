@@ -29,6 +29,7 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make(env_id))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     kwargs = {"seed": seed, "device": "cpu", "verbose": 0}
     if algorithm in ("dqn", "ddpg", "td3", "sac"):
@@ -45,6 +46,7 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
         # 采集长度决定一次更新前收集多少步；PPO 还会分小批量重复更新。
         kwargs.update(n_steps=256, batch_size=64, n_epochs=4, clip_range=0.2)
     elif algorithm in ("ddpg", "td3"):
+        # shape[0] 查动作数组长度；Pendulum 的动作是一维，观测却有三维。
         action_dim = train_env.action_space.shape[0]
         # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
         kwargs["action_noise"] = NormalActionNoise(
@@ -57,6 +59,7 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
         # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
         model = classes[algorithm]("MlpPolicy", train_env, **kwargs)
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5, deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
         model.learn(total_timesteps=steps)
@@ -69,6 +72,7 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5, deterministic=True)
         print(f"{algorithm.upper()} | {env_id} | steps={model.num_timesteps}")
         print(f"before={before:.2f} | after={after:.2f} +/- {std:.2f}")
@@ -88,6 +92,7 @@ if __name__ == "__main__":
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--output", default="rl-output")
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

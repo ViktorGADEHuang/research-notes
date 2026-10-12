@@ -47,6 +47,43 @@
 
 本章的 `expected` 和 `std::to_underlying` 属于 C++23。编译器接受 `-std=c++23` 不代表配套标准库实现了每个功能；若找不到 `<expected>`，检查编译器和标准库版本。
 
+## 先按顺序走过一个成功输入和一个失败输入
+
+完整示例把 distance_m 固定为 4 米，依次试 2 秒、0 秒。把函数里的三个检查当作三道依次通过的关卡：
+
+| 检查顺序 | speed(4.0, 2.0) | speed(4.0, 0.0) |
+| --- | --- | --- |
+| 距离有限、非负吗 | 是，继续 | 是，继续 |
+| 时长有限、严格为正吗 | 是，继续 | 否，返回时长错误，到此结束 |
+| 计算 distance_m / seconds | 得到 2.0 | 不执行，因此没有除以零 |
+| 结果有限吗 | 是，返回成功值 2.0 | 不执行 |
+| main 如何处理 | if 分支输出速度 | else 分支输出错误原因 |
+
+每条 return 都结束**当前这一次函数调用**。错误输入不会先返回一条说明、再继续计算速度；后面那些行根本不会执行。理解这个顺序，才能判断检查是否放在危险操作之前。
+
+## 返回类型、成功结果和错误标记，分开看
+
+`expected<double, std::string>` 的两个类型参数按顺序表示成功类型和错误类型。函数返回 `result` 这个 double 时会建立成功状态；返回 `std::unexpected(std::string{...})` 时会建立失败状态。unexpected 不是 throw，它不会自行跳到 catch。
+
+| 操作 | 前提 | 目的 |
+| --- | --- | --- |
+| `if (result)` | 无需先知道状态 | 问这次计算是否成功 |
+| `*result` | 已确认成功 | 取出速度 |
+| `result.error()` | 已确认失败 | 取出错误说明 |
+| `result.value()` | 若失败会抛异常 | 以带失败检查的接口获取值；本例用 if 分支更直观 |
+
+不要用“我看到函数最后返回 double”判断每次都能成功；函数还有多个提前返回点。调用者的 else 也不是可以省略的装饰，它定义失败时程序接下来如何做。
+
+## “数值合法”与“物理上合理”还隔着一层
+
+零距离除以正时长得到零速度，仍是成功。负距离不符合本例把输入解释为“走过的路程”的约定；若描述有方向的位移，接口约定应重新设计，不能直接复制这个非负检查。
+
+两个有限数相除，结果也可能过大而超出 double 可表示范围，所以还检查 result。代码没有设置实际机器人的速度上限，那是后面练习加入的业务规则；“有限”不等于“适合机器人执行”。
+
+### 最后一行枚举与速度函数没有依赖关系
+
+`enum class Mode : unsigned` 定义了有名字的状态，idle 为 0，tracking 为 1；unsigned 指定底层整数类型。`Mode::tracking` 让代码表达“跟踪状态”，`std::to_underlying(...)` 在需要编码时明确得到整数 1。这里示范的是 C++23 的另一个小工具，先读懂 expected，再回来看这一行即可。
+
 ## 完整示例
 
 ```cpp
@@ -56,26 +93,28 @@
 #include <string>
 #include <utility>
 
+// 给工作状态起名字；它是状态标签，不参与速度计算。
 enum class Mode : unsigned { idle = 0, tracking = 1 };
 
 // 成功时装速度，失败时装字符串原因。
 std::expected<double, std::string> speed(double distance_m, double seconds) {
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 距离允许为 0，但不允许负数、NaN 或无穷大。
     if (!std::isfinite(distance_m) || distance_m < 0.0) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"invalid distance"});
     }
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 时长必须严格大于 0，通过本关之后才执行除法。
     if (!std::isfinite(seconds) || seconds <= 0.0) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"duration must be positive"});
     }
     const double result = distance_m / seconds;
-    // 检查数值有限及输入范围，避免非法时长或距离。
+    // 两个输入有限，也不能保证相除后的结果一定在 double 可表示范围内。
     if (!std::isfinite(result)) {
         // expected 的失败分支：明确返回错误原因。
         return std::unexpected(std::string{"speed overflow"});
     }
+    // 返回普通 double，由 expected 包装为“成功并持有速度”。
     return result;
 }
 
@@ -98,7 +137,7 @@ int main() {
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./cpp23.exe` 换成 `./cpp23`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `cpp23.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./cpp23.exe` 换成 `./cpp23`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++23 -Wall -Wextra -Wpedantic cpp23.cpp -o cpp23.exe

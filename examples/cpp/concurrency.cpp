@@ -11,14 +11,14 @@ int main() {
         const auto collect = [&samples] {
             for (int i = 0; i < 1000; ++i) {
                 // 原子的读—改—写，默认使用顺序一致的内存序。
-                samples.fetch_add(1); // Default sequentially consistent ordering.
+                samples.fetch_add(1);
             }
         };
         // 启动工作；对象析构会请求停止并等待线程结束。
         std::jthread first{collect};
-        // 启动工作；对象析构会请求停止并等待线程结束。
+        // 再启动一份相同工作，两份工作借用同一个 samples。
         std::jthread second{collect};
-    } // Both jthreads join before reading the final count.
+    } // 先等待 second，再等待 first；两份工作都结束后才往下走。
     // 内部作用域已结束，两个线程完成后读取最终计数。
     std::cout << "samples: " << samples.load() << '\n';
 }

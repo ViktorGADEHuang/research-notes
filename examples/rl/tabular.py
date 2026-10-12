@@ -78,6 +78,7 @@ def run(algorithm, episodes=3000, seed=7):
             if algorithm in ("mc", "td"):
                 action = rng.randrange(2)  # 评估同一个均匀随机策略
             elif algorithm == "reinforce":
+                # 查询本状态的动作分布，再从中随机抽取一个动作。
                 probs = softmax(logits[state])
                 action = rng.choices([0, 1], weights=probs)[0]
             elif algorithm == "q-learning":
@@ -147,5 +148,6 @@ if __name__ == "__main__":
     parser.add_argument("algorithm", choices=["value-iteration", "mc", "td", "sarsa", "q-learning", "reinforce"])
     parser.add_argument("--episodes", type=int, default=3000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     run(args.algorithm, args.episodes, args.seed)

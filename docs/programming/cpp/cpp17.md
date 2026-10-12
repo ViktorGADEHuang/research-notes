@@ -47,6 +47,47 @@ C++17 有一批实用工具，让接口更准确地表达“可能没有结果�
 
 `std::filesystem` 也在 C++17 中进入标准库，可操作路径、遍历目录；文件操作可能失败，需处理异常或 `error_code`。本章先把没有值与字符串借用讲清。
 
+## 查表代码先读成普通两步，不急着合成一行
+
+`positions` 是一张“编号 → 位置”的表：编号 1 对应 0.0，编号 2 对应 3.5。`find(id)` 返回的是记录位置；没找到时返回 end。它不会像非 const map 的 `operator[]` 那样创建新记录。
+
+正文把初始化与条件合并为 C++17 的 `if (初始语句; 条件)`。下面是 lookup 内的同一逻辑，只用展开写法方便阅读，不要在正文函数后重复粘贴第二份实现：
+
+```cpp
+const auto it = positions.find(id); // 先查编号，得到一个迭代器。
+if (it != positions.end()) {        // 确认找到，才读取对应记录。
+    return it->second;              // first 是编号，second 是位置。
+}
+return std::nullopt;                // 查不到，明确返回“没有值”。
+```
+
+结构化绑定 `const auto& [id, x]` 则是在遍历一条记录时，把 first 和 second 分别起名为 id 与 x。方括号里的名字由你选；加 `&` 是只读借用这条记录，不复制记录，也不把它拆成与原数据无关的两份值。
+
+## optional 的状态与里面的数字，要问两次
+
+| 你想问的事情 | 对有值的 optional x 怎么写 | x 内的值为 0 时 |
+| --- | --- | --- |
+| 是否有结果 | `if (x)` 或 `x.has_value()` | 有结果，true |
+| 结果具体是多少 | 成功分支内 `*x` | 得到 0 |
+| 结果是否大于 0 | 成功分支内 `*x > 0.0` | false |
+
+`std::nullopt` 是专门表示空状态的标记。`value_or(备用值)` 会得到一个普通值，从此不再携带“原来有没有”的区别；只有业务允许把缺失变成默认值时才这样用。位置既可能为 0，也可能为负数，所以把 −1 打印出来可以演示接口，却不能把它当通用错误协议。
+
+## string_view 与 variant 分别在解决什么
+
+string 拥有自己的字符，string_view 只保存一段字符的位置和长度。本例 name 一直存在、没有发生使存储失效的修改，所以 view 可读。只声明 view 为 const，并不会让原字符串活得更久；view 内的 const 也不是生命周期保险。
+
+variant 则像有明确标签的一格储物柜，本例允许放 int 或 string。message 当前放的是字符串 ready；`visit` 根据当前保存的类型把值交给处理函数。下面只是替换完整示例的最后两句，展示同一个接口处理另一类型：
+
+```cpp
+const std::variant<int, std::string> message{42}; // 这次当前类型是 int。
+std::visit([](const auto& value) {
+    std::cout << value << '\n'; // 这个 Lambda 对 int 和 string 都能输出。
+}, message);
+```
+
+这一替换输出 42。visit 要求处理函数对所有可能被访问的候选类型都适用，不能只为当前碰巧装着的类型写一段无法处理其他候选的代码。某些会抛异常的类型切换还可能使 variant 无有效备选值；本例不进行这种切换，初学先掌握带类型标签地存取结果。
+
 ## 完整示例
 
 ```cpp
@@ -61,6 +102,7 @@ C++17 有一批实用工具，让接口更准确地表达“可能没有结果�
 std::optional<double> lookup(const std::map<int, double>& positions, int id) {
     // 只查询不插入，避免 positions[id] 意外添加键。
     if (const auto it = positions.find(id); it != positions.end()) {
+        // map 中一项是“编号 + 位置”；second 取其中的位置值。
         return it->second;
     }
     // 返回“没有结果”，不要把缺失数据当作有效的零值。
@@ -69,11 +111,13 @@ std::optional<double> lookup(const std::map<int, double>& positions, int id) {
 
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 每一对花括号是一条记录：第一个值为编号，第二个为位置（米）。
     const std::map<int, double> positions{{1, 0.0}, {2, 3.5}};
     // 结构化绑定拆出键和值，并以引用避免复制。
     for (const auto& [id, x] : positions) {
         std::cout << "sheep " << id << ": " << x << '\n';
     }
+    // 仅演示 value_or：缺失时用于显示的备用值，不要把它继续当真实位置。
     std::cout << "missing fallback: " << lookup(positions, 9).value_or(-1.0) << '\n';
     // 检查有没有值，而不是里面的数是不是非零。
     if (auto x = lookup(positions, 1)) {
@@ -85,14 +129,14 @@ int main() {
     std::cout << "view: " << view << '\n';
     // 当前保存一种类型，不是同时存两种结果。
     const std::variant<int, std::string> message{std::string{"ready"}};
-    // 根据 variant 当前类型调用可接受它的 Lambda。
+    // auto 参数让同一个 Lambda 能分别处理 int 和 string；当前输出 ready。
     std::visit([](const auto& value) { std::cout << value << '\n'; }, message);
 }
 ```
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./cpp17.exe` 换成 `./cpp17`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `cpp17.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./cpp17.exe` 换成 `./cpp17`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic cpp17.cpp -o cpp17.exe

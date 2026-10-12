@@ -32,7 +32,9 @@ for _ in range(10000):
         ns, reward, done = step(s, a)
         # 保存这一时刻的数据，方便在结束后从后往前计算回报。
         episode.append((s, reward))
+        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
         s = ns
+    # 只创建本局的回报表；最后一步之后回报为 0，便于从末尾递推。
     returns, total = [0.0] * len(episode), 0.0
     # 从最后一步倒推 G：当前奖励 + gamma × 后面已经算好的回报。
     for t in reversed(range(len(episode))):

@@ -18,6 +18,7 @@ from stable_baselines3.common.noise import NormalActionNoise
 def main(steps, seed):
     # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
     torch.set_num_threads(1)
+    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
     output = Path("rl-output/ddpg")
     # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
     output.mkdir(parents=True, exist_ok=True)
@@ -26,6 +27,7 @@ def main(steps, seed):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make("Pendulum-v1"))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     dim = train_env.action_space.shape[0]
     # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
@@ -41,6 +43,7 @@ def main(steps, seed):
             train_freq=1, gradient_steps=1, action_noise=noise,
         )
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
                                    deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
@@ -52,6 +55,7 @@ def main(steps, seed):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
                                     deterministic=True)
         print(f"Actual training steps: {model.num_timesteps}")
@@ -69,6 +73,7 @@ if __name__ == "__main__":
     # steps 是训练预算示例，不是预期学会任务所需的精确步数。
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

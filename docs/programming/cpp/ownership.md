@@ -50,6 +50,47 @@
 
 `*p` 取指针指向的对象，`p->field` 访问其成员。不要解引用空指针。单纯需要一个局部对象时直接写 `Sensor sensor{...}`，不必为了“现代”而动态分配。
 
+## 在智能指针之前，先用一个真实对象认清星号
+
+这一小段放在 main 内，并沿用后面定义的 Sensor。先用局部对象，暂时不需要动态分配：
+
+```cpp
+Sensor local{2.5};       // 对象本身，离开自己的作用域时销毁。
+Sensor* pointer = &local; // & 在表达式里取地址；pointer 只借用 local。
+Sensor& alias = local;   // & 在声明里建立引用；alias 是 local 的别名。
+alias.distance_m = 3.0;  // 通过别名修改，local 的数据随之变为 3.0。
+std::cout << pointer->distance_m << '\n'; // 输出 3。
+// pointer->distance_m 等价于 (*pointer).distance_m。
+```
+
+`Sensor*` 中的星号用于声明“这是一种指针类型”；`*pointer` 中的星号用于“通过地址取对象”。`&local` 取地址；`Sensor& alias` 声明引用。同一符号放在不同位置有不同角色，先看是在**声明类型**还是在**使用值**。
+
+这个 pointer 不拥有 local，所以不应该对它调用 delete。离开作用域后 local 自己销毁；若把 pointer 保存到别处再用，它就指向已经不存在的对象，称为悬空指针。非空也可能悬空，因此“检查不是 nullptr”并不足以证明任意裸指针可用。
+
+## 为什么选择 unique_ptr，而不是所有地方都用 shared_ptr
+
+局部对象够用时直接用局部对象。需要让资源随一个管理对象转交、动态存在时，unique_ptr 表达“这一时刻只有一个负责清理的拥有者”；复制会让责任不明确，所以它禁止复制，但允许移动。
+
+shared_ptr 表达“确实有多个地方共同决定资源何时结束”。复制 shared_ptr 复制的是一份拥有关系，通常不会复制 Sensor 本身；最后一个强拥有者释放时，Sensor 才被销毁。它还有计数成本，不能因为方便就把所有对象改成共享拥有。
+
+weak_ptr 表达“我想观察，但不阻止它结束”。下面是可替换正文共享指针演示的片段；`show`、Sensor 与头文件沿用正文：
+
+```cpp
+auto shared = std::make_shared<Sensor>(Sensor{1.0});
+std::weak_ptr<Sensor> observer = shared;
+if (auto active = observer.lock()) { // 成功时临时取得一个强拥有者。
+    show(*active);                  // active 存在期间，对象仍然存在。
+}                                  // 临时拥有关系结束，shared 仍然拥有它。
+shared.reset();                    // 此时最后一个强拥有者释放，对象销毁。
+if (auto active = observer.lock()) {
+    show(*active);
+} else {
+    std::cout << "sensor is gone\n"; // 这次会进入这里。
+}
+```
+
+输出为 `distance: 1` 和 `sensor is gone`。真正访问时用 lock 的结果，而不是先看 expired、再假设对象还在；前一个检查与后一个动作之间，其他拥有者可能发生变化。
+
 ## 完整示例
 
 ```cpp
@@ -71,24 +112,27 @@ void show(const Sensor& sensor) {
 int main() {
     // 创建资源并交给唯一拥有者，离开作用域自动释放。
     auto owner = std::make_unique<Sensor>(Sensor{2.5});
+    // *owner 取得那个 Sensor，show 用只读引用暂时借看它。
     show(*owner);
     // 转移 unique_ptr 所有权；之后原 owner 保证为空。
     auto new_owner = std::move(owner);
     std::cout << std::boolalpha << "old owner empty: " << !owner << '\n';
     show(*new_owner);
     // 共享所有权：最后一个强拥有者离开时销毁对象。
+    // 这里另建一个 Sensor，与上面的 unique_ptr 资源互不相同。
     auto shared = std::make_shared<Sensor>(Sensor{1.0});
     // 弱观察者不延长资源的生命周期。
     std::weak_ptr<Sensor> observer = shared;
     // 释放这里最后一个强拥有者，传感器随之销毁。
     shared.reset();
+    // expired 只用于本例展示状态；真正访问对象应调用 lock 并检查结果。
     std::cout << "resource expired: " << observer.expired() << '\n';
 }
 ```
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./ownership.exe` 换成 `./ownership`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `ownership.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./ownership.exe` 换成 `./ownership`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic ownership.cpp -o ownership.exe

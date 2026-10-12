@@ -21,6 +21,7 @@ def step(state, action):
 values = [0.0] * 7
 # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(10000):
+    # 每一局从位置 3 重新出发；外面的 V/Q 表不重置，所以能积累经验。
     s = 3
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
@@ -31,5 +32,6 @@ for _ in range(10000):
         target = reward + (0.0 if done else gamma * values[ns])
         # TD 每走一步就更新 V，无需等到这一幕结束。
         values[s] += alpha * (target - values[s])
+        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
         s = ns
 print("Random-policy values:", [round(x, 3) for x in values[1:6]])

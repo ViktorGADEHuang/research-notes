@@ -44,6 +44,30 @@
 
 下一幕不会清空 values，它要跨回合累积经验；每幕只把当前位置重新设为 3。看清哪些数据重置、哪些数据保留，是理解循环的关键。
 
+## 用四行核心运算跟踪一个格子
+
+```python
+# 这些是用于讲解的一条已观察经验，以及更新前的两个预测。
+current, next_value = 0.3, 0.8
+reward, gamma, alpha = -0.01, 0.95, 0.1
+terminated = False
+future = 0.0 if terminated else gamma * next_value  # 未终止，未来部分 0.76。
+target = reward + future                           # 参考目标 0.75。
+error = target - current                           # 比旧预测高 0.45。
+current += alpha * error                           # 只提高 0.045，变为 0.345。
+```
+
+`x += y` 与 `x = x + y` 是这里的同一种加法写法。完整代码不是更新名为 current 的独立变量，而是直接更新 `values[s]`。
+
+| 执行到这里 | s | ns | values 中发生什么 |
+| --- | --- | --- | --- |
+| `s = 3` | 当前在 3 | 尚未取得 | 不改表 |
+| `step(s, a)` 后 | 仍是 3 | 假设为 4 | 返回经历，不自动改 V |
+| V 更新后 | 仍是 3 | 仍是 4 | 只修正 values[3] |
+| `s = ns` 后 | 变成 4 | 仍记录刚才的 4 | 准备下一步，不再更新旧状态 |
+
+所以 `s = ns` 放在更新之后。若提前覆盖 s，再用 `values[s]` 更新，改到的就是下一位置，公式含义变了。每局起点重新设成 3，但价值表在局外创建，不会每局归零。
+
 ## 完整代码
 
 ```python
@@ -70,6 +94,7 @@ def step(state, action):
 values = [0.0] * 7
 # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(10000):
+    # 每一局从位置 3 重新出发；外面的 V/Q 表不重置，所以能积累经验。
     s = 3
     # 持续与环境交互，直到走到左端或右端。
     while s not in (0, 6):
@@ -80,6 +105,7 @@ for _ in range(10000):
         target = reward + (0.0 if done else gamma * values[ns])
         # TD 每走一步就更新 V，无需等到这一幕结束。
         values[s] += alpha * (target - values[s])
+        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
         s = ns
 print("Random-policy values:", [round(x, 3) for x in values[1:6]])
 ```

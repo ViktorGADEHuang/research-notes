@@ -113,10 +113,15 @@
 .reading-toolbar button:focus-visible, .figure-dialog button:focus-visible, .figure-dialog-scroll:focus-visible, .md-typeset img[role="button"]:focus-visible { outline: 3px solid var(--md-accent-fg-color); outline-offset: 3px; }
 .md-typeset img[role="button"] { cursor: zoom-in; }
 .md-typeset .highlight pre { border: 1px solid var(--research-border); border-radius: 10px; }
+.md-typeset .highlight > .filename { margin-bottom: 0; padding: .55rem .8rem; border: 1px solid var(--research-border); border-bottom: 0; border-radius: 10px 10px 0 0; background: var(--research-surface); color: var(--research-accent); font-size: .68rem; }
+.md-typeset .highlight > .filename + pre { margin-top: 0; border-radius: 0 0 10px 10px; }
 .md-typeset .highlight pre code { font-size: .68rem; line-height: 1.75; }
 .md-typeset .highlight .c1, .md-typeset .highlight .cm { color: var(--research-muted); }
 .md-typeset details { border-radius: 9px; }
 .md-typeset .admonition { border-radius: 9px; }
+.md-typeset .admonition.tip, .md-typeset .admonition.note { border-color: var(--research-border); box-shadow: none; font-size: .74rem; }
+.md-typeset .admonition.tip > .admonition-title, .md-typeset .admonition.note > .admonition-title { background: var(--research-surface); color: var(--research-accent); }
+.md-typeset .admonition.tip > .admonition-title::before, .md-typeset .admonition.note > .admonition-title::before { background-color: var(--research-accent); }
 .md-typeset h2 { scroll-margin-top: 5rem; }
 .figure-dialog { width: min(1100px, 94vw); max-width: 94vw; max-height: 90vh; padding: 1rem; border: 1px solid var(--research-border); border-radius: 14px; background: var(--md-default-bg-color); color: var(--md-default-fg-color); box-shadow: 0 18px 80px #0005; }
 .figure-dialog::backdrop { background: #10251dcc; }

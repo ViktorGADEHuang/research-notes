@@ -10,6 +10,7 @@ int main() {
     const double threshold_m{3.0};
     // 列表拥有三个距离元素，数量由容器管理。
     const std::vector<double> distances_m{1.2, 4.5, 2.0};
+    // 计数器放在循环外，才能记住前面已经数到多少只。
     int far_count{0};
     // 范围循环，每次读取一个距离。
     for (const double distance_m : distances_m) {
@@ -19,7 +20,9 @@ int main() {
             ++far_count;
         }
     }
+    // << 把右侧内容交给输出流；字符 '\n' 让下一次输出换行。
     std::cout << experiment << '\n';
     std::cout << "far sheep: " << far_count << '\n';
+    // 5 / 2 先按整数做除法；5.0 / 2 中有小数，结果才保留小数部分。
     std::cout << "integer: " << 5 / 2 << ", decimal: " << 5.0 / 2 << '\n';
 }

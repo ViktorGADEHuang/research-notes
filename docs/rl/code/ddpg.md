@@ -25,7 +25,7 @@
 
 **语言：Python 3.12；实现方式：使用 Stable-Baselines3 的真实算法实现。**
 
-本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现，完整脚本可运行，但它不是从零手写算法。
+本页先学习如何调用算法、训练、保存与评估。网络结构与梯度更新由库实现。完整脚本用于阅读训练、保存与评估的调用顺序，内部算法细节要与前两部分对照。
 
 
 本页以阅读代码为主，不要求安装依赖或运行训练。
@@ -56,6 +56,34 @@
 
 回放、目标网络和动作梯度由库完成。先在代码里找 noise 的创建及传入，再对照公式区分目标 Actor 与当前 Actor，不必先研究库的每个内部类。
 
+## 先读“这条经验的目标”，再读训练配置
+
+```python
+# 目标 Actor 已经给下一状态输出动作，目标 Critic 对它的评分为 2。
+reward, gamma, next_target_q = -1.0, 0.9, 2.0
+terminated = False
+target = reward + (0.0 if terminated else gamma * next_target_q)  # 0.8。
+current_q = 1.3  # 当前 Critic 对经验中实际执行动作的预测。
+critic_loss = (current_q - target)**2  # 0.25，训练当前 Critic 用的误差。
+
+# 单独演示目标网络一个参数的软更新，和动作大小无关。
+old_target_parameter, current_parameter, tau = 10.0, 14.0, 0.01
+new_target_parameter = (1 - tau) * old_target_parameter + tau * current_parameter
+# 结果为 10.04；真实 tau 由算法配置决定，这里 0.01 只用于手算。
+```
+
+这段只展示 Critic 目标与软更新。Actor 还要通过当前 Critic 的“评分如何随动作变化”取得梯度，不能把 critic_loss 当作速度改变量。
+
+| 输入或输出 | 本例是什么 | 别混淆成什么 |
+| --- | --- | --- |
+| Pendulum 观测 | cos(角度)、sin(角度)、角速度，共 3 个数 | 不是只有一个角度 |
+| 动作 | 长度 1 的数组，扭矩范围 [−2, 2] | 不是离散动作编号 |
+| Actor 输出 | 一个连续动作 | 不是该动作的概率 |
+| Critic 输入 | 观测与动作一起输入 | 不能只给观测却说已评估任意动作 |
+| `dim` | 动作维数 1 | 不是观测维数 3 |
+
+输入和单位见 [Pendulum 环境说明](https://gymnasium.farama.org/environments/classic_control/pendulum/)。SB3 会在内部缩放连续动作；示例 `sigma=0.1` 是噪声配置，不能不看缩放过程就直接解释成真实机器人 0.1 米每秒。
+
 ## 完整代码
 
 ```python
@@ -79,6 +107,7 @@ from stable_baselines3.common.noise import NormalActionNoise
 def main(steps, seed):
     # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
     torch.set_num_threads(1)
+    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
     output = Path("rl-output/ddpg")
     # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
     output.mkdir(parents=True, exist_ok=True)
@@ -87,6 +116,7 @@ def main(steps, seed):
     # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
     eval_env = Monitor(gym.make("Pendulum-v1"))
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     dim = train_env.action_space.shape[0]
     # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
@@ -102,6 +132,7 @@ def main(steps, seed):
             train_freq=1, gradient_steps=1, action_noise=noise,
         )
         # 记录未训练策略的评估均值，作为观察起点。
+        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
         before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
                                    deterministic=True)
         # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
@@ -113,6 +144,7 @@ def main(steps, seed):
         # 评估随机种子单独设置；它不保证跨硬件逐位一致。
         eval_env.reset(seed=seed + 100)
         # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
         after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
                                     deterministic=True)
         print(f"Actual training steps: {model.num_timesteps}")
@@ -130,6 +162,7 @@ if __name__ == "__main__":
     # steps 是训练预算示例，不是预期学会任务所需的精确步数。
     parser.add_argument("--steps", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=7)
+    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
     args = parser.parse_args()
     if args.steps <= 0:
         parser.error("--steps must be positive")

@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import ast
 import re
+import textwrap
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,6 +48,13 @@ def check(condition, message):
         errors.append(message)
 
 
+def code_blocks(text, language):
+    """读取普通、带标题及折叠答案中的围栏；只移除 Markdown 的公共缩进。"""
+    pattern = rf'^([ \t]*)```{re.escape(language)}(?:[ \t][^\n]*)?\n(.*?)^\1```[ \t]*$'
+    return [textwrap.dedent(match.group(2)).strip()
+            for match in re.finditer(pattern, text, re.M | re.S)]
+
+
 pages = {p.resolve(): Page(p.read_text(encoding='utf-8')) for p in SITE.rglob('*.html')}
 check(bool(pages), '请先执行 mkdocs build --strict')
 for path, page in pages.items():
@@ -70,8 +78,11 @@ for p in DOCS.rglob('*.md'):
     check(text.count('```') % 2 == 0, f'{p}: 未闭合代码围栏')
     check('\ufffd' not in text, f'{p}: 存在乱码替换字符')
     # 仅解析语法，包括需要正文提供输入的阅读片段；不导入，不执行。
-    for block in re.findall(r'^```python\s*\n(.*?)^```', text, re.M | re.S):
-        ast.parse(block, filename=str(p))
+    for index, block in enumerate(code_blocks(text, 'python'), start=1):
+        try:
+            ast.parse(block, filename=f'{p}:代码块{index}')
+        except SyntaxError as error:
+            errors.append(str(error))
 
 for p in DOCS.rglob('*.svg'):
     diagram = ET.parse(p).getroot()
@@ -83,7 +94,7 @@ for p in python_files:
     ast.parse(p.read_text(encoding='utf-8'), filename=str(p))
     chapter = DOCS / 'rl/code' / (p.stem + '.md')
     if chapter.exists():
-        blocks = re.findall(r'^```python\s*\n(.*?)^```', chapter.read_text(encoding='utf-8'), re.M | re.S)
+        blocks = code_blocks(chapter.read_text(encoding='utf-8'), 'python')
         check(p.read_text(encoding='utf-8').strip() in [b.strip() for b in blocks],
               f'网页完整示例与源码不一致: {p.name}')
 
@@ -104,13 +115,13 @@ for path, page in pages.items():
 
 cmake = (examples / 'CMakeLists.txt').read_text(encoding='utf-8').strip()
 tooling = (DOCS / 'programming/cpp/tooling.md').read_text(encoding='utf-8')
-check(cmake in [b.strip() for b in re.findall(r'^```cmake\s*\n(.*?)^```', tooling, re.M | re.S)],
+check(cmake in code_blocks(tooling, 'cmake'),
       '网页 CMake 配置与本地源码不一致')
 
 # 独立源码与网页完整示例必须一致；练习片段不参与匹配。
 for p in examples.glob('*.cpp'):
     chapter = DOCS / 'programming/cpp' / (p.stem + '.md')
-    blocks = re.findall(r'^```cpp\s*\n(.*?)^```', chapter.read_text(encoding='utf-8'), re.M | re.S)
+    blocks = code_blocks(chapter.read_text(encoding='utf-8'), 'cpp')
     check(p.read_text(encoding='utf-8').strip() in [b.strip() for b in blocks],
           f'网页完整示例与源码不一致: {p.name}')
 

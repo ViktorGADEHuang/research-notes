@@ -47,6 +47,43 @@ count_if 需要一条“算不算”的规则。下面 `[](double d) { return d 
 
 迭代器像指向容器元素的位置标记。`begin()` 指向起点，`end()` 指向末尾之后，不能解引用。常见算法使用半开区间 `[begin, end)`。
 
+## 先会放入和取出一个元素，再谈算法
+
+下面片段放在 main 内，文件需要 `<vector>` 和 `<iostream>`。它独立于后面完整示例的 distances 列表，用 readings 避免同名：
+
+```cpp
+std::vector<double> readings{1.2, 2.8}; // 现在有两个元素，下标为 0 和 1。
+readings.push_back(4.0);               // 在末尾再放一个，现在有三个元素。
+std::cout << readings.size() << '\n';  // 输出 3，size 是已有元素数量。
+std::cout << readings.at(0) << '\n';   // 输出 1.2，下标从 0 开始。
+readings.at(1) = 3.0;                  // 修改已有的第二个元素，不改变数量。
+```
+
+**下标**是元素的位置编号，与羊的身份编号没有关系。三只羊的身份可以是 7、18、42，但把它们放进 vector 后，三个位置仍然是 0、1、2。要按身份找记录，可以另外使用 map；不要把身份编号直接当作 vector 下标。
+
+### size 与 capacity 不是一回事
+
+size 像已经坐下的人数，capacity 像目前准备好的座位数量。`reserve(100)` 只为容器预留空间，现有元素数量不变，不能因此访问第 99 个元素；`resize(100)` 才把元素数量改为 100。新增 double 元素通常由这种 resize 写法初始化为 0.0。
+
+vector 扩容时可能换到更大的存储区域。此前保存的元素指针、引用、迭代器就可能失效；“变量还在作用域内”不等于“它借用的那个位置还有效”。初学先完成增删，再开始遍历，避免一边走列表一边改变其布局。
+
+## 算法接收的不是数字下标，而是一段区间
+
+把排序后的列表画成位置关系：
+
+```text
+元素：      1.0    2.0    3.0    4.0    [没有元素]
+下标：       0      1      2      3
+位置：     begin()                         end()
+处理范围：   └────────包含这四个元素──────────┘
+```
+
+这就是 `[begin, end)` 中“左边包含、右边不包含”的意思。`std::max_element` 返回的是其中一个**位置**，写 `*位置` 才读到那个数；空列表没有最大元素，返回 end，此时不能加星号读取。
+
+`count_if` 的 if 不是要你给它一条写死的 if 语句，而是要你提供一个可被调用的判断规则。本例对 1、2、3、4 分别判断 `d <= 2.0`，得到 true、true、false、false，所以计数是 2。算法不用知道“羊”是什么，它只按规则处理每个 double。
+
+`sort` 需要元素之间有合适的顺序关系；本例使用有限普通距离。包含 NaN 的浮点测量值应先按业务要求拒绝或处理，不能拿本例直接声称完成了任意传感器数据的稳健排序。
+
 ## 完整示例
 
 ```cpp
@@ -57,6 +94,7 @@ count_if 需要一条“算不算”的规则。下面 `[](double d) { return d 
 
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 四个元素的下标为 0、1、2、3；size() 是元素数量 4。
     std::vector<double> distances{4.0, 1.0, 3.0, 2.0};
     // 对半开区间 [begin, end) 排序，修改原容器。
     std::sort(distances.begin(), distances.end());
@@ -68,18 +106,19 @@ int main() {
     // 初值 0.0 让累加保持浮点类型。
     const double sum = std::accumulate(
         distances.begin(), distances.end(), 0.0);
+    // 排序后逐项读取；这里只输出数值，不需要修改元素或复制整个容器。
     for (const auto distance : distances) {
         std::cout << distance << ' ';
     }
     std::cout << "\nclose: " << close_count << ", sum: " << sum << '\n';
-    // at 带范围检查，非法位置会抛异常。
+    // 本例确定非空，at(0) 取第一个元素；若下标越界，at 会抛异常。
     std::cout << "first: " << distances.at(0) << '\n';
 }
 ```
 
 ## 编译与运行
 
-在示例目录执行。Windows 使用 PowerShell；Linux/macOS 将 `./containers.exe` 换成 `./containers`，并把输出文件名的 `.exe` 去掉。
+把上面的完整程序保存为 `containers.cpp`，在保存这个文件的目录打开终端。短片段与练习修改不要额外拼在完整程序后面；按正文标明的位置替换或追加。Windows 使用 PowerShell；Linux/macOS 将 `./containers.exe` 换成 `./containers`，并把输出文件名的 `.exe` 去掉。
 
 ```powershell
 g++ -std=c++17 -Wall -Wextra -Wpedantic containers.cpp -o containers.exe

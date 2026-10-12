@@ -9,6 +9,7 @@
 std::optional<double> lookup(const std::map<int, double>& positions, int id) {
     // 只查询不插入，避免 positions[id] 意外添加键。
     if (const auto it = positions.find(id); it != positions.end()) {
+        // map 中一项是“编号 + 位置”；second 取其中的位置值。
         return it->second;
     }
     // 返回“没有结果”，不要把缺失数据当作有效的零值。
@@ -17,11 +18,13 @@ std::optional<double> lookup(const std::map<int, double>& positions, int id) {
 
 // 程序入口；下面按顺序执行示例步骤。
 int main() {
+    // 每一对花括号是一条记录：第一个值为编号，第二个为位置（米）。
     const std::map<int, double> positions{{1, 0.0}, {2, 3.5}};
     // 结构化绑定拆出键和值，并以引用避免复制。
     for (const auto& [id, x] : positions) {
         std::cout << "sheep " << id << ": " << x << '\n';
     }
+    // 仅演示 value_or：缺失时用于显示的备用值，不要把它继续当真实位置。
     std::cout << "missing fallback: " << lookup(positions, 9).value_or(-1.0) << '\n';
     // 检查有没有值，而不是里面的数是不是非零。
     if (auto x = lookup(positions, 1)) {
@@ -33,6 +36,6 @@ int main() {
     std::cout << "view: " << view << '\n';
     // 当前保存一种类型，不是同时存两种结果。
     const std::variant<int, std::string> message{std::string{"ready"}};
-    // 根据 variant 当前类型调用可接受它的 Lambda。
+    // auto 参数让同一个 Lambda 能分别处理 int 和 string；当前输出 ready。
     std::visit([](const auto& value) { std::cout << value << '\n'; }, message);
 }
