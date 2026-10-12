@@ -49,6 +49,7 @@ nav:
   - 强化学习:
       - 强化学习概览: rl/index.md
       - 入门第一课 · 用一次经历理解学习: rl/start.md
+      - 网络与梯度入门 · 两个数字怎样学习: rl/network-basics.md
       - 第一部分 · 算法直觉:
           - 算法直觉导读: rl/intuition/index.md
           - 价值迭代: rl/intuition/value-iteration.md

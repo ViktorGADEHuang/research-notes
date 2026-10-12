@@ -19,6 +19,7 @@ values = [0.0] * 7
 # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(10000):
     # 复制上一轮的 V；本轮所有目标都使用旧表，进行同步更新。
+    # 本表元素是不可变数字，切片得到独立列表，写 values 不会改 old。
     old = values[:]
     for s in range(1, 6):
         candidates = []

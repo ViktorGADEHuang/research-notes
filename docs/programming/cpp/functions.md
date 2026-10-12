@@ -57,7 +57,7 @@
 
 直接遇到引用、容器和异常会很拥挤。先把求平均放一旁，认识“定义 → 调用 → 返回”的顺序。这是独立的短示例，可以单独保存为 hello_function.cpp：
 
-```cpp
+```cpp title="hello_function.cpp · 独立短例"
 #include <iostream>
 
 // 这里只定义做法，程序执行到 main 前不会自动调用它。
@@ -105,7 +105,7 @@ int main() {
 
 ## 完整示例
 
-```cpp
+```cpp title="functions.cpp · 完整示例"
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -167,13 +167,30 @@ after: 3
 empty samples
 ```
 
-## 怎样读这段代码
+## 怎样读这段代码：调用前、调用中、返回后
 
-`average` 借用数据而不修改；累加的初值 `0.0` 使累加结果为 `double`。`static_cast<double>` 明确把数量转换成浮点数。
+![同一份列表，三次调用中的数据变化](../../assets/learning/cpp-function-call.svg){ .learning-figure }
 
-`shift` 中的 `auto&` 指向真实元素，所以修改会留下来。若写 `auto value`，就只修改每次复制出来的临时变量。
+[打开调用过程大图](../../assets/learning/cpp-function-call.svg)
 
-空列表无法计算平均值，因此抛出异常。`try` 内发生异常时，控制流进入匹配的 `catch`；`what()` 给出说明。异常不是普通的返回值。
+main 创建的是同一份 values，开始为 {1.0, 2.0, 3.0}。程序先调用 average 输出平均值，再调用 shift 修改这份列表，最后再次调用 average。函数在文件上方的排版顺序，不是它们实际执行的顺序。
+
+| 这时执行什么 | 函数内发生什么 | 调用回到 main 后 |
+| --- | --- | --- |
+| average(values) | 只读借用列表，求和 6、数量 3，返回 2 | values 仍是 {1, 2, 3}，输出 before: 2 |
+| shift(values, 1.0) | 依次把原元素加 1 | values 变成 {2, 3, 4}；void 没有普通返回值 |
+| 再次 average(values) | 读取修改后的列表，求和 9、数量 3 | 返回 3，输出 after: 3 |
+| average(empty) | 首先发现列表为空，抛出异常 | 正常路径中断，进入 catch，输出 empty samples |
+
+average 的 `const std::vector<double>&` 可以从三个问题读：输入是什么类型？一组小数；是否复制？通过引用借用；能否通过这个参数改原列表？不能。调用时写 average(values)，引用要求写在定义的参数类型里，不是在调用位置加星号。
+
+shift 中的 `auto& value` 是对**当前真实元素**起的别名。第一轮改变 values[0]，第二轮改变 values[1]，第三轮改变 values[2]。如果删除这个 &，每轮修改的只是取出来的副本，原列表不会留下修改。
+
+average 通过 return 交回一个数字，cout 才显示它。异常则改变执行路径：`throw` 后面的正常语句不继续执行，匹配的 catch 用 `error.what()` 取得说明文字。它们解决的是“怎样计算”和“无法按约定计算时怎么办”两件事。
+
+### 为什么累加从 0.0 开始？
+
+accumulate 的累计类型由初始值决定。0.0 是 double，本例的 1、2、3 按浮点累计。若用整数 0 累计小数列表，部分小数会在中间结果转换中被截断；仅在最后把答案转成 double 不能补回。数量转换为 double 则明确表达了除法的数值类型。
 
 ## 常见错误
 

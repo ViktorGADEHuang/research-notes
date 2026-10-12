@@ -56,7 +56,7 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
         kwargs["ent_coef"] = "auto"
 
     try:
-        # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
+        # 按所选算法建立模型：DQN 使用 Q 网络，其他列出的算法使用 Actor/Critic。
         model = classes[algorithm]("MlpPolicy", train_env, **kwargs)
         # 记录未训练策略的评估均值，作为观察起点。
         # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。

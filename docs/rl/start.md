@@ -133,3 +133,5 @@
 
 [继续读算法直觉 →](intuition/index.md){ .md-button .md-button--primary }
 [查看公共符号](math/index.md){ .md-button }
+
+准备阅读深度算法时，接着看[网络与梯度入门](network-basics.md)。先弄清“一个学习信号怎样改参数”，再读创建模型与 learn 的库调用。

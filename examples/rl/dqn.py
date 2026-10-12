@@ -27,7 +27,7 @@ def main(steps, seed):
     # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     try:
-        # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
+        # 建立当前 Q 网络与目标 Q 网络；本算法按动作分数决策，没有另一个 Actor。
         model = DQN(
             # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,

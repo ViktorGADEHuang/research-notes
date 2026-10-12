@@ -69,7 +69,7 @@ Q-learning 不需要在构造目标前选 `next_action`，因此与 SARSA 的循
 
 ## 完整代码
 
-```python
+```python title="q-learning · 完整学习代码"
 """标准库教学代码：对照注释理解更新过程，无需运行。"""
 import random
 
@@ -98,6 +98,7 @@ def choose(q, state, epsilon=0.15):
     return rng.choice([a for a in range(2) if q[state][a] == best])
 
 # Q 表每行对应状态，两列分别对应向左与向右。
+# 每行分别创建新列表；不能写 [[0.0, 0.0]] * 7，那会让七行共用同一列表。
 q = [[0.0, 0.0] for _ in range(7)]
 # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(3000):
@@ -126,22 +127,32 @@ print("Greedy actions:", [max(range(2), key=lambda a: q[s][a]) for s in range(1,
 
 输出 Q 表与贪心动作。当前设置下，五个状态应学到向右；这不表示所有环境都能用 3000 幕学会。
 
-## 阅读练习：不用运行，也能推演
+## 阅读练习：把理解分成三小步
 
 <div class="practice-card" markdown="1">
 
-<p class="practice-kicker">把代码与公式接起来</p>
+<p class="practice-kicker">纸笔演算，不需要运行训练</p>
 
-<p class="practice-title">同一条经验，比较两种目标</p>
+<p class="practice-title">给同一条经验换两种后续参考</p>
 
-正文的 max 与实际下一动作可能不同。先用相同数字比较目标，不急着改整个算法。
+**沿用这些条件**：当前 Q=0.4，下一 Q=[0.3, 0.9]，下一次探索准备选左；奖励 0.1、折扣 0.9、步长 0.2，未终止。
 
-**沿用这些条件**：奖励 0.1，折扣 0.9；下一 Q 为 0.3、0.9，实际下一动作选中 0.3。
+**从哪里开始**：回到本页的核心短片段，先圈出输入和旧预测，再计算临时目标；最后才判断要修改什么。
 
-**你的任务**：分别写 Q-learning 与 SARSA 的目标；若要改代码，再读 SARSA 页完整的动作衔接。
+**按这几步做**：
 
-??? example "查看推演与解释"
+1. 先算 Q-learning 的目标与新 Q。
+2. 再算 SARSA 使用实际下一动作时的目标与新 Q。
+3. 解释哪种算法需要提前选好 next_action 并沿用。
 
-    Q-learning 为 0.91，SARSA 为 0.37。只替换 max 而没选择和沿用 next_action，不是完整的 SARSA 修改。
+??? tip "先要一点提示？"
+
+    给每个数写上名字，区分奖励、旧预测、目标、参数或动作。每算完一步，把中间结果写下来，再进入下一步，不只抄最后答案。
+
+??? example "对照完整推理"
+
+    Q-learning 先取 max=0.9，目标 0.91，新 Q=0.502。SARSA 读取选左的 0.3，目标 0.37，新 Q=0.394。同一经历得到不同参考，来自对后续策略的不同定义。
+
+    本页 Q-learning 不需要提前选择下一动作来构造 max 目标；SARSA 必须选择并交接下一动作。因此只把 max 换成一个任意下标，还不能完成 SARSA 的改写。
 
 </div>

@@ -26,6 +26,7 @@ def choose(q, state, epsilon=0.15):
     return rng.choice([a for a in range(2) if q[state][a] == best])
 
 # Q 表每行对应状态，两列分别对应向左与向右。
+# 每行分别创建新列表；不能写 [[0.0, 0.0]] * 7，那会让七行共用同一列表。
 q = [[0.0, 0.0] for _ in range(7)]
 # 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
 for _ in range(3000):

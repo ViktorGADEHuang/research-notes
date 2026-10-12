@@ -93,7 +93,7 @@ if (auto active = observer.lock()) {
 
 ## 完整示例
 
-```cpp
+```cpp title="ownership.cpp · 完整示例"
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -148,13 +148,29 @@ distance: 2.5
 resource expired: true
 ```
 
-## 怎样读这段代码
+## 怎样读这段代码：把“谁拥有”画成两张图
 
-`make_unique` 创建传感器并交给一个拥有者；`show` 只借用，所以不会夺走资源。移动后 `new_owner` 接手，原 `unique_ptr` 保证为空。
+程序里有两个分别由智能指针管理的 Sensor：距离 2.5 的那个由 unique_ptr 管理；距离 1.0 的另一个由 shared_ptr 管理。看到两个智能指针名字，不要误认为它们总指向同一对象。
 
-`weak_ptr` 不增加强引用计数。`shared.reset()` 释放最后一个强拥有者后，对象销毁，观察者变为过期。真实访问时写 `if (auto p = observer.lock()) { show(*p); }`：`lock()` 成功获得临时强拥有者才访问。
+| 执行步骤 | 距离 2.5 的 Sensor | 距离 1.0 的 Sensor |
+| --- | --- | --- |
+| make_unique 后 | owner 是唯一拥有者 | 尚未创建 |
+| show(*owner) | show 临时只读借用，所有权仍在 owner | 尚未创建 |
+| 移动给 new_owner | 对象仍在；new_owner 接手，owner 为空 | 尚未创建 |
+| make_shared 后 | new_owner 继续拥有 | shared 是强拥有者 |
+| observer = shared | 没有变化 | observer 只观察，不阻止对象销毁 |
+| shared.reset() | 没有变化 | 本例最后一个强拥有者释放，对象销毁 |
+| main 结束 | new_owner 销毁并释放对象 | 对象早已销毁；弱观察关系也结束 |
 
-离开 `main` 时，`new_owner` 自动释放它拥有的资源。
+`make_unique<Sensor>(Sensor{2.5})` 的尖括号指定管理的对象类型；里面的 Sensor{2.5} 提供构造数据。`show(*owner)` 的星号取出 Sensor 对象，show 的 const 引用参数只读它。owner 这个智能指针对象与它管理的 Sensor，是两个不同层次的对象。
+
+普通引用和裸指针本身不会自动承担清理责任。局部对象存在时，借用者可以读取；对象生命周期结束后，再沿旧地址读就出问题。**借用关系不延长对象寿命**，所以应同时追踪拥有者活多久、访问发生在什么时候。
+
+### 同样是“复制”，shared_ptr 与 Sensor 有何不同？
+
+复制 shared_ptr，通常是让另一个 shared_ptr 加入同一对象的强拥有关系；复制 Sensor，则创建另一份 Sensor 数据。本例只有一个 shared，所以 reset 后 Sensor 就销毁。若之前还复制给了另一强拥有者，只有当前 shared 放手，对象不会因此立即销毁。
+
+真正要通过 weak_ptr 读取时，用 lock 取得临时 shared_ptr，并检查是否成功。得到的临时拥有者在访问期间让对象保持存在；只检查一次 expired 后再另行访问，不能替代这个步骤。
 
 ## 常见错误
 

@@ -85,7 +85,7 @@ RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用�
 
 ## 完整示例
 
-```cpp
+```cpp title="classes.cpp · 完整示例"
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -152,13 +152,27 @@ distance: 4 m
 invalid speed
 ```
 
-## 怎样读这段代码
+## 怎样读这段代码：先创建合法对象，再调用方法
 
-成员初始化列表 `: speed_mps_{speed_mps}` 直接初始化成员；`explicit` 阻止一些意外的隐式转换。函数末尾的 `const` 表示它不通过普通成员修改该对象，因此能在 `const Robot` 上调用。
+`const Robot robot{0.8}` 分别表示“对象类型是 Robot”“对象名叫 robot”“创建时传入速度 0.8”。Robot 是一个类型，robot 是一份具体对象；可以创建多个 Robot，每份对象保存自己的速度。
 
-速度乘时间得到距离，单位分别是米/秒、秒、米。`observations_` 是教学用的资源成员：即便类没有自定义析构函数，它也会自动销毁。
+| 阶段 | 本例执行的操作 | 接下来为何能继续 |
+| --- | --- | --- |
+| 创建 robot | 初始化 speed_mps_ 为 0.8，检查有限且非负 | 构造成功，robot 才成为可使用的对象 |
+| 调用 distance(5.0) | 参数 seconds 得到 5.0，检查输入后乘以速度 | 返回 4.0，由 cout 输出 distance: 4 m |
+| 创建 invalid | 初始化速度为 −1.0，检查失败 | 抛异常，没有得到一个可正常使用的 invalid |
+| 处理异常 | catch 取得错误对象，输出 what() | 不再执行 invalid.distance(1.0) |
+| main 结束 | 已成功创建的对象按生命周期销毁 | vector 等成员清理各自管理的资源 |
 
-如果构造函数抛异常，已构造完成的成员会清理；这个未构造成功的完整对象不会执行自身析构函数。
+构造函数没有写普通返回类型，名字与类名相同。冒号后面的 `speed_mps_{speed_mps}` 是**用参数初始化成员**：左边带下划线的是对象长期保存的成员，右边是这次构造调用的参数。下划线只是命名习惯，不是语法上自动创建成员的符号。
+
+函数末尾的 const 表达“这个成员操作不通过普通成员修改对象”。所以对 const robot 也能调用 distance。参数 seconds 每次调用都重新取得本次输入；speed_mps_ 则一直保存在 robot 内。`distance(2.0)` 会用同一速度算出 1.6，而不是沿用上一次调用的 5 秒。
+
+RAII 的关键是资源跟着管理对象的生命周期。本例没有手写 delete：observations_ 是 vector，vector 自己管理其内存。它是教学用的空成员，并没有读取传感器。创建失败时，已构造的成员仍会清理，但未完成构造的整个 Robot 不会执行自身析构函数。
+
+### private 为何有用？
+
+如果外部代码能直接把速度成员改成 −1，构造时的检查就容易被绕过。private 把修改入口收进类的接口中；之后若添加设置速度的方法，也应在那个入口重新检查。合法状态靠所有修改入口维持，不能只给一个构造函数加检查就随意开放别的写入口。
 
 ## 常见错误
 

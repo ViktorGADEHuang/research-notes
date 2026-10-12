@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 410" role="img" aria-labelledby="title desc">
+<title id="title">同一个距离列表，先只读求平均，再原地修改，再求平均</title>
+<desc id="desc">main保存values列表1,2,3。第一次average只读借用，返回2，原数据不变。shift通过可修改引用给每项加1，列表变成2,3,4。再次average返回3。函数定义顺序不是调用顺序。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#397b68"/></marker></defs>
+<rect width="920" height="410" rx="16" fill="#f2f6f1"/>
+<g font-family="'Microsoft YaHei',sans-serif" fill="#24463c">
+<text x="30" y="48" font-size="25" font-weight="700">从 main 的调用顺序读，原列表由 main 保管</text>
+<text x="30" y="82" font-size="18">average 只读借用；shift 通过引用修改同一份数据。</text>
+<g fill="#fff" stroke="#b7cbbb"><rect x="30" y="115" width="260" height="200" rx="12"/><rect x="330" y="115" width="260" height="200" rx="12"/><rect x="630" y="115" width="260" height="200" rx="12"/></g>
+<text x="50" y="152" font-size="21" font-weight="700">1 · average(values)</text>
+<text x="50" y="195" font-size="20">读取 [1, 2, 3]</text>
+<text x="50" y="236" font-size="18">总和 6 ÷ 数量 3 = 2</text>
+<text x="50" y="283" font-size="18">返回 2，原列表不变</text>
+<text x="350" y="152" font-size="21" font-weight="700">2 · shift(values, 1.0)</text>
+<text x="350" y="195" font-size="20">每项加 1</text>
+<text x="350" y="236" font-size="18">[1, 2, 3] → [2, 3, 4]</text>
+<text x="350" y="283" font-size="18">没有普通返回值，数据已改</text>
+<text x="650" y="152" font-size="21" font-weight="700">3 · average(values)</text>
+<text x="650" y="195" font-size="20">读取 [2, 3, 4]</text>
+<text x="650" y="236" font-size="18">总和 9 ÷ 数量 3 = 3</text>
+<text x="650" y="283" font-size="18">返回 3，原列表保持现值</text>
+<path d="M296 214H322" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M596 214H622" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="30" y="363" font-size="18" font-weight="700">return 把结果交回调用者；cout 才把结果显示出来。</text>
+<text x="30" y="394" font-size="17">参数中的 const &amp; 表示只读借用；非 const 引用允许按接口修改原对象。</text>
+</g></svg>

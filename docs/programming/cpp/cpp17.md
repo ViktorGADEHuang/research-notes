@@ -90,7 +90,7 @@ std::visit([](const auto& value) {
 
 ## 完整示例
 
-```cpp
+```cpp title="cpp17.cpp · 完整示例"
 #include <iostream>
 #include <map>
 #include <optional>
@@ -154,13 +154,27 @@ view: herding
 ready
 ```
 
-## 怎样读这段代码
+## 怎样读这段代码：把四个工具当成四个小任务
 
-`optional` 的真假表示有没有值，不是里面的数字是不是 0。所以查询编号 1 的位置 0.0 仍然成功。`value_or` 在缺失时使用默认值，但实际业务别用容易与正常数据混淆的哨兵值作为唯一错误机制。
+这页依次演示 map 查询、optional、string_view、variant。它们不是一个必须一起使用的大算法。先逐项追踪，每项都回答一个具体问题。
 
-带初始化语句的 `if` 把迭代器的使用范围限制在这个判断里。结构化绑定把键值对拆成 `id` 和 `x`。
+| 语句或操作 | 发生了什么 | 输出为什么是这样 |
+| --- | --- | --- |
+| 遍历 positions | 按 map 的有序键访问编号 1、2 | 分别显示位置 0、3.5 |
+| lookup(positions, 9) | find 没找到，返回空 optional | value_or 使用备用值 −1 做显示 |
+| lookup(positions, 1) | 找到真实位置 0，返回有值 optional | if 为真，*x 得到 0 |
+| string_view view{name} | 借看 name 当前的字符 | 原 name 有效，所以显示 herding |
+| visit 处理 message | 当前保存 string 类型的 ready | 回调输出 ready，而不是尝试把它当 int |
 
-`string_view` 依赖 `name` 的存储。本例先创建 `name`，后创建 `view`，使用时原字符串未被销毁或改动到使存储失效。`visit` 根据 variant 当前类型调用同一 Lambda。
+`if (auto x = lookup(...))` 在这里同时创建局部结果并检查是否有值；x 只在这个 if 相关作用域里使用。`*x` 是读取 optional 中的值，虽然形状像指针解引用，但这里 x 的类型是 optional，并非裸地址。
+
+map 的一项含键和值，迭代器 `it->second` 取得值。查询用 find 不会新增记录。`positions[id]` 在可修改的 map 上可能因为找不到键而插入默认值，因此不能拿它代替这里的“只查有没有”。
+
+### 借看字符串为什么要记录长度？
+
+string_view 只借用某一段字符，没有为你重新分配、复制一份独立字符串。本例让 name 活到 view 用完之后。若只借看字符串的一小段，view 的结尾处也不保证就是零字符；把 data() 交给只接受零结尾 C 字符串的接口时，必须核对接口要求。
+
+variant 的当前类型由内部标签记录，visit 根据那个标签选择怎样调用处理函数。它管理的是“这一项现在是哪种类型”，而 optional 管理的是“这一项有没有结果”；两者解决不同问题，不靠随意选择 −1 或空字符串代替状态。
 
 ## 常见错误
 
