@@ -31,8 +31,12 @@ def main(steps, seed):
         model = A2C(
             # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
+            # 完整示例折扣固定为 0.99；正文短算例另给折扣，便于口算。
+            gamma=0.99,
             # 每个环境先采集 32 步，再用这段数据更新 Actor 与 Critic。
             n_steps=32,
+            # lambda=1 使用片段中的多步回报；不做优势标准化，不加熵项。
+            gae_lambda=1.0, normalize_advantage=False, ent_coef=0.0,
         )
         # 记录未训练策略的评估均值，作为观察起点。
         # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。

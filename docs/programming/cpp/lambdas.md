@@ -21,6 +21,21 @@ Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留�
 **按值捕获**：[threshold]，保存创建时的副本；**按引用捕获**：[＆threshold]，使用外部当前值；**生命周期**：稍后调用的回调，引用对象不能先销毁。
 
 
+## 定义一条规则，与执行一次规则，是两个动作
+
+以下片段放在 main 内，已有 `<iostream>` 即可。先故意不用任何捕获，认识最短的 Lambda：
+
+```cpp
+const auto is_far = [](double distance_m) {
+    return distance_m > 2.0; // 这里描述规则；定义时还没有具体距离。
+};                          // Lambda 表达式赋给变量，整条声明需要分号。
+std::cout << std::boolalpha;
+std::cout << is_far(1.0) << '\n'; // 这才调用，输出 false。
+std::cout << is_far(3.0) << '\n'; // 再调用一次，输出 true。
+```
+
+这里 auto 推导的是编译器生成的可调用对象类型，并不是 bool。**调用它之后返回的结果**才是 bool。可以把 is_far 理解为存了一张处理规则，每次递给它一个距离，它回给你“是”或“否”。
+
 ## 为什么短规则常常写在使用位置
 
 给 count_if 一条“距离超过阈值”的规则，没必要为了几字逻辑到远处找定义。Lambda 会创建一个可调用对象，你可以把它交给算法，也可以保存后再调用。
@@ -49,20 +64,6 @@ Lambda 是写在使用位置附近的函数。像“把大于阈值的距离留�
 
 `auto` 可以保存具体 Lambda 类型。`std::function` 可以保存符合签名的不同可调用对象，但有类型擦除开销，有些情况还会动态分配，别无条件套一层。
 
-## 定义一条规则，与执行一次规则，是两个动作
-
-以下片段放在 main 内，已有 `<iostream>` 即可。先故意不用任何捕获，认识最短的 Lambda：
-
-```cpp
-const auto is_far = [](double distance_m) {
-    return distance_m > 2.0; // 这里描述规则；定义时还没有具体距离。
-};                          // Lambda 表达式赋给变量，整条声明需要分号。
-std::cout << std::boolalpha;
-std::cout << is_far(1.0) << '\n'; // 这才调用，输出 false。
-std::cout << is_far(3.0) << '\n'; // 再调用一次，输出 true。
-```
-
-这里 auto 推导的是编译器生成的可调用对象类型，并不是 bool。**调用它之后返回的结果**才是 bool。可以把 is_far 理解为存了一张处理规则，每次递给它一个距离，它回给你“是”或“否”。
 
 ## 捕获变量与传入参数，为什么需要两处括号
 
@@ -94,6 +95,27 @@ std::cout << count << '\n';
 这里“交给别人调用”就是回调，并不意味着必须等待很久、必须开线程或必须联网。count_if 会在这次调用期间完成检查。事件系统或线程以后才调用的回调，则需要另外考虑被捕获对象的生命周期。
 
 初学优先写清具体捕获名。`[=]`、`[&]` 这样的默认捕获更省字符，却容易把不该延长借用的局部变量带进回调。是否按值保存、是否借用，先根据数据是否需要更新、调用发生在何时来决定。
+
+## 按值保存不等于自动保存所有数据
+
+捕获 double 时，Lambda 内部保存一份数字。若捕获的是裸指针、string_view 或 span，按值保存的是**地址或视图本身**，底层对象仍可能先销毁；只有捕获的类型真正拥有所需数据时，才携带相应的拥有关系。
+
+下面定义放在 main 前，调用片段放进 main。它返回一个按值保存阈值的规则，因此 make_rule 调用结束后仍可使用；这里 auto 推导的是返回的 Lambda 类型：
+
+```cpp title="main 前定义片段 · 返回按值保存数据的规则"
+auto make_rule(double threshold_m) {
+    return [threshold_m](double distance_m) {
+        return distance_m > threshold_m; // 阈值副本跟着规则对象存在。
+    };
+}
+```
+
+```cpp title="main 内调用片段 · 使用返回的规则"
+const auto saved_rule = make_rule(2.0);
+std::cout << std::boolalpha << saved_rule(3.0) << '\n'; // 输出 true。
+```
+
+不能把捕获改为 `&threshold_m`：它是 make_rule 的局部参数，函数返回后就不再有效。按值捕获的普通成员默认不能在 Lambda 中修改；若确实需要修改内部副本，可以了解 mutable，但不会因此修改调用者原变量。这一功能留作后续扩展，先读懂本页只读规则即可。捕获行为可查 [Lambda 捕获的标准约定](https://eel.is/c++draft/expr.prim.lambda.capture)。
 
 ## 完整示例
 

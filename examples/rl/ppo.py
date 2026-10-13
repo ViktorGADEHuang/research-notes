@@ -31,8 +31,12 @@ def main(steps, seed):
         model = PPO(
             # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
+            # 完整示例折扣固定为 0.99；正文短算例另给折扣，便于口算。
+            gamma=0.99,
             # 采集长度决定一次更新前收集多少步；PPO 还会分小批量重复更新。
             n_steps=256, batch_size=64, n_epochs=4, clip_range=0.2,
+            # GAE 先算原始优势；每个小批再中心化并缩放，最后进入裁剪目标。
+            gae_lambda=0.95, normalize_advantage=True, ent_coef=0.0,
         )
         # 记录未训练策略的评估均值，作为观察起点。
         # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。

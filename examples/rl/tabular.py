@@ -59,7 +59,7 @@ def run(algorithm, episodes=3000, seed=7):
             for state in range(1, 6):
                 targets = []
                 for action in range(2):
-                    # 执行一次动作，获得下一状态、奖励和真正终止的标记。
+                    # 按已知模型枚举动作结果；价值迭代这里没有实际采样。
                     ns, reward, done = step(state, action)
                     targets.append(reward + (0.0 if done else gamma * old[ns]))
                 values[state] = max(targets)

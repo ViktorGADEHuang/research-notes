@@ -108,6 +108,7 @@
 
 /* 教程以正文为中心，保持代码、图示与正文有清楚的阅读层次。 */
 .md-typeset .reading-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; padding: .6rem .8rem; margin: -.5rem 0 1.4rem; border: 1px solid var(--research-border); border-radius: 10px; background: var(--research-surface); color: var(--research-muted); font-size: .66rem; }
+.reading-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .reading-toolbar button, .figure-dialog button { border: 1px solid var(--research-border); border-radius: 6px; padding: .3rem .65rem; background: var(--md-default-bg-color); color: var(--research-accent); font: inherit; font-weight: 650; cursor: pointer; }
 .reading-toolbar button:hover, .figure-dialog button:hover { border-color: var(--research-accent); }
 .reading-toolbar button:focus-visible, .figure-dialog button:focus-visible, .figure-dialog-scroll:focus-visible, .md-typeset img[role="button"]:focus-visible { outline: 3px solid var(--md-accent-fg-color); outline-offset: 3px; }
@@ -116,6 +117,7 @@
 .md-typeset .highlight > .filename { margin-bottom: 0; padding: .55rem .8rem; border: 1px solid var(--research-border); border-bottom: 0; border-radius: 10px 10px 0 0; background: var(--research-surface); color: var(--research-accent); font-size: .68rem; }
 .md-typeset .highlight > .filename + pre { margin-top: 0; border-radius: 0 0 10px 10px; }
 .md-typeset .highlight pre code { font-size: .68rem; line-height: 1.75; }
+.code-wrap .md-typeset .highlight pre code { white-space: pre-wrap; overflow-wrap: anywhere; }
 .md-typeset .highlight .c1, .md-typeset .highlight .cm { color: var(--research-muted); }
 .md-typeset details { border-radius: 9px; }
 .md-typeset .admonition { border-radius: 9px; }
@@ -144,7 +146,7 @@
   .md-typeset .highlight pre code { font-size: .65rem; }
 }
 @media screen and (max-width: 1219px) {
-  .reading-toolbar button { display: none; }
+  .reading-toolbar [data-reading-focus] { display: none; }
 }
 
 /* 练习接续正文：任务、提示、答案有清楚的边界，代码留在答案中。 */

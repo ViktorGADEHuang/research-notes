@@ -9,24 +9,34 @@ gamma = 0.95
 
 # 小走廊模型：输入当前位置与动作，返回下一位置、奖励、终止标记。
 def step(state, action):
-    # 动作 1 向右一步，动作 0 向左一步。
-    ns = state + (1 if action == 1 else -1)
-    # 走到两端才是真正终止；终止状态没有后续奖励。
+    # 调用者只传动作 0 或 1；先按动作找到下一位置。
+    if action == 1:
+        ns = state + 1  # 向右。
+    else:
+        ns = state - 1  # 向左。
+    # 两端才是真正终点；0、6 不再作为下一次 step 的输入。
     done = ns in (0, 6)
-    # 右端奖励 +1、左端 -1，其余每步 -0.01，鼓励尽快到达右端。
-    reward = 1.0 if ns == 6 else -1.0 if ns == 0 else -0.01
+    # 奖励描述刚发生的结果；进入终点时不再额外扣中间步进代价。
+    if ns == 6:
+        reward = 1.0
+    elif ns == 0:
+        reward = -1.0
+    else:
+        reward = -0.01
     return ns, reward, done
 
 
 # 将动作偏好转换成概率；先减最大值可减少指数溢出的风险。
 def softmax(row):
-    weights = [math.exp(x - max(row)) for x in row]
+    largest = max(row)  # 同一行都减去同一个最大值，概率比例不变。
+    weights = [math.exp(x - largest) for x in row]
     total = sum(weights)
     return [x / total for x in weights]
 
 # 保存每个动作的偏好值，不是概率；softmax 后才得到概率。
 logits = [[0.0, 0.0] for _ in range(7)]
-# 外层控制迭代或采样幕数；数值只是教学配置，不是收敛保证。
+# 采集 3000 个回合；每局结束后才整体更新一次策略偏好。
+# 这些数量是教学设置，不构成收敛保证。
 for _ in range(3000):
     # 一幕从状态 3 开始，并记录这一幕经历的数据。
     s, episode = 3, []
@@ -40,7 +50,7 @@ for _ in range(3000):
         ns, reward, done = step(s, a)
         # 保存这一时刻的数据，方便在结束后从后往前计算回报。
         episode.append((s, a, reward))
-        # 本步更新完以后，再移动当前位置；提前赋值会把旧状态的信息丢掉。
+        # 先保存动作前的位置，再推进当前位置；本局学习要等回合结束。
         s = ns
     # 只创建本局的回报表；最后一步之后回报为 0，便于从末尾递推。
     returns, total = [0.0] * len(episode), 0.0

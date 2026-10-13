@@ -45,20 +45,11 @@
 
 对标准库对象，移动后通常处于**有效但未指定的状态**，除非相应类型另有保证。`unique_ptr` 有明确的空指针保证；不能把它推广成“所有容器移动后一定为空”。
 
-## 用同一份列表追踪：到底哪个对象发生了变化
+## 创建新对象与覆盖已有对象，要分开
 
-后面完整程序按下表顺序执行。表中的“未作内容假设”不是对象坏了，而是教程选择不依赖它移动后的具体内容：
+`auto copy = original` 中虽然出现等号，但 copy 正在被创建，所以是**复制构造**；若 copy 已存在，再写 copy = original 才是复制赋值。移动也有同样区别：创建新对象用移动构造，覆盖已有对象用移动赋值。
 
-| 刚执行完的语句 | original | copy | moved |
-| --- | --- | --- | --- |
-| 创建 original | 1、2、3 | 尚未创建 | 尚未创建 |
-| `auto copy = original` | 1、2、3 | 1、2、3 | 尚未创建 |
-| `copy[0] = 9` | 1、2、3 | 9、2、3 | 尚未创建 |
-| `auto moved = std::move(original)` | 未作内容假设 | 9、2、3 | 1、2、3 |
-| `original.clear()` | 空 | 9、2、3 | 1、2、3 |
-| `original.push_back(7)` | 7 | 9、2、3 | 1、2、3 |
-
-`auto copy = original` 中虽然出现等号，但 copy 正在被创建，所以这里调用的是**复制构造**；若 copy 早已存在，再写 `copy = original`，才是复制赋值。移动也有相同区别：创建新对象与覆盖已有对象走不同操作。
+先圈出每个变量第一次声明的位置，正文末尾的执行表再追踪三份容器。创建与赋值的区分能解释为什么同一个等号有时调用不同操作。
 
 ## “有效但未指定”应该怎样使用
 
@@ -73,6 +64,22 @@ std::move 写上去也不代表程序完成了某种“通用搬家”。它是�
 常见移动操作需要改动源对象，所以通常接收非 const 源。`std::move` 不会去掉 const；对 const vector 使用它，通常只能匹配复制构造。指针拥有关系、引用与 const 都是在表达约定，不能为了追求“看起来更快”而无差别添加 std::move。
 
 这章先掌握读现成类型的移动。手写移动构造涉及异常保证、资源状态等更多规则；用 vector、string、unique_ptr 组合类时，通常可以先让成员完成这些工作。
+
+## 只写 std::move，没有接收方会怎样？
+
+下面片段放在带 `<vector>`、`<utility>`、`<iostream>` 的 main 内。它先只做转换，再真的创建接收方：
+
+```cpp title="main 内片段 · 转换与实际移动分别发生"
+std::vector<int> data{1, 2, 3};
+static_cast<void>(std::move(data)); // 丢弃转换结果，没有构造或赋值接收方。
+std::cout << "after conversion: " << data.size() << '\n'; // 仍为 3。
+auto destination = std::move(data); // 这里才调用 vector 的移动构造。
+std::cout << "destination size: " << destination.size() << '\n'; // 为 3。
+```
+
+前面的 static_cast<void> 只表示“有意不使用这个表达式结果”，不用为这行另找一份容器。输出为 `after conversion: 3` 与 `destination size: 3`。第二条输出之后不要依赖 data 的旧内容；按正文方法先 clear 再复用。
+
+对 const vector，std::move 不会去掉 const。常见的移动构造接收可修改来源，因此 const 来源通常会选择复制。这也说明“有 move 这个词”并不能单独证明发生了资源转移。标准库的移动后总体约定见 [移动后状态](https://eel.is/c++draft/lib.types.movedfrom)。
 
 ## 完整示例
 

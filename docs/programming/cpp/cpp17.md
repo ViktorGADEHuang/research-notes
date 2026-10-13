@@ -31,7 +31,7 @@ C++17 有一批实用工具，让接口更准确地表达“可能没有结果�
 | 编号 2 | 有 | 3.5 |
 | 编号 9 | 没有 | 走缺失处理分支 |
 
-`if (auto x = lookup(...))` 可以分两步理解：先调用函数，把 optional 存入 x；再检查 x 有没有值。条件成立后 `*x` 才取出里面的 double。`value_or(-1.0)` 是为了示范默认值接口，真实数据里要避免 −1 与正常位置混淆。
+`if (auto x = lookup(...))` 可以分两步理解：先调用函数，把 optional 存入 x；再检查 x 有没有值。条件成立后 `*x` 才取出里面的 double。需要显示缺失时直接走 else 分支；不要先把缺失转成一个可能与真实位置冲突的数字。
 
 本章后半的 variant 解决“是哪一种类型”，string_view 解决“借看一段文字”。先弄懂 optional，再分别阅读另外两段，不必把四项新功能同时背下来。
 
@@ -71,11 +71,11 @@ return std::nullopt;                // 查不到，明确返回“没有值”�
 | 结果具体是多少 | 成功分支内 `*x` | 得到 0 |
 | 结果是否大于 0 | 成功分支内 `*x > 0.0` | false |
 
-`std::nullopt` 是专门表示空状态的标记。`value_or(备用值)` 会得到一个普通值，从此不再携带“原来有没有”的区别；只有业务允许把缺失变成默认值时才这样用。位置既可能为 0，也可能为负数，所以把 −1 打印出来可以演示接口，却不能把它当通用错误协议。
+`std::nullopt` 是专门表示空状态的标记。`value_or(备用值)` 会得到一个普通值，从此不再携带“原来有没有”的区别；只有业务允许把缺失变成默认值时才这样用。位置既可能为 0，也可能为负数，所以 −1 也可能是正常坐标，不能把它当通用错误协议。本页完整程序用单独的文字分支显示缺失。
 
 ## string_view 与 variant 分别在解决什么
 
-string 拥有自己的字符，string_view 只保存一段字符的位置和长度。本例 name 一直存在、没有发生使存储失效的修改，所以 view 可读。只声明 view 为 const，并不会让原字符串活得更久；view 内的 const 也不是生命周期保险。
+string 拥有自己的字符，string_view 只保存一段字符的位置和长度。本例 name 一直存在、没有发生使存储失效的修改，所以 view 可读。只声明 view 为 const，并不会让原字符串活得更久；string_view 的只读访问也不延长底层字符的生命周期。
 
 variant 则像有明确标签的一格储物柜，本例允许放 int 或 string。message 当前放的是字符串 ready；`visit` 根据当前保存的类型把值交给处理函数。下面只是替换完整示例的最后两句，展示同一个接口处理另一类型：
 
@@ -87,6 +87,22 @@ std::visit([](const auto& value) {
 ```
 
 这一替换输出 42。visit 要求处理函数对所有可能被访问的候选类型都适用，不能只为当前碰巧装着的类型写一段无法处理其他候选的代码。某些会抛异常的类型切换还可能使 variant 无有效备选值；本例不进行这种切换，初学先掌握带类型标签地存取结果。
+
+## string_view 不是创建那一刻的文字快照
+
+下面片段放在含 `<string>`、`<string_view>` 和 `<iostream>` 的 main 内，借用时没有复制字符：
+
+```cpp title="main 内片段 · 有效借用会看到原字符的变化"
+std::string label{"herding"};
+std::string_view borrowed{label}; // 借用 label 当前的七个字符。
+label[0] = 'H'; // 只替换已有字符，不改变大小和存储位置。
+std::cout << borrowed << '\n'; // 输出 Herding，借用并不是旧字符快照。
+const std::string owned_copy{borrowed}; // 现在才复制成独立拥有的字符串。
+label[0] = 'h';
+std::cout << owned_copy << '\n'; // 仍输出 Herding。
+```
+
+本例只修改原来已有的一个字符。若对 label 做追加、赋值等可能使存储位置失效的操作，不能继续照旧使用 borrowed；若 label 销毁，也必须结束借用。需要长期保存文字时，用 string 拥有一份；只是临时读取时，再考虑 string_view。规则见 [标准草案的字符串视图约定](https://eel.is/c++draft/string.view.template.general)。
 
 ## 完整示例
 
@@ -117,8 +133,12 @@ int main() {
     for (const auto& [id, x] : positions) {
         std::cout << "sheep " << id << ": " << x << '\n';
     }
-    // 仅演示 value_or：缺失时用于显示的备用值，不要把它继续当真实位置。
-    std::cout << "missing fallback: " << lookup(positions, 9).value_or(-1.0) << '\n';
+    // 缺失单独显示，不再用 -1 伪装成位置。
+    if (const auto missing = lookup(positions, 9)) {
+        std::cout << "position: " << *missing << '\n';
+    } else {
+        std::cout << "missing position\n";
+    }
     // 检查有没有值，而不是里面的数是不是非零。
     if (auto x = lookup(positions, 1)) {
         std::cout << "valid zero: " << *x << '\n';
@@ -148,7 +168,7 @@ g++ -std=c++17 -Wall -Wextra -Wpedantic cpp17.cpp -o cpp17.exe
 ```text
 sheep 1: 0
 sheep 2: 3.5
-missing fallback: -1
+missing position
 valid zero: 0
 view: herding
 ready
@@ -161,7 +181,7 @@ ready
 | 语句或操作 | 发生了什么 | 输出为什么是这样 |
 | --- | --- | --- |
 | 遍历 positions | 按 map 的有序键访问编号 1、2 | 分别显示位置 0、3.5 |
-| lookup(positions, 9) | find 没找到，返回空 optional | value_or 使用备用值 −1 做显示 |
+| lookup(positions, 9) | find 没找到，返回空 optional | else 明确显示 missing position |
 | lookup(positions, 1) | 找到真实位置 0，返回有值 optional | if 为真，*x 得到 0 |
 | string_view view{name} | 借看 name 当前的字符 | 原 name 有效，所以显示 herding |
 | visit 处理 message | 当前保存 string 类型的 ready | 回调输出 ready，而不是尝试把它当 int |

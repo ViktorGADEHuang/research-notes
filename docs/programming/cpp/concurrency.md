@@ -145,6 +145,32 @@ fetch_add(1) 是一个原子的读、加、写操作，两线程对这个计数�
 
 最终 2000 是在这份有限工作和等待约定下得到的计数，不说明任意多线程程序都安全，也不保证实时频率。改成共享 vector 或多项相关状态时，还要考虑它们各自的同步规则，不能把一个原子计数器的效果推广到所有数据。
 
+## 接下来再学锁：两个字段要一起更新
+
+独立计数器适合 atomic；若位置与时间戳必须作为一份记录一起读取，就需要把相关读写放在同一把锁保护下。先看一个只在主线程调用的片段，理解持锁范围；文件需增加 `<mutex>`：
+
+```cpp title="main 内片段 · 用同一把锁保护一条记录"
+struct Sample { double distance_m; int sequence; };
+Sample latest{0.0, 0};
+std::mutex latest_mutex;
+const auto save = [&latest, &latest_mutex](double distance_m, int sequence) {
+    const std::lock_guard<std::mutex> guard{latest_mutex}; // 进入时加锁。
+    latest.distance_m = distance_m;
+    latest.sequence = sequence; // 两个字段在同一个持锁范围内更新。
+}; // guard 在 Lambda 的一次调用结束时销毁并解锁。
+save(2.5, 1);
+{ // 读取相关字段时也使用同一把锁。
+    const std::lock_guard<std::mutex> guard{latest_mutex};
+    std::cout << latest.distance_m << ", " << latest.sequence << '\n'; // 2.5, 1。
+}
+```
+
+这段不声称创建了第二条线程，它先演示**所有读写必须遵循同一份锁约定**。以后把 save 交给线程，还必须保持 latest 与 mutex 活到工作结束。读者只给写入加锁、读取仍无锁，不能算完成保护。锁也不自动保证绝无死锁，因此初学避免嵌套多把锁。
+
+### 工作线程抛异常时，主线程不会自动接住
+
+若异常从工作函数逃出，程序会调用 terminate；把创建 jthread 的语句围进主线程的 try/catch，不能接住另一线程后来抛出的异常。需要在工作函数内处理失败，或者通过专门的机制把失败交回。当前 collect 没有故意抛异常，先理解完成与等待；有输入、文件或分配的任务还要设计错误报告。这项行为由 [工作线程入口的标准约定](https://eel.is/c++draft/thread.thread.constr) 说明。
+
 ## 常见错误
 
 - 把 atomic 换成普通 int，即使偶尔输出 2000，也不能证明程序正确。

@@ -31,29 +31,34 @@ def run(algorithm, steps=10000, seed=7, output="rl-output"):
     # 评估随机种子单独设置；它不保证跨硬件逐位一致。
     # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
-    kwargs = {"seed": seed, "device": "cpu", "verbose": 0}
+    kwargs = {"seed": seed, "device": "cpu", "verbose": 0, "gamma": 0.99}
     if algorithm in ("dqn", "ddpg", "td3", "sac"):
         # 经验回放容量、开始学习前的采样步数、每批样本数。
         kwargs.update(buffer_size=20000, learning_starts=100, batch_size=64,
                       # 决定多频繁学习与每次做多少梯度更新；SAC auto 自动调节熵系数。
                       train_freq=1, gradient_steps=1)
     if algorithm == "dqn":
-        kwargs.update(target_update_interval=250, exploration_fraction=0.3)
+        kwargs.update(target_update_interval=250, exploration_fraction=0.3,
+                      exploration_initial_eps=1.0, exploration_final_eps=0.05)
     elif algorithm == "a2c":
         # 采集长度决定一次更新前收集多少步；PPO 还会分小批量重复更新。
-        kwargs.update(n_steps=32)
+        kwargs.update(n_steps=32, gae_lambda=1.0, normalize_advantage=False, ent_coef=0.0)
     elif algorithm == "ppo":
         # 采集长度决定一次更新前收集多少步；PPO 还会分小批量重复更新。
-        kwargs.update(n_steps=256, batch_size=64, n_epochs=4, clip_range=0.2)
+        kwargs.update(n_steps=256, batch_size=64, n_epochs=4, clip_range=0.2,
+                      gae_lambda=0.95, normalize_advantage=True, ent_coef=0.0)
     elif algorithm in ("ddpg", "td3"):
         # shape[0] 查动作数组长度；Pendulum 的动作是一维，观测却有三维。
         action_dim = train_env.action_space.shape[0]
-        # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
+        # 软更新与归一化动作噪声；它们不是机器人接口的物理单位。
+        kwargs["tau"] = 0.005
+        if algorithm == "td3":
+            kwargs.update(policy_delay=2, target_policy_noise=0.2, target_noise_clip=0.5)
         kwargs["action_noise"] = NormalActionNoise(
             # 每个动作维度使用零均值高斯噪声，标准差设为 0.1。
             mean=np.zeros(action_dim), sigma=0.1 * np.ones(action_dim))
     elif algorithm == "sac":
-        kwargs["ent_coef"] = "auto"
+        kwargs.update(ent_coef="auto", target_entropy="auto", tau=0.005)
 
     try:
         # 按所选算法建立模型：DQN 使用 Q 网络，其他列出的算法使用 Actor/Critic。

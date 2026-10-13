@@ -44,7 +44,7 @@
 | Linux | 使用发行版包管理器安装 GCC/G++ | `g++ --version` |
 | macOS | 安装 Xcode 命令行开发工具，使用 Apple Clang | `clang++ --version` |
 
-本教程命令主要用 G++。如果用 MSYS2，在 **UCRT64** 终端安装 `mingw-w64-ucrt-x86_64-gcc`；不要把 MSYS、MINGW64、UCRT64 的不同工具链混在一起。照 [MSYS2 入门文档](https://www.msys2.org/docs/environments/)选对应终端。
+本教程命令主要用 G++。如果用 MSYS2，在 **UCRT64** 终端按官方入门步骤完成系统更新后，安装 `mingw-w64-ucrt-x86_64-gcc`；不要把 MSYS、MINGW64、UCRT64 的不同工具链混在一起。照 [MSYS2 入门文档](https://www.msys2.org/docs/environments/)选对应终端。
 
 PowerShell 找不到 g++ 时，把实际安装目录的 `ucrt64/bin` 加入 PATH 并重新打开终端，或直接使用编译器完整路径。编译与运行应能找到同一工具链的 DLL，不要从其他来源随意复制 DLL 来凑。
 
@@ -125,23 +125,23 @@ MSVC 用户请在开发者终端执行：
 
 ```text
 cl /std:c++17 /EHsc /W4 /utf-8 hello.cpp /Fe:hello.exe
-hello.exe
+./hello.exe
 ```
+
+`./hello.exe` 可用于开发者 PowerShell；开发者命令提示符中也可以直接写 `hello.exe`。`/EHsc` 选择常见的 C++ 异常处理模式，`/utf-8` 让编译器按 UTF-8 解读源码。
 
 C++20 示例可改为 `/std:c++20`。C++23 开关与功能支持请按所装 MSVC 版本查 [官方 /std 文档](https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version)，不要把 G++ 的参数直接传给 cl。
 
 ## 出错时先分清阶段
 
-### 第一次看到输出后，确认你理解了四个位置
+命令失败时，终端仍可能留着上一次生成的程序。先看编译命令有没有成功，再运行；下面的退出码可以帮助核对：
 
-1. **编辑器中的文件**：你写的是 hello.cpp，保存后才成为编译器接收的那份文本。
-2. **终端中的编译命令**：读取这个文件，检查 C++，生成程序文件；这里不执行 cout。
-3. **终端中的运行命令**：启动刚生成的 hello.exe 或 hello，进入 main，执行输出语句。
-4. **终端里的 Hello 文字**：它是程序结果，不是第三条需要再输入的命令。
+| 终端 | 编译命令结束后查看 | 本例成功时 |
+| --- | --- | --- |
+| PowerShell | `$LASTEXITCODE` | 0 |
+| UCRT64 / Linux / macOS 的常见 shell | `echo $?` | 0 |
 
-把文字改成 `My first program` 后，先保存，再编译，再运行，应看到新文字。只改编辑器里的文本、只重新启动旧程序，都会少一个步骤。先练会这条最小工作流程，之后的变量、函数和现代 C++ 例子都沿用它。
-
-`#include <iostream>` 让编译器看得到输出接口的声明；括号与分号属于源码语法；命令中的 `-std=c++17` 则是编译器选项。它们分别写在源文件和终端里，不应该连成一份文件复制。
+退出码是命令交给终端的状态，不是程序输出的 Hello 文字。这里必须紧接着失败或成功的那条命令检查；执行另一个命令可能改变它。即使编译成功，也仍要核对输出是否符合题目。
 
 | 阶段 | 常见现象 | 先检查 |
 | --- | --- | --- |

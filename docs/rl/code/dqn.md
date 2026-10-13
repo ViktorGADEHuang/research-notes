@@ -5,10 +5,9 @@
 
 !!! tip "读完这页，你应该能做到"
 
-    找到输入、目标或训练调用，再对照公式解释关键注释。
+    从一条转移算出 TD 目标与平滑 L1 损失，再指出库在哪一步训练 Q 网络。
 
     **先会这些就够了**：Q-learning、平方误差。
-
 
 ## 看图梳理
 
@@ -34,19 +33,7 @@
 
 **CartPole-v1**：左右推动小车，让杆保持直立；动作是离散的，回报越高表示维持时间越长。
 
-这是训练链路示例，不是放牧仿真，也不保证使用默认 10000 步就解决环境。
-
-## 用中文顺着读代码
-
-1. `gym.make(...)`：创建一个用来练习的环境。
-2. `Monitor(...)`：记录每局拿了多少奖励、走了多少步。
-3. 创建模型：选算法和它的配置，模型此时还没学会任务。
-4. 第一次 `evaluate_policy(...)`：测一下未训练时的表现。
-5. `model.learn(...)`：真正与环境交互，并更新网络。
-6. `save` 与 `load`：把学到的参数保存，再从文件读回来。
-7. 再次评估：使用独立环境检查保存后的策略表现。
-
-环境的 `reset` 是开始新一局；`step` 是执行一次动作。这里库负责调用它们。`seed` 固定随机数起点，便于复现；它不意味着不同硬件一定得到完全相同的结果。
+这是库调用流程示例，不是放牧仿真。完整脚本的折扣固定为 0.99，默认请求 10000 个环境步；短片段的折扣另行给定用于演算，不能直接当作库日志。
 
 ## 库调用藏起了哪些内部步骤
 
@@ -59,9 +46,9 @@
 | batch_size = 64 | 一次拿多少条记录构成训练批次 |
 | target_update_interval = 250 | 按采样步数定期同步目标网络 |
 
-先读配置的用途，不要把这些教学数字当成最优参数。单条记录中下一状态的最高分如何进入目标，回到公式篇的算例理解；这里只展示库的使用流程。
+本例探索率在前 30% 请求步数内由 1 降到 0.05，此后保持 0.05。探索表示随机选动作；随机选时仍可能选到最高分动作。先读配置的用途，不要把这些教学数字当成最优参数。单条记录中下一状态的最高分如何进入目标，回到公式篇的算例理解；这里只展示库的使用流程。
 
-## 先看核心学习目标，不从保存文件开始
+## 先读一条样本的学习过程
 
 下面用普通数字展开 DQN 的一条训练样本。它不包含网络和优化器，只用于把公式与 Python 运算对应起来。
 
@@ -91,95 +78,9 @@ loss = 0.5 * error**2 if absolute_error < 1 else absolute_error - 0.5
 
 上述输入、动作含义对应 [CartPole 环境说明](https://gymnasium.farama.org/environments/classic_control/cart_pole/)。DQN 没有 A2C 那样单独的 Actor；SB3 虽使用通用名称 MlpPolicy，这里实际用 Q 分数来选动作。
 
-## 完整代码
-
-```python title="dqn · 完整学习代码"
-"""DQN 训练、保存与独立评估；默认 10000 步，可传 --steps 调整。"""
-# 命令行参数工具；阅读算法时可先跳过参数解析部分。
-import argparse
-from pathlib import Path
-# 环境接口库：提供 reset 开始一局、step 执行动作。
-import gymnasium as gym
-# 神经网络库；本示例的网络与梯度计算由 SB3 调用它完成。
-import torch
-# 导入库实现的算法；调用库并不等于从零实现算法内部。
-from stable_baselines3 import DQN
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.evaluation import evaluate_policy
-
-
-def main(steps, seed):
-    # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
-    torch.set_num_threads(1)
-    # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
-    output = Path("rl-output/dqn")
-    # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
-    output.mkdir(parents=True, exist_ok=True)
-    # 训练环境负责收集经验，Monitor 统计每幕奖励与步数。
-    train_env = Monitor(gym.make("CartPole-v1"), str(output / "train"))
-    # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
-    eval_env = Monitor(gym.make("CartPole-v1"))
-    # 评估随机种子单独设置；它不保证跨硬件逐位一致。
-    # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
-    eval_env.reset(seed=seed + 100)
-    try:
-        # 建立当前 Q 网络与目标 Q 网络；本算法按动作分数决策，没有另一个 Actor。
-        model = DQN(
-            # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
-            "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
-            # 经验回放容量、开始学习前的采样步数、每批样本数。
-            buffer_size=20000, learning_starts=100, batch_size=64,
-            # 每交互一步后进行一次梯度更新；训练初期先积累经验。
-            train_freq=1, gradient_steps=1, target_update_interval=250,
-            exploration_fraction=0.3,
-        )
-        # 记录未训练策略的评估均值，作为观察起点。
-        # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
-        before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
-                                   deterministic=True)
-        # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
-        model.learn(total_timesteps=steps)
-        # 保存参数，便于理解模型持久化，不表示策略性能已达标。
-        model.save(str(output / "model"))
-        # 从磁盘重新加载模型，展示部署前参数恢复的步骤。
-        loaded = DQN.load(str(output / "model"), device="cpu")
-        # 评估随机种子单独设置；它不保证跨硬件逐位一致。
-        eval_env.reset(seed=seed + 100)
-        # 使用独立环境评估恢复的模型，输出平均回报与标准差。
-        # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
-        after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
-                                    deterministic=True)
-        print(f"Actual training steps: {model.num_timesteps}")
-        print(f"Before: {before:.2f} | After: {after:.2f} +/- {std:.2f}")
-        print(f"Model saved to: {output / 'model.zip'}")
-    # 即使中间发生异常，也尝试释放环境资源。
-    finally:
-        train_env.close()
-        eval_env.close()
-
-
-# 入口保护：被导入时不调用这里的 main；网站只展示文本。
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    # steps 是训练预算示例，不是预期学会任务所需的精确步数。
-    parser.add_argument("--steps", type=int, default=10000)
-    parser.add_argument("--seed", type=int, default=7)
-    # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
-    args = parser.parse_args()
-    if args.steps <= 0:
-        parser.error("--steps must be positive")
-    main(args.steps, args.seed)
-```
-
-## 参数如何对应算法
-
-`buffer_size` 是经验池容量；`learning_starts` 是开始更新前的采样步数；`target_update_interval` 是目标网络同步间隔；探索设置控制随机动作比例的变化。
-
-`MlpPolicy` 是多层感知机策略，用于向量观测；如果改为图像或字典观测，需要选择相应策略与输入处理。脚本设置独立评估环境，使用固定的一组评估起始条件，并保存训练日志与模型。
-
 ## 看懂输出
 
-- `Actual training steps`：实际交互步数。同策略方法可能为凑齐完整 rollout 超过请求步数。
+- `Actual training steps`：实际交互步数；本例单环境、逐步采样，不需要凑齐 A2C/PPO 的固定长度片段。
 - `Before`：未训练模型的确定性评估均值。
 - `After`：保存并重新加载模型后，5 幕独立评估的均值与标准差。
 - `rl-output/dqn/model.zip`：模型文件；同目录的 `train.monitor.csv` 保存训练回合记录。
@@ -216,7 +117,94 @@ if __name__ == "__main__":
 
 </div>
 
+## 第二遍再读完整脚本
+
+先用上面的短片段和练习弄清更新目标，再展开脚本追踪“创建模型 → 训练 → 保存 → 重新加载 → 独立评估”。保存文件与命令行参数不参与算法公式。
+
+??? note "展开带注释的完整脚本"
+
+    ```python title="dqn · 完整学习代码"
+    """DQN 训练、保存与独立评估；默认 10000 步，可传 --steps 调整。"""
+    # 命令行参数工具；阅读算法时可先跳过参数解析部分。
+    import argparse
+    from pathlib import Path
+    # 环境接口库：提供 reset 开始一局、step 执行动作。
+    import gymnasium as gym
+    # 神经网络库；本示例的网络与梯度计算由 SB3 调用它完成。
+    import torch
+    # 导入库实现的算法；调用库并不等于从零实现算法内部。
+    from stable_baselines3 import DQN
+    from stable_baselines3.common.monitor import Monitor
+    from stable_baselines3.common.evaluation import evaluate_policy
+
+
+    def main(steps, seed):
+        # 限制 CPU 计算线程数量，不代表启动机器人或仿真控制线程。
+        torch.set_num_threads(1)
+        # Path 表示文件路径；后面的 / 是拼接子路径，并非这里在做数字除法。
+        output = Path("rl-output/dqn")
+        # 只有主动运行脚本才创建输出目录；网站展示代码不会执行这一行。
+        output.mkdir(parents=True, exist_ok=True)
+        # 训练环境负责收集经验，Monitor 统计每幕奖励与步数。
+        train_env = Monitor(gym.make("CartPole-v1"), str(output / "train"))
+        # 另建评估环境，避免把训练过程中的奖励直接当作评估结果。
+        eval_env = Monitor(gym.make("CartPole-v1"))
+        # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+        # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
+        eval_env.reset(seed=seed + 100)
+        try:
+            # 建立当前 Q 网络与目标 Q 网络；本算法按动作分数决策，没有另一个 Actor。
+            model = DQN(
+                # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
+                "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
+                # 完整示例折扣固定为 0.99；正文短算例另给折扣，便于口算。
+                gamma=0.99,
+                # 经验回放容量、开始学习前的采样步数、每批样本数。
+                buffer_size=20000, learning_starts=100, batch_size=64,
+                # 每交互一步后进行一次梯度更新；训练初期先积累经验。
+                train_freq=1, gradient_steps=1, target_update_interval=250,
+                # 前 30% 请求步数内，探索率由 1 降至 0.05；随后保持 0.05。
+                exploration_fraction=0.3,
+                exploration_initial_eps=1.0, exploration_final_eps=0.05,
+            )
+            # 记录未训练策略的评估均值，作为观察起点。
+            # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。
+            before, _ = evaluate_policy(model, eval_env, n_eval_episodes=5,
+                                       deterministic=True)
+            # 这行才触发训练；本教程只提供代码，不在项目中自动调用。
+            model.learn(total_timesteps=steps)
+            # 保存参数，便于理解模型持久化，不表示策略性能已达标。
+            model.save(str(output / "model"))
+            # 从磁盘重新加载模型，展示部署前参数恢复的步骤。
+            loaded = DQN.load(str(output / "model"), device="cpu")
+            # 评估随机种子单独设置；它不保证跨硬件逐位一致。
+            eval_env.reset(seed=seed + 100)
+            # 使用独立环境评估恢复的模型，输出平均回报与标准差。
+            # std 是这些评估回合回报的标准差，不是训练结果可靠性的保证。
+            after, std = evaluate_policy(loaded, eval_env, n_eval_episodes=5,
+                                        deterministic=True)
+            print(f"Actual training steps: {model.num_timesteps}")
+            print(f"Before: {before:.2f} | After: {after:.2f} +/- {std:.2f}")
+            print(f"Model saved to: {output / 'model.zip'}")
+        # 即使中间发生异常，也尝试释放环境资源。
+        finally:
+            train_env.close()
+            eval_env.close()
+
+
+    # 入口保护：被导入时不调用这里的 main；网站只展示文本。
+    if __name__ == "__main__":
+        parser = argparse.ArgumentParser(description=__doc__)
+        # steps 是训练预算示例，不是预期学会任务所需的精确步数。
+        parser.add_argument("--steps", type=int, default=10000)
+        parser.add_argument("--seed", type=int, default=7)
+        # 把可选命令行文字转换为参数值；定义参数本身不会启动学习。
+        args = parser.parse_args()
+        if args.steps <= 0:
+            parser.error("--steps must be positive")
+        main(args.steps, args.seed)
+    ```
 
 ## 官方实现说明
 
-[Stable-Baselines3：DQN](https://stable-baselines3.readthedocs.io/en/master/modules/dqn.html)
+[Stable-Baselines3：DQN](https://stable-baselines3.readthedocs.io/en/v2.9.0/modules/dqn.html)

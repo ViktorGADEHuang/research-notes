@@ -43,6 +43,32 @@ values[3] += 0.1
 
 列表可以想成一排格子。七格的下标是 0～6，`values[7]` 已经超出范围。最后编号 3 的格子约为 0.5；浮点计算可能有很小的表示误差。
 
+### 赋值不一定复制数据：先看两个名字指向哪里
+
+下面是一个完整小片段，专门解释为什么“我只改了新变量，旧变量也变了”。先按行读，不必记住“引用”这个术语。
+
+```python title="两个名字与一份列表 · 独立阅读片段"
+# 建立一份列表。
+original = [0.0, 0.0]
+
+# 只让另一个名字指向同一份列表，没有复制其中的格子。
+shared = original
+shared[0] = 1.0
+print(original)  # [1.0, 0.0]：通过 shared 改动的也是 original 所指的列表。
+
+# 为这份一维数字列表复制格子，得到另一份列表。
+separate = original.copy()
+separate[1] = 2.0
+print(original)  # [1.0, 0.0]：原列表的第二格没有改变。
+print(separate)  # [1.0, 2.0]。
+```
+
+可以画成 `original → 列表 ← shared`，而 separate 指向另一份列表。`copy()` 在这里是**浅复制**：复制最外层容器；若里面还有列表等可变对象，内部对象仍可能共享。记录历史观测时，要确认保存的是当时的快照，还是会被后续修改的同一对象。赋值与复制的区别可核对 [Python 官方 copy 文档](https://docs.python.org/3.14/library/copy.html)。
+
+![两个名字共享原列表，复制后得到另一份列表](../assets/learning/python-aliases-example.svg){ .learning-figure }
+
+[打开列表共享与复制的大图](../assets/learning/python-aliases-example.svg)
+
 RL 中 `q[state][action]` 是两次查找：先找状态所在行，再找动作所在列。两列可分别存向左、向右的分数。例如 `q[3][1]` 是“在位置 3 向右走”的动作价值估计，不是动作选择概率。
 
 !!! note "一行高级写法可以先拆开理解"
@@ -99,6 +125,29 @@ result = add_reward(0.4, 0.1)
 ```
 
 函数名后的圆括号里放输入参数，返回值由调用者接收。看到 `step(s, a)` 时，可以先读成“把当前位置与动作交给环境规则，取得结果”。
+
+调用一次函数，会为这次调用建立局部名字。给局部参数重新赋值，通常不会把调用者的名字也改掉；但如果双方指向同一列表，修改列表内容会被双方看到：
+
+```python title="重新赋值与修改内容 · 独立阅读片段"
+def change_number(number):
+    number = 9  # 局部名字改指向 9，没有改调用者的 count。
+    return number
+
+
+def change_first(items):
+    items[0] = 9  # 修改传入列表的内容；调用者会看到这一变化。
+
+
+count = 3
+changed = change_number(count)
+print(count, changed)  # 3 9。
+
+scores = [3, 4]
+change_first(scores)
+print(scores)  # [9, 4]。
+```
+
+所以“传给函数”不等于“自动复制一份”。先判断函数是在换局部名字，还是在修改共享对象。
 
 `ns, reward, done = step(s, a)` 表示函数交回三项，分别给三个名字；不是执行三次 step。缩写 ns 是 next state，即下一状态。
 
@@ -172,6 +221,8 @@ score = evaluate(model, episodes=5, deterministic=True)
 `q[3][1]` 可用于嵌套列表；教程里的 `q[3, 1]` 则通常是支持多维索引的数组。若看到 `shape=(4,)`，通常表示一条含 4 个数的一维观测；`shape=(32, 4)` 表示 32 条这样的观测。**32 是样本数、4 是每条的特征数**，不能只看总共 128 个数就认为任何排法都相同。
 
 这里先学习如何阅读维度说明；具体能否广播、能否相加，要按代码使用的数组或张量库确认。
+
+对于 NumPy 数组，普通切片常产生**视图**，即仍使用原数组的数据；`.copy()` 才创建独立的数据副本。不要把 Python 列表切片和 NumPy 数组切片的复制规则混为一谈。遇到 `observation.copy()` 时，先想“这里是不是需要保存一个不会被后续修改的快照”，再核对类型。详见 [NumPy 的 copies 与 views](https://numpy.org/doc/stable/user/basics.copies.html)。
 
 ## 8. 从入口跟一遍：函数并不是按排版顺序全部执行
 

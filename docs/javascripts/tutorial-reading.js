@@ -11,9 +11,10 @@
     toolbar.setAttribute("role", "group");
     toolbar.setAttribute("aria-label", "教程阅读工具");
     const hint = document.createElement("span");
-    hint.textContent = "先看图，再读解释，最后自测";
+    hint.textContent = "读任务 → 看图和例子 → 对照步骤 → 自测";
     const focus = document.createElement("button");
     focus.type = "button";
+    focus.setAttribute("data-reading-focus", "");
     focus.textContent = "专注阅读";
     focus.setAttribute("aria-pressed", "false");
     focus.addEventListener("click", () => {
@@ -21,7 +22,23 @@
       focus.setAttribute("aria-pressed", String(active));
       focus.textContent = active ? "恢复目录" : "专注阅读";
     });
-    toolbar.append(hint, focus);
+    const actions = document.createElement("div");
+    actions.className = "reading-actions";
+    actions.append(focus);
+    if (article.querySelector(".highlight pre code")) {
+      const wrap = document.createElement("button");
+      wrap.type = "button";
+      wrap.textContent = "代码换行";
+      wrap.title = "长行在屏幕内换行显示，复制内容保持原样";
+      wrap.setAttribute("aria-pressed", "false");
+      wrap.addEventListener("click", () => {
+        const active = document.body.classList.toggle("code-wrap");
+        wrap.setAttribute("aria-pressed", String(active));
+        wrap.textContent = active ? "保留代码行" : "代码换行";
+      });
+      actions.append(wrap);
+    }
+    toolbar.append(hint, actions);
     article.querySelector("h1")?.after(toolbar);
 
     let dialog = document.querySelector(".figure-dialog");

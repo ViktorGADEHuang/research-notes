@@ -62,7 +62,7 @@ views 版本把“取哪些”和“怎样变换”分别写成 filter 与 trans
 
 ## 延迟计算：没有遍历，就还没有结果列表
 
-本例定义 far_cm 后，尚未建立一份拥有 300、500 的新 vector。遍历它时，底层的数据会按筛选与转换规则被访问。得到的是一种访问方式，生命周期仍与原 distances 有关系。
+本例定义 far_cm 后，尚未建立一份拥有 300、500 的新 vector。遍历它时，底层的数据会按筛选与转换规则被访问。得到的是一种访问方式，生命周期仍与原 distances 有关系。filter_view 对某些底层范围会缓存起点，因此“延迟”也不等于修改原数据后每次都必然从头重算。
 
 所以不要在生成 view 后随意改变原容器结构，也不要把依赖局部 vector 的 view 返回到函数外继续使用。若任务要求保存一份独立结果，可以显式遍历并逐项放进新的 vector；“view”与“独立存储”需要按实际用途选择。
 
@@ -82,6 +82,23 @@ views 版本把“取哪些”和“怎样变换”分别写成 filter 与 trans
 `meters_to_centimeters(3.0)` 推导 T 为 double，满足 floating_point；`meters_to_centimeters(3)` 推导 T 为 int，所以约束不满足，不能靠“3 也能表示米”蒙混过去。显式用小数表达输入，是此示例接口的要求。
 
 反过来，double 类型的 −3.0、NaN、无穷大仍然满足 floating_point。concepts 不会自动检查距离非负或单位是否是米；本例只演示类型约束、普通有限数的转换与均值。mean 只检查空输入，遇到异常测量值还需另外验证。
+
+## 把数组的一部分借给函数，先检查数量
+
+span 可以借用 vector，也可以借用数组。下面片段放在完整程序的 main 内，mean 的定义与头文件保持原样；first(2) 的含义是“借前两个元素”：
+
+```cpp title="main 内片段 · 安全选择前两个测量值"
+const double readings[]{2.0, 4.0, 9.0}; // 三个连续存放的 double。
+const std::span<const double> all{readings}; // 借用整段，不复制元素。
+if (all.size() >= 2) { // first(2) 需要至少两个元素，不自动代你验证。
+    const auto first_two = all.first(2); // 仍然借用 readings 的前两个数。
+    std::cout << "first two mean: " << mean(first_two) << '\n'; // (2+4)/2=3。
+}
+```
+
+输出为 `first two mean: 3`。all 与 first_two 都只是借用，readings 是实际的数据；它在当前作用域里活着，所以此处调用有效。span 有长度，便于函数知道范围，但 first 和下标仍有使用前提，见 [子范围的标准约定](https://eel.is/c++draft/span.sub)；本章 C++20 不提供 span::at。
+
+这段是**数值列表的切片**，没有筛选，也没有换算单位。与前面的 view 管道分开追踪，先说明每份对象是数据还是访问方式，再组合到复杂程序中。
 
 ## 完整示例
 

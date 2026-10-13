@@ -84,6 +84,25 @@
 
 `enum class Mode : unsigned` 定义了有名字的状态，idle 为 0，tracking 为 1；unsigned 指定底层整数类型。`Mode::tracking` 让代码表达“跟踪状态”，`std::to_underlying(...)` 在需要编码时明确得到整数 1。这里示范的是 C++23 的另一个小工具，先读懂 expected，再回来看这一行即可。
 
+## 再检查零速度与一份失败原因
+
+下面片段放在完整程序 main 中，保留 speed 的定义与头文件。它没有危险的除法，而是让函数先检查输入，再通过状态分支读取：
+
+```cpp title="main 内片段 · 成功的零与失败分开"
+const auto stopped = speed(0.0, 2.0); // 路程为 0、时长为正，成功得到速度 0。
+if (stopped) {
+    std::cout << "valid zero speed: " << *stopped << '\n';
+}
+const auto bad = speed(4.0, -1.0); // 负时长在除法之前被拒绝。
+if (!bad) { // 确认失败之后才读错误字段。
+    std::cout << "reason: " << bad.error() << '\n';
+}
+```
+
+新增输出为 `valid zero speed: 0` 和 `reason: duration must be positive`。expected 的状态检查是一次有无成功结果的询问，并非测试 double 是否非零。
+
+在失败状态调用 value() 会抛出带错误值的 bad_expected_access 异常；这与直接 *bad 是不同接口。本页采用 if/else，使初学者先看清两种状态对应的读取路径。string 分配等底层操作依然可能抛异常，因此 speed 返回 expected 并不表示它已承诺永不抛异常。
+
 ## 完整示例
 
 ```cpp title="cpp23.cpp · 完整示例"

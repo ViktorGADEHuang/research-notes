@@ -31,9 +31,9 @@
 | --- | --- |
 | 创建对象 | 初始化成员，检查速度是否有效 |
 | 调用 distance | 读取速度，检查时间，返回计算结果 |
-| 离开作用域 | 销毁对象，其 vector 成员也清理自身资源 |
+| 离开作用域 | 销毁对象，其成员也随对象销毁 |
 
-RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用法：**把资源交给会自动清理的对象管理**。不需要初学就手写复杂析构函数。下面的 vector 成员只用来示范资源随对象清理，不代表实现了传感器采集。
+RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用法：**把资源交给会自动清理的对象管理**。不需要初学就手写复杂析构函数。Robot 本身只保存速度，不需要动态分配。下面的独立文件小例子展示自动关闭资源，先读类的接口，再看这个例子即可。
 
 
 ## 构造、析构与不变量
@@ -64,24 +64,45 @@ RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用�
 
 `double distance(double seconds) const` 末尾的 const 修饰这次成员函数操作：它不通过这个接口修改普通成员。因此 `const Robot robot{0.8};` 也可以调用 distance。参数中的 const 与函数末尾的 const 所处位置不同，不能只看它们长得一样。
 
-## 为什么“自动清理”不用每个类都写 delete
+## 用一个真正的文件理解 RAII
 
-可以把对象看作一只带清单的箱子：Robot 里有一个 double 和一个 vector。销毁 Robot 时，它的成员也依次被销毁；vector 知道如何释放自己管理的存储，所以 Robot 不必重复写这套工作。这就是优先组合现成资源管理类型的理由。
+Robot 的速度只是一份普通数据。要看清“管理资源”，再看一个需要关闭的文件：`std::ofstream` 对象取得文件资源，对象离开作用域时自动关闭。下面是**独立小程序**，可保存为 raii_file.cpp；它会在程序运行的文件夹创建或覆盖 study-note.txt。
 
-本例的 observations_ 初始为空，只用于说明“成员也有自己的生命周期”，没有在这里实现采集或保存测量值。实际需要数据时再增加接口；不要为了演示 RAII，先堆入没有用途的手动 new/delete。
+```cpp title="raii_file.cpp · 独立文件资源短例"
+#include <fstream>   // 输出文件流和输入文件流。
+#include <iostream>
+#include <string>
 
-| 本例的两次创建 | 会经过哪些步骤 | main 接着做什么 |
-| --- | --- | --- |
-| `Robot{0.8}` | 初始化成员 → 检查通过 → 对象可用 | 调用 distance(5.0)，得到 4 |
-| `Robot{-1.0}` | 初始化成员 → 检查失败 → 抛异常 | 跳到 catch，显示 invalid speed |
+int main() {
+    { // 内层作用域只负责写文件。
+        std::ofstream file{"study-note.txt"}; // 默认方式会覆盖同名文件。
+        if (!file) { // 文件可能因路径、权限等原因打不开。
+            std::cerr << "cannot open output file\n";
+            return 1;
+        }
+        file << "learning RAII\n";
+        file.flush(); // 这里显式刷新，便于在对象仍可查询时检查写入失败。
+        if (!file) {
+            std::cerr << "cannot write file\n";
+            return 1; // 提前退出也会销毁 file，释放它管理的资源。
+        }
+    } // file 结束生命周期，文件被自动关闭；无需手工配对 close。
 
-第二种情况下，完整 Robot 没有构造成功，不能拿来用；已经构造好的成员会清理自身。这也解释了为什么检查失败后那句 `invalid.distance(...)` 不会执行。
+    std::ifstream input{"study-note.txt"};
+    std::string line;
+    if (!std::getline(input, line)) { // 打不开文件或读不到一行，也要处理。
+        std::cerr << "cannot read file\n";
+        return 1;
+    }
+    std::cout << line << '\n'; // 成功路径输出 learning RAII。
+}
+```
 
-### 输入检查的范围要说清楚
+可以用第 01 章的 G++ 命令，把文件名换成 raii_file.cpp。成功时输出 `learning RAII`；失败时显示对应说明并返回 1。读取对象 input 也会在 main 结束时自动关闭。
 
-`std::isfinite` 表示“不是 NaN，也不是正负无穷大”；`!` 表示取反，`||` 表示任一条件成立。速度为 0、时长为 0 在本例都是合法输入，表示没有走过距离；负输入会被拒绝。
+RAII 管的是**资源何时释放**，不保证磁盘永不出错；重要写入仍需检查结果。优先使用会管理资源的标准类型，自己的类组合这些成员即可，不必再手写一套 delete。
 
-本例用速度乘时间演示成员函数，假设输入在普通教学数值范围。它没有检查乘积是否超出 double 的范围，也没有描述加减速；有限的两个极大数相乘仍可能得到非有限结果。真实距离计算需要补充结果检查和任务所要求的运动模型。
+Robot 构造失败时，完整对象没有创建成功，自己的析构函数不会执行；已经成功构造的成员会正常销毁。构造检查与 RAII 配合，使“半途失败”的资源也有负责清理的对象。
 
 ## 完整示例
 
@@ -89,7 +110,6 @@ RAII 是 Resource Acquisition Is Initialization 的缩写；先记住实际用�
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 
 // 把机器人数据与合法操作封装在一起。
 class Robot {
@@ -116,8 +136,6 @@ public:
     // 外部代码不能绕过接口随意修改速度。
 private:
     double speed_mps_;
-    // 容器自动管理内存，不需要自定义 delete 或析构。
-    std::vector<double> observations_;
 };
 
 // 程序入口；下面按顺序执行示例步骤。
@@ -162,13 +180,13 @@ invalid speed
 | 调用 distance(5.0) | 参数 seconds 得到 5.0，检查输入后乘以速度 | 返回 4.0，由 cout 输出 distance: 4 m |
 | 创建 invalid | 初始化速度为 −1.0，检查失败 | 抛异常，没有得到一个可正常使用的 invalid |
 | 处理异常 | catch 取得错误对象，输出 what() | 不再执行 invalid.distance(1.0) |
-| main 结束 | 已成功创建的对象按生命周期销毁 | vector 等成员清理各自管理的资源 |
+| main 结束 | 已成功创建的对象按生命周期销毁 | 成员随成功创建的对象一起销毁 |
 
 构造函数没有写普通返回类型，名字与类名相同。冒号后面的 `speed_mps_{speed_mps}` 是**用参数初始化成员**：左边带下划线的是对象长期保存的成员，右边是这次构造调用的参数。下划线只是命名习惯，不是语法上自动创建成员的符号。
 
 函数末尾的 const 表达“这个成员操作不通过普通成员修改对象”。所以对 const robot 也能调用 distance。参数 seconds 每次调用都重新取得本次输入；speed_mps_ 则一直保存在 robot 内。`distance(2.0)` 会用同一速度算出 1.6，而不是沿用上一次调用的 5 秒。
 
-RAII 的关键是资源跟着管理对象的生命周期。本例没有手写 delete：observations_ 是 vector，vector 自己管理其内存。它是教学用的空成员，并没有读取传感器。创建失败时，已构造的成员仍会清理，但未完成构造的整个 Robot 不会执行自身析构函数。
+RAII 的关键是资源跟着管理对象的生命周期。Robot 没有手动取得资源，因此不需要写 delete；上面的文件短例则展示了管理对象自动关闭资源的过程。创建失败时，已构造的成员仍会清理，但未完成构造的整个 Robot 不会执行自身析构函数。
 
 ### private 为何有用？
 

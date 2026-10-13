@@ -30,17 +30,21 @@ def main(steps, seed):
     # reset 返回初始观测和 info；评估器之后会自行按回合调用环境接口。
     eval_env.reset(seed=seed + 100)
     dim = train_env.action_space.shape[0]
-    # 为 DDPG/TD3 的确定性动作添加探索噪声，不是评价时的噪声。
+    # 探索噪声加在 [-1, 1] 归一化动作上；换回 Pendulum 扭矩需再乘 2。
     noise = NormalActionNoise(mean=np.zeros(dim), sigma=0.1 * np.ones(dim))
     try:
         # 创建策略与价值网络；初始化完成不意味着模型已经学会任务。
         model = DDPG(
             # 多层感知机策略；seed 控制随机初始化，device 指定 CPU。
             "MlpPolicy", train_env, seed=seed, device="cpu", verbose=0,
+            # 完整示例折扣固定为 0.99；正文短算例另给折扣，便于口算。
+            gamma=0.99,
             # 经验回放容量、开始学习前的采样步数、每批样本数。
             buffer_size=20000, learning_starts=100, batch_size=64,
             # 每交互一步后进行一次梯度更新；训练初期先积累经验。
             train_freq=1, gradient_steps=1, action_noise=noise,
+            # 每次把当前参数的 0.5% 混入目标参数；不是把动作减小 0.5%。
+            tau=0.005,
         )
         # 记录未训练策略的评估均值，作为观察起点。
         # 左边两个名字接收均值和标准差；这里用 _ 表示暂时不使用第二项。

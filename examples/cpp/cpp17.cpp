@@ -24,8 +24,12 @@ int main() {
     for (const auto& [id, x] : positions) {
         std::cout << "sheep " << id << ": " << x << '\n';
     }
-    // 仅演示 value_or：缺失时用于显示的备用值，不要把它继续当真实位置。
-    std::cout << "missing fallback: " << lookup(positions, 9).value_or(-1.0) << '\n';
+    // 缺失单独显示，不再用 -1 伪装成位置。
+    if (const auto missing = lookup(positions, 9)) {
+        std::cout << "position: " << *missing << '\n';
+    } else {
+        std::cout << "missing position\n";
+    }
     // 检查有没有值，而不是里面的数是不是非零。
     if (auto x = lookup(positions, 1)) {
         std::cout << "valid zero: " << *x << '\n';

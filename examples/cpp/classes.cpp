@@ -1,7 +1,6 @@
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 
 // 把机器人数据与合法操作封装在一起。
 class Robot {
@@ -28,8 +27,6 @@ public:
     // 外部代码不能绕过接口随意修改速度。
 private:
     double speed_mps_;
-    // 容器自动管理内存，不需要自定义 delete 或析构。
-    std::vector<double> observations_;
 };
 
 // 程序入口；下面按顺序执行示例步骤。

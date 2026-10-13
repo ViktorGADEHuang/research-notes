@@ -229,7 +229,15 @@ add_executable(distance_demo
 target_compile_features(distance_demo PRIVATE cxx_std_17)
 ```
 
-在 `distance-cmake` 目录重新配置、构建。Windows G++ 路线仍使用前面的 `-G "MinGW Makefiles"` 命令。运行时把 `hello.exe` 换成 `distance_demo.exe`；Linux/macOS 换成 `distance_demo`。输出应为 `250 cm`。
+在 distance-cmake 目录打开终端。这个项目有自己的构建目录，不能直接跑前一个 hello-cmake 的程序。Windows G++ 路线逐行执行：
+
+```powershell title="在 distance-cmake 目录执行"
+cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+./build/distance_demo.exe
+```
+
+Linux/macOS 用前面的单配置路线，把最后一行改成 `./build/distance_demo`。成功输出为 `250 cm`。三个步骤的职责仍是配置、构建、运行，只改变了源文件列表与成品名字。
 
 `#include "distance.hpp"` 让编译器知道函数如何调用，**不会自动替你编译 `distance.cpp`**。配置中漏掉它，`main.cpp` 可能编译通过，之后却出现找不到 `to_centimeters` 定义的链接错误。
 
@@ -280,6 +288,23 @@ endif()
     ```
 
     `-g` 保留调试信息；`-O1` 选择较低优化级别；`-fsanitize` 加入运行时检查。这些工具只能检查实际走到的执行路径，某些 Windows MinGW 工具链没有完整支持。初学先读懂普通报错，再引入这些工具。
+
+### Debug 与 Release 不是两个不同的 C++ 文件
+
+Debug 通常保留便于调试的信息并减少优化；Release 通常更偏向优化。具体参数由工具链与配置决定，不保证 Debug 一定找到所有错误，也不保证 Release 一定满足性能目标。源码可以相同，构建配置不同。
+
+| 生成器类型 | 怎么选择配置 | 本章例子的程序位置 |
+| --- | --- | --- |
+| 单配置：MinGW Makefiles、Unix Makefiles、普通 Ninja | 配置时设置 `-DCMAKE_BUILD_TYPE=Debug` | build/hello.exe 或 build/hello |
+| 多配置：Visual Studio、Ninja Multi-Config | 构建时设置 `--config Debug` | 默认常见布局为 build/Debug/hello.exe（Windows） |
+
+只加 `--config Debug` 不能让普通 Makefile 构建自动切到 Debug；只设置 CMAKE_BUILD_TYPE 也不能替多配置生成器选择构建配置。这项区别见 [CMake 的构建类型说明](https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html)。
+
+### PRIVATE 为何出现在目标后面？
+
+target_compile_features、target_compile_options 都先指名“给哪个目标设置”，再说设置的传播范围。PRIVATE 表示要求用于本目标；PUBLIC 表示本目标和使用它的其他目标；INTERFACE 表示供使用它的目标。当前只生成独立程序，用 PRIVATE 足够。
+
+以后把公用代码做成库时，这些传播范围才更重要。不要把 PRIVATE 当成 C++ 类的 private；同一个英文词出现在两种配置语法里，含义需要按位置读。
 
 ## 7. 动手练习：亲自解释一次链接错误
 

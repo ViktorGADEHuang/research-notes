@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" role="img" aria-labelledby="title desc">
+  <title id="title">两个名字共享一份列表，复制后才有另一份列表</title>
+  <desc id="desc">original 和 shared 都指向同一份列表。执行 shared[0]=1 后，这份列表为 1,0。执行 separate=original.copy() 后，再把 separate[1] 设为 2，只会修改第二份列表，原列表仍为 1,0。本例为一维数字列表的浅复制。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#397b68"/></marker></defs>
+  <rect width="960" height="460" rx="18" fill="#f3f6f0"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#24463c">
+    <text x="35" y="52" font-size="27" font-weight="700">名字可以换，先看它指向的是哪份数据</text>
+    <g fill="#fff" stroke="#b8cbbd" stroke-width="2">
+      <rect x="40" y="90" width="210" height="65" rx="10"/>
+      <rect x="40" y="190" width="210" height="65" rx="10"/>
+      <rect x="380" y="120" width="240" height="100" rx="12"/>
+      <rect x="40" y="320" width="210" height="65" rx="10"/>
+      <rect x="380" y="300" width="240" height="100" rx="12"/>
+    </g>
+    <g font-size="24" text-anchor="middle" font-weight="700">
+      <text x="145" y="132">original</text><text x="145" y="232">shared</text><text x="145" y="362">separate</text>
+    </g>
+    <g fill="none" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M250 122L375 150"/><path d="M250 222L375 190"/><path d="M250 352L375 352"/>
+    </g>
+    <g text-anchor="middle"><text x="500" y="160" font-size="22">第一份列表</text><text x="500" y="198" font-size="25" font-weight="700">[1.0, 0.0]</text>
+      <text x="500" y="341" font-size="22">复制出的第二份列表</text><text x="500" y="380" font-size="25" font-weight="700">[1.0, 2.0]</text></g>
+    <g font-size="19"><text x="653" y="151">shared = original</text><text x="653" y="185">只增加一个名字</text><text x="653" y="218">修改内容，双方都看见</text>
+      <text x="653" y="333">separate = original.copy()</text><text x="653" y="367">修改这份，不改第一份</text></g>
+    <text x="40" y="437" font-size="19">本例是一维数字列表；嵌套列表浅复制时，内部列表仍可能共享。</text>
+  </g>
+</svg>

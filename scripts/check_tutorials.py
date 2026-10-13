@@ -2,6 +2,7 @@
 from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
+from collections import Counter
 import ast
 import re
 import textwrap
@@ -18,6 +19,8 @@ class Page(HTMLParser):
         self.ids, self.links = set(), []
         self.article = self.code = 0
         self.raw_fence = False
+        self.pre_depth = self.pre_code_depth = 0
+        self.pre_blocks, self.block_text = [], []
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
@@ -31,14 +34,28 @@ class Page(HTMLParser):
             self.article += 1
         if tag in ('code', 'pre'):
             self.code += 1
+        if tag == 'pre':
+            self.pre_depth += 1
+        if tag == 'code' and self.pre_depth:
+            self.pre_code_depth += 1
+            if self.pre_code_depth == 1:
+                self.block_text = []
 
     def handle_endtag(self, tag):
         if tag == 'article':
             self.article = max(0, self.article - 1)
         if tag in ('code', 'pre'):
             self.code = max(0, self.code - 1)
+        if tag == 'code' and self.pre_code_depth:
+            self.pre_code_depth -= 1
+            if not self.pre_code_depth:
+                self.pre_blocks.append(''.join(self.block_text).strip())
+        if tag == 'pre':
+            self.pre_depth = max(0, self.pre_depth - 1)
 
     def handle_data(self, data):
+        if self.pre_code_depth:
+            self.block_text.append(data)
         if self.article and not self.code and '```' in data:
             self.raw_fence = True
 
@@ -51,6 +68,13 @@ def check(condition, message):
 def code_blocks(text, language):
     """读取普通、带标题及折叠答案中的围栏；只移除 Markdown 的公共缩进。"""
     pattern = rf'^([ \t]*)```{re.escape(language)}(?:[ \t][^\n]*)?\n(.*?)^\1```[ \t]*$'
+    return [textwrap.dedent(match.group(2)).strip()
+            for match in re.finditer(pattern, text, re.M | re.S)]
+
+
+def all_fenced_blocks(text):
+    """收集所有普通代码围栏，包括命令、输出及折叠练习，不执行内容。"""
+    pattern = r'^([ \t]*)```[\w+-]*(?:[ \t][^\n]*)?\n(.*?)^\1```[ \t]*$'
     return [textwrap.dedent(match.group(2)).strip()
             for match in re.finditer(pattern, text, re.M | re.S)]
 
@@ -73,10 +97,24 @@ for path, page in pages.items():
             check(unquote(url.fragment) in pages[target].ids,
                   f'{path.relative_to(ROOT)}: 缺少锚点 {link}')
 
+rendered_code_count = 0
 for p in DOCS.rglob('*.md'):
     text = p.read_text(encoding='utf-8')
     check(text.count('```') % 2 == 0, f'{p}: 未闭合代码围栏')
     check('\ufffd' not in text, f'{p}: 存在乱码替换字符')
+    relative = p.relative_to(DOCS)
+    flat = (SITE / relative.with_suffix('.html')).resolve()
+    directory = (SITE / relative.with_suffix('') / 'index.html').resolve()
+    # MkDocs 可使用目录式或文件式地址；index.md 对应目录的 index.html。
+    page = pages.get(flat) if p.name == 'index.md' else pages.get(directory, pages.get(flat))
+    check(page is not None, f'{relative}: 缺少构建后的教程页面')
+    if page is not None:
+        expected_blocks = Counter(all_fenced_blocks(text))
+        actual_blocks = Counter(page.pre_blocks)
+        for block, count in expected_blocks.items():
+            check(actual_blocks[block] >= count,
+                  f'{relative}: 代码/命令/输出块未完整呈现: {block.splitlines()[0][:80] if block else "空块"}')
+        rendered_code_count += sum(expected_blocks.values())
     # 仅解析语法，包括需要正文提供输入的阅读片段；不导入，不执行。
     for index, block in enumerate(code_blocks(text, 'python'), start=1):
         try:
@@ -128,4 +166,5 @@ for p in examples.glob('*.cpp'):
 if errors:
     raise SystemExit('\n'.join(errors))
 print(f'PASS: {len(list(DOCS.rglob("*.md")))} 篇 Markdown、{len(pages)} 个 HTML 页面、'
-      f'{len(python_files)} 个 Python 文件静态语法、正文与本地源码一致；无示例下载资源，未运行 RL。')
+      f'{rendered_code_count} 个代码/命令/输出块完整呈现、{len(python_files)} 个 Python 文件静态语法、'
+      '正文与本地源码一致；无示例下载资源，未运行 RL。')
