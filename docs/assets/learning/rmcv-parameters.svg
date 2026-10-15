@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">参数管理：写入与查询，是两条路径</title><desc id="desc">配置经过解析形成参数对象。调用者按名字查找，再检查类型。名称不存在与类型不匹配是不同情况。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">参数管理：写入与查询，是两条路径</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">显示设置为教学例子；原实现的行为需对照固定提交的参数文件。</text>
+<rect x="44" y="155" width="282" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">配置内容</text>
+<text x="64" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">[display]</text>
+<text x="64" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">scale = 1.0</text>
+<rect x="409" y="155" width="282" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="429" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">解析与命名</text>
+<text x="429" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">表 → 子项</text>
+<text x="429" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">display.scale</text>
+<rect x="774" y="155" width="282" height="155" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="794" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">参数对象</text>
+<text x="794" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">保留类型与值</text>
+<text x="794" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">持有者维持寿命</text>
+<path d="M337 231 L394 231" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M702 231 L759 231" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="44" y="388" width="282" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="428" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">读取请求</text>
+<text x="64" y="468" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">名称是什么？</text>
+<text x="64" y="502" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">希望得到哪种类型？</text>
+<rect x="409" y="388" width="282" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="429" y="428" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">两层检查</text>
+<text x="429" y="468" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">① 名称查找</text>
+<text x="429" y="502" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">② 所存类型匹配</text>
+<rect x="774" y="388" width="282" height="155" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="794" y="428" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">按接口返回</text>
+<text x="794" y="468" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">成功：交回数值</text>
+<text x="794" y="502" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">失败：查接口约定</text>
+<path d="M337 466 L394 466" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M702 466 L759 466" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="44" y="622" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">整数 1 与浮点数 1.0 类型不同；默认值 0 本身不能证明参数读取成功。</text>
+</g></svg>

@@ -89,6 +89,23 @@
 
 ## 02 · 机器人视觉
 
+### rm.cv.fans · 配套零基础源码阅读课
+
+`julyfun/rm.cv.fans` 是 RoboMaster 视觉工程仓库，包含通用视觉基础组件与比赛专用模块。它适合作为工程阅读材料，但不是从零编排的教材。本站为它增加了 **8 课入门路线**：从 C++ 语法、图像数字和矩阵开始，再阅读参数管理与共享对象。
+
+<div class="course-intro" markdown="1">
+<p class="course-label">先学会看懂，再沿接口读源码</p>
+
+每课都有图解、数字例子、中文解释与练习。独立 C++ 示例包含注释和预期输出；与原项目的实现分开说明。滤波基础采用静态温度例子；专用瞄准、弹道和发射控制部分仅辨认职责。
+
+[进入配套教程 →](../vision/rm-cv-fans/index.md){ .md-button .md-button--primary }
+[查看原仓库](https://github.com/julyfun/rm.cv.fans){ .md-button }
+</div>
+
+阅读基准为提交 [`6abd1bf`](https://github.com/julyfun/rm.cv.fans/tree/6abd1bf359356d1d603766c4b3bcabbb1d6432b2)，本次核对日期为 2026-10-15。该快照没有根目录 CMake 构建入口，作者也保留了已知问题说明；教程说明构建材料的限制，不承诺整套工程可直接运行。阅读不要求创建虚拟环境或安装原项目依赖，不提供下载包。
+
+---
+
 ### 浙江大学 RoboMaster 视觉组学习资料
 
 **浙江大学 RoboMaster 机甲大师视觉组入组培训教程**

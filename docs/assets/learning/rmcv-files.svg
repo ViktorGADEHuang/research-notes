@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">五类文件：先认职责，再读细节</title><desc id="desc">README 说明用途，头文件介绍接口，实现文件提供步骤，TOML 保存配置，CMake 组织构建。后缀不是绝对规则。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">五类文件：先认职责，再读细节</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">文件名是线索，实际内容才是判断依据；模板实现也常在头文件。</text>
+<rect x="44" y="145" width="1012" height="72" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="190" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">README.md</text>
+<text x="355" y="190" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">项目说明</text>
+<text x="660" y="190" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">做什么？有哪些限制？</text>
+<rect x="44" y="232" width="1012" height="72" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="277" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">.hpp / .h</text>
+<text x="355" y="277" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">类型与接口</text>
+<text x="660" y="277" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">输入、输出是什么？</text>
+<rect x="44" y="319" width="1012" height="72" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="364" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">.cpp</text>
+<text x="355" y="364" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">实现或接口注册</text>
+<text x="660" y="364" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">具体怎样处理数据？</text>
+<rect x="44" y="406" width="1012" height="72" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="451" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">.toml</text>
+<text x="355" y="451" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">配置数据</text>
+<text x="660" y="451" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">名字、类型、数值是什么？</text>
+<rect x="44" y="493" width="1012" height="72" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="538" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">CMakeLists.txt</text>
+<text x="355" y="538" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">构建规则</text>
+<text x="660" y="538" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">哪些文件和库组成目标？</text>
+<text x="44" y="628" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">include 提供所需声明等内容，不会自动安装依赖；子目录不一定是构建入口。</text>
+</g></svg>

@@ -48,13 +48,19 @@
     toolbar.append(hint, actions);
     heading?.after(toolbar);
 
-    const roboticsChapters = ["start", "units", "sensors", "frames", "kinematics",
-      "control", "ros2", "tf2", "urdf", "mujoco", "localization", "planning",
-      "quadrupeds", "project"];
+    const courses = [
+      { key: "robotics", label: "机器人技术", chapters: [
+        "start", "units", "sensors", "frames", "kinematics", "control", "ros2",
+        "tf2", "urdf", "mujoco", "localization", "planning", "quadrupeds", "project"] },
+      { key: "rm-cv-fans", label: "rm.cv.fans 阅读入门", chapters: [
+        "repository", "cpp-basics", "cpp-types", "images", "math",
+        "configuration", "estimation", "reading-lab"] }
+    ];
     const path = window.location.pathname.split("/").filter(Boolean);
-    const section = path.lastIndexOf("robotics");
+    const currentCourse = courses.find(item => path.includes(item.key));
+    const section = currentCourse ? path.lastIndexOf(currentCourse.key) : -1;
     const chapter = section < 0 ? "" : (path[section + 1] || "").replace(/\.html$/, "");
-    const chapterIndex = roboticsChapters.indexOf(chapter);
+    const chapterIndex = currentCourse ? currentCourse.chapters.indexOf(chapter) : -1;
     if (chapterIndex >= 0) {
       article.classList.add("lesson-page");
       const meta = document.createElement("nav");
@@ -62,9 +68,9 @@
       meta.setAttribute("aria-label", "课程位置");
       const course = document.createElement("a");
       course.href = new URL("/" + path.slice(0, section + 1).join("/") + "/", window.location.href).href;
-      course.textContent = "机器人技术";
+      course.textContent = currentCourse.label;
       const position = document.createElement("span");
-      position.textContent = `第 ${String(chapterIndex + 1).padStart(2, "0")} / ${roboticsChapters.length} 章`;
+      position.textContent = `第 ${String(chapterIndex + 1).padStart(2, "0")} / ${currentCourse.chapters.length} 章`;
       meta.append(course, position);
       heading?.after(meta);
       meta.after(toolbar);

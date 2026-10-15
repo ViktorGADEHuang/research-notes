@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">第一次读源码：围绕一个具体问题找证据</title><desc id="desc">从问题开始，固定版本，查接口和失败分支，使用独立小例子检查理解，最后写清已知与未知。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">第一次读源码：围绕一个具体问题找证据</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">本课问题：按名字读取数字时，为什么可能得到默认值？</text>
+<rect x="44" y="150" width="1012" height="69" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="195" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">01 提出问题</text>
+<text x="350" y="195" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">一次只跟踪一个输入和一个返回结果</text>
+<rect x="44" y="237" width="1012" height="69" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="282" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">02 固定证据</text>
+<text x="350" y="282" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">记录提交版本、文件路径、相关函数</text>
+<rect x="44" y="324" width="1012" height="69" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="369" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">03 圈出分支</text>
+<text x="350" y="369" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">名称查找 → 类型检查 → 成功或失败</text>
+<rect x="44" y="411" width="1012" height="69" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="456" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">04 独立推算</text>
+<text x="350" y="456" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">用小 map 和数字解释，不冒充原工程复现</text>
+<rect x="44" y="498" width="1012" height="69" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="543" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">05 写下边界</text>
+<text x="350" y="543" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">已读源码、未构建工程、仍需核对的行为</text>
+<text x="44" y="630" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">会用自己的话解释一条数据路径，比抄下一页函数名更有用。</text>
+</g></svg>

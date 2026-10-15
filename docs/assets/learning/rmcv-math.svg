@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">矩阵是成组计算，误差要先定义</title><desc id="desc">矩阵两行分别与列向量三四相乘求和，输出十一和二十五。两次温度观测二十与二十二的平方误差在二十一处最小。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">矩阵是成组计算，误差要先定义</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">先检查形状，再按行计算；平方和最小并不等于测量没有偏差。</text>
+<rect x="44" y="158" width="1012" height="208" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="75" y="205" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">2×2 矩阵</text>
+<text x="335" y="205" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">2×1 向量</text>
+<text x="700" y="205" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">两行分别计算</text>
+<text x="102" y="265" font-size="34" fill="#23463b" font-weight="700" text-anchor="start">1   2</text>
+<text x="102" y="321" font-size="34" fill="#23463b" font-weight="700" text-anchor="start">3   4</text>
+<text x="270" y="292" font-size="38" fill="#23463b" font-weight="400" text-anchor="start">×</text>
+<text x="377" y="265" font-size="34" fill="#23463b" font-weight="700" text-anchor="start">3</text>
+<text x="377" y="321" font-size="34" fill="#23463b" font-weight="700" text-anchor="start">4</text>
+<path d="M474 278 L572 278" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="626" y="260" font-size="30" fill="#23463b" font-weight="700" text-anchor="start">1×3 + 2×4 = 11</text>
+<text x="626" y="319" font-size="30" fill="#23463b" font-weight="700" text-anchor="start">3×3 + 4×4 = 25</text>
+<text x="44" y="421" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">用一个 m 概括观测 20、22：E = (m−20)² + (m−22)²</text>
+<rect x="44" y="452" width="314" height="112" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="492" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">选择 m = 20</text>
+<text x="64" y="532" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">平方误差和 E = 4</text>
+<rect x="393" y="452" width="314" height="112" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="413" y="492" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">选择 m = 21</text>
+<text x="413" y="532" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">平方误差和 E = 2</text>
+<rect x="742" y="452" width="314" height="112" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="762" y="492" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">选择 m = 22</text>
+<text x="762" y="532" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">平方误差和 E = 4</text>
+<text x="44" y="627" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">本例 E = 2(m−21)² + 2，所以在 m=21 时最小；这依赖当前目标与观测。</text>
+</g></svg>

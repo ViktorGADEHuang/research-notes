@@ -116,6 +116,16 @@ nav:
 
   - 计算机视觉:
       - 视觉学习概览: vision/index.md
+      - rm.cv.fans 阅读入门:
+          - 学习路线与版本说明: vision/rm-cv-fans/index.md
+          - 01 · 仓库与文件: vision/rm-cv-fans/repository.md
+          - 02 · C++ 第一眼: vision/rm-cv-fans/cpp-basics.md
+          - 03 · 类型与所有权: vision/rm-cv-fans/cpp-types.md
+          - 04 · 图像其实是数字: vision/rm-cv-fans/images.md
+          - 05 · 矩阵与误差: vision/rm-cv-fans/math.md
+          - 06 · 参数与共享对象: vision/rm-cv-fans/configuration.md
+          - 07 · 测量与滤波: vision/rm-cv-fans/estimation.md
+          - 08 · 带着问题读源码: vision/rm-cv-fans/reading-lab.md
 
   - 编程技术:
       - 编程学习概览: programming/index.md

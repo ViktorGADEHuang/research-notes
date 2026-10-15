@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">一个函数：把输入变成有明确含义的结果</title><desc id="desc">四个亮度数字总和为一百，平均值为二十五。空列表返回没有结果，main 检查后才取值。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">一个函数：把输入变成有明确含义的结果</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">独立教学例子 · 不调用原工程 · 先理解数据，再阅读符号</text>
+<rect x="44" y="160" width="280" height="150" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="200" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">输入：四个数</text>
+<text x="64" y="240" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">10、20、30、40</text>
+<text x="64" y="274" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">列表不在函数中修改</text>
+<rect x="405" y="160" width="280" height="150" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="425" y="200" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">函数 average</text>
+<text x="425" y="240" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">逐项相加：100</text>
+<text x="425" y="274" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">除以数量：100 ÷ 4</text>
+<rect x="766" y="160" width="290" height="150" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="786" y="200" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">返回：可能有值</text>
+<text x="786" y="240" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">本次有值：25</text>
+<text x="786" y="274" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">空输入：没有结果</text>
+<path d="M337 235 L390 235" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M698 235 L752 235" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="44" y="382" width="1012" height="168" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="69" y="425" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">main：先判断 result 是否有值，再使用 *result</text>
+<text x="69" y="476" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">有值 → mean: 25.0</text>
+<text x="565" y="476" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">没有值 → no data</text>
+<text x="44" y="620" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">空数据没有平均值；返回 0 会把“没结果”和“结果确实为零”混在一起。</text>
+</g></svg>

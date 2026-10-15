@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">名字不同，数据可能仍是同一份</title><desc id="desc">左侧 original 与 alias 指向同一普通对象，copy 是独立副本。右侧两个共享指针拥有同一个温度对象。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">名字不同，数据可能仍是同一份</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">独立温度例子 · 复制对象、借用对象与共享所有权要分别理解</text>
+<rect x="44" y="150" width="478" height="425" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<rect x="555" y="150" width="501" height="425" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="68" y="193" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">值与引用</text>
+<text x="580" y="193" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">共享指针</text>
+<text x="80" y="270" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">original</text>
+<text x="80" y="320" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">alias</text>
+<rect x="266" y="232" width="226" height="125" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="286" y="279" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">同一个 Reading</text>
+<text x="286" y="327" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">改后：21 °C</text>
+<path d="M195 262 L252 262" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M149 313 L252 313" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="80" y="423" width="412" height="91" rx="14" fill="#fff" stroke="#cedcd5" stroke-width="2"/>
+<text x="103" y="460" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">copy：另一份对象</text>
+<text x="103" y="496" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">仍是 20 °C</text>
+<rect x="580" y="230" width="187" height="65" rx="14" fill="#fff" stroke="#cedcd5" stroke-width="2"/>
+<rect x="835" y="230" width="187" height="65" rx="14" fill="#fff" stroke="#cedcd5" stroke-width="2"/>
+<text x="603" y="273" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">first</text>
+<text x="856" y="273" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">second</text>
+<rect x="669" y="355" width="280" height="92" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="690" y="393" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">同一个 Reading</text>
+<text x="690" y="429" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">修改后：22 °C</text>
+<path d="M680 305 L746 342" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<path d="M924 305 L867 342" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="580" y="504" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">first.reset() 之后</text>
+<text x="580" y="545" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">second 仍持有对象 → 对象仍存活</text>
+<text x="44" y="628" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">共享所有权只管理寿命，不会自动解决对象内容的并发读写问题。</text>
+</g></svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">静态温度估计：向测量走多少，由模型决定</title><desc id="desc">旧估计二十摄氏度，方差四；测量二十二摄氏度，噪声方差一。增益零点八，得到估计二十一点六、方差零点八。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">静态温度估计：向测量走多少，由模型决定</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">通用标量例子 · 温度保持不变 · 测量误差无偏且与旧估计误差不相关</text>
+<rect x="44" y="155" width="302" height="153" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">旧估计</text>
+<text x="64" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">m = 20 °C</text>
+<text x="64" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">误差方差 P = 4 °C²</text>
+<rect x="399" y="155" width="302" height="153" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="419" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">本次测量</text>
+<text x="419" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">z = 22 °C</text>
+<text x="419" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">噪声方差 R = 1 °C²</text>
+<rect x="754" y="155" width="302" height="153" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="774" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">更新后</text>
+<text x="774" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">m_new = 21.6 °C</text>
+<text x="774" y="269" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">P_new = 0.8 °C²</text>
+<path d="M110 432 H970" stroke="#5d7269" stroke-width="3"/>
+<circle cx="110" cy="432" r="8" fill="#5d7269"/>
+<text x="110" y="476" font-size="28" fill="#5d7269" font-weight="700" text-anchor="middle">20</text>
+<circle cx="798" cy="432" r="8" fill="#367660"/>
+<text x="798" y="476" font-size="28" fill="#367660" font-weight="700" text-anchor="middle">21.6</text>
+<circle cx="970" cy="432" r="8" fill="#5d7269"/>
+<text x="970" y="476" font-size="28" fill="#5d7269" font-weight="700" text-anchor="middle">22</text>
+<path d="M125 389 L783 389" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<text x="260" y="367" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">K = 4 ÷ (4+1) = 0.8；沿差值走 80%</text>
+<rect x="44" y="521" width="1012" height="71" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="67" y="567" font-size="29" fill="#23463b" font-weight="700" text-anchor="start">新估计 = 20 + 0.8 × (22−20) = 21.6 °C</text>
+<text x="44" y="636" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">增益不是正确率；方差单位是 °C²；模型不成立时，平滑也可能误导。</text>
+</g></svg>
