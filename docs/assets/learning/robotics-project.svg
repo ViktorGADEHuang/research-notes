@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-labelledby="title desc">
+  <title id="title">一个点的闭环：执行后的状态进入下一轮</title>
+  <desc id="desc">初始位置零米，目标零点二米。读模型状态，检查有效标记、坐标系和时间戳，计算误差并限制速度大小，先记录本轮执行前的位置、指令和状态。有效且未到达时，用速度乘零点五秒更新模型位置，新位置回到下一轮；到达或数据不可用时结束本例。它是理想点模型，不是实机运动结果。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#397b68"/></marker></defs>
+  <rect width="1000" height="640" rx="18" fill="#f3f6f0"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#24463c">
+    <text x="35" y="55" font-size="30" font-weight="700">下一轮用的是新状态，目标仍然不变</text>
+    <text x="35" y="92" font-size="20">世界坐标 · 米与秒 · 只演示理想点模型</text>
+    <g fill="#fff" stroke="#b8cbbd" stroke-width="2">
+      <rect x="35" y="125" width="280" height="135" rx="12"/>
+      <rect x="360" y="125" width="280" height="135" rx="12"/>
+      <rect x="685" y="125" width="280" height="135" rx="12"/>
+      <rect x="685" y="355" width="280" height="145" rx="12"/>
+      <rect x="360" y="355" width="280" height="145" rx="12"/>
+      <rect x="35" y="355" width="280" height="145" rx="12"/>
+    </g>
+    <g text-anchor="middle" font-size="22">
+      <text x="175" y="163" font-weight="700">1 读当前模型位置</text>
+      <text x="175" y="202">x=0，时间戳=0</text>
+      <text x="175" y="237">这份输入有坐标和时间</text>
+      <text x="500" y="163" font-weight="700">2 检查能不能用</text>
+      <text x="500" y="202">有效、同坐标、未过期</text>
+      <text x="500" y="237">不通过：本例不继续移动</text>
+      <text x="825" y="163" font-weight="700">3 算误差与速度</text>
+      <text x="825" y="202">误差 0.2 → 请求 0.2</text>
+      <text x="825" y="237">限幅后 0.1 米/秒</text>
+      <text x="825" y="395" font-weight="700">4 先记日志与状态</text>
+      <text x="825" y="433">执行前位置 + 本轮指令</text>
+      <text x="825" y="471" font-size="20">到达或不可用：本例结束</text>
+      <text x="500" y="395" font-weight="700">5 执行理想点模型</text>
+      <text x="500" y="433">0 + 0.1 × 0.5 = 0.05</text>
+      <text x="500" y="471">第一轮后的 x=0.05 米</text>
+      <text x="175" y="395" font-weight="700">6 下一轮用新位置</text>
+      <text x="175" y="433" font-size="20">当前 0.05，目标仍是 0.2</text>
+      <text x="175" y="471">新误差变为 0.15 米</text>
+    </g>
+    <g fill="none" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M315 195H353"/><path d="M640 195H678"/>
+      <path d="M825 260V348"/><path d="M685 428H647"/><path d="M360 428H322"/>
+      <path d="M175 355V268"/>
+    </g>
+    <text x="35" y="554" font-size="21" font-weight="700">返回路径：执行后的模型状态 → 新观测 → 新指令</text>
+    <text x="35" y="591" font-size="20">真实机器人要重新测量；预计位移不能代替实际反馈。</text>
+  </g>
+</svg>

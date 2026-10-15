@@ -121,6 +121,14 @@ for p in DOCS.rglob('*.md'):
             ast.parse(block, filename=f'{p}:代码块{index}')
         except SyntaxError as error:
             errors.append(str(error))
+    # URDF/MJCF 完整模型先检查 XML 结构；不加载模拟器或执行节点。
+    # 局部修改片段可能包含多个兄弟元素，只有完整模型才作为文档解析。
+    for index, block in enumerate(code_blocks(text, 'xml'), start=1):
+        if re.search(r'<(?:robot|mujoco)\b', block):
+            try:
+                ET.fromstring(block)
+            except ET.ParseError as error:
+                errors.append(f'{relative}: XML 模型块 {index} 无法解析: {error}')
 
 for p in DOCS.rglob('*.svg'):
     diagram = ET.parse(p).getroot()
@@ -148,7 +156,15 @@ for folder in (DOCS, SITE):
                   f'网站仍包含示例下载资源: {p.relative_to(ROOT)}')
 for path, page in pages.items():
     for link in page.links:
-        check(not re.search(r'/examples/|\.(?:zip|7z|rar|tar|gz|cpp|py)$', urlsplit(link).path, re.I),
+        parsed = urlsplit(link)
+        # GitHub 的 blob 页面用于阅读官方接口源码，不是本站的源码下载入口。
+        # 仅区分这种网页；raw 源文件、压缩包和本站 examples 路径仍拒绝。
+        source_reference = (parsed.scheme == 'https' and parsed.hostname == 'github.com'
+                            and re.match(r'^/[^/]+/[^/]+/blob/', parsed.path)
+                            and parsed.path.lower().endswith(('.cpp', '.py')))
+        download_link = bool(re.search(r'/examples/|\.(?:zip|7z|rar|tar|gz|cpp|py)$',
+                                       parsed.path, re.I))
+        check(not download_link or source_reference,
               f'{path.relative_to(ROOT)}: 仍包含示例下载链接 {link}')
 
 cmake = (examples / 'CMakeLists.txt').read_text(encoding='utf-8').strip()

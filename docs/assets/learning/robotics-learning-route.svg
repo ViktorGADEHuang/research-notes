@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" role="img" aria-labelledby="title desc">
+  <title id="title">机器人从观测到行动的闭环</title>
+  <desc id="desc">测量与定位说明当前在哪里，规划选择可行路线，控制与执行根据误差产生运动，新的测量说明实际发生什么。新的测量返回到下一轮；整条链路要说明单位、坐标系与时刻。</desc>
+  <defs><marker id="arrow" markerWidth="9" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8" fill="#397b68"/></marker></defs>
+  <rect width="1000" height="480" rx="18" fill="#f3f6f0"/>
+  <g font-family="Microsoft YaHei, sans-serif" fill="#24463c">
+    <text x="30" y="55" font-size="30" font-weight="700">先看每个模块回答什么，再把它们接成闭环</text>
+    <g fill="#fff" stroke="#b8cbbd" stroke-width="2">
+      <rect x="25" y="110" width="210" height="145" rx="12"/>
+      <rect x="270" y="110" width="210" height="145" rx="12"/>
+      <rect x="515" y="110" width="210" height="145" rx="12"/>
+      <rect x="760" y="110" width="210" height="145" rx="12"/>
+    </g>
+    <g text-anchor="middle" font-size="22">
+      <text x="130" y="151" font-weight="700">测量与定位</text>
+      <text x="130" y="193">我在哪里？</text><text x="130" y="229" font-size="19">这份观测何时产生？</text>
+      <text x="375" y="151" font-weight="700">规划</text>
+      <text x="375" y="193">沿哪条路线走？</text><text x="375" y="229" font-size="19">有无空间与障碍？</text>
+      <text x="620" y="151" font-weight="700">控制与执行</text>
+      <text x="620" y="193">这一轮怎么运动？</text><text x="620" y="229" font-size="19">实际执行受哪些约束？</text>
+      <text x="865" y="151" font-weight="700">新的测量</text>
+      <text x="865" y="193">实际发生了什么？</text><text x="865" y="229" font-size="19">执行结果返回了吗？</text>
+    </g>
+    <g fill="none" stroke="#397b68" stroke-width="3" marker-end="url(#arrow)">
+      <path d="M235 180H263"/><path d="M480 180H508"/><path d="M725 180H753"/>
+      <path d="M865 255V320H130V263"/>
+    </g>
+    <text x="295" y="356" font-size="23" font-weight="700">新反馈进入下一轮，重新估计与计算</text>
+    <text x="30" y="418" font-size="21">沿途检查：单位、坐标系、时间戳、数据质量与执行反馈。</text>
+    <text x="30" y="451" font-size="19">ROS 2 传消息；URDF 描述结构；MuJoCo 按模型仿真运动。</text>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="690" viewBox="0 0 1100 690" role="img" aria-labelledby="title desc">
+  <title id="title">朝北机器人的世界坐标与机身坐标</title>
+  <desc id="desc">世界坐标向东为正 x，向北为正 y。机器人在二、一并朝北，机身前方 x 指北、左方 y 指西。目标在三、三，对应机身前方二米、右方一米，即二、负一。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#367660"/></marker>
+    <marker id="bodyarrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9b7a36"/></marker></defs>
+  <rect width="1100" height="690" rx="22" fill="#fff"/>
+  <g font-family="'Microsoft YaHei','Noto Sans CJK SC',sans-serif" fill="#23463b">
+    <text x="42" y="58" font-size="32" font-weight="700">同一个目标：世界 (3, 3) m，机身 (2, −1) m</text>
+    <text x="42" y="105" font-size="24" fill="#5d7269">俯视平面 · z 向上 · 朝向从世界 x 起算，逆时针为正</text>
+    <g stroke="#e4ebe6" stroke-width="1"><path d="M 210 165 V 515 M 310 165 V 515 M 410 165 V 515 M 510 165 V 515"/><path d="M 110 215 H 570 M 110 315 H 570 M 110 415 H 570"/></g>
+    <g stroke="#367660" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M 110 515 H 590"/><path d="M 110 515 V 148"/></g>
+    <g font-size="24"><text x="122" y="164">世界 y：北</text><text x="430" y="555">世界 x：东</text><text x="75" y="552">0</text>
+      <text x="303" y="546">2</text><text x="403" y="546">3</text><text x="75" y="423">1</text><text x="75" y="224">3</text></g>
+    <path d="M 310 415 V 215 H 410" stroke="#7b9c89" stroke-width="3" fill="none" stroke-dasharray="8 7"/>
+    <g stroke="#9b7a36" stroke-width="4" marker-end="url(#bodyarrow)"><path d="M 310 415 V 297"/><path d="M 310 415 H 186"/></g>
+    <circle cx="310" cy="415" r="12" fill="#367660"/>
+    <circle cx="410" cy="215" r="12" fill="#9b7a36"/>
+    <g font-size="24" fill="#795d26"><text x="326" y="300">机身 x：前</text><text x="178" y="392">机身 y：左</text><text x="427" y="207">目标 (3, 3)</text></g>
+    <text x="289" y="474" font-size="24">机器人 (2, 1)</text>
+    <g font-size="25"><text x="644" y="200" font-weight="700">先减原点：找相对位置</text><text x="644" y="246">世界相对位移 (1, 2) m</text>
+      <text x="644" y="321" font-weight="700">再换方向：前后与左右</text><text x="644" y="367">朝北时：北是前，东是右</text><text x="644" y="413">机身前方 2 m、右方 1 m</text><text x="644" y="459">左方为正，所以右方写 −1</text></g>
+    <rect x="44" y="589" width="1012" height="67" rx="12" fill="#edf5eb"/>
+    <text x="67" y="631" font-size="24">点的位置：旋转 + 平移；同一个速度向量换轴：只旋转。</text>
+  </g>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 710" role="img" aria-labelledby="title desc">
+<title id="title">tf2：从传感器坐标换到机身坐标</title><desc id="desc">树中机身是父坐标系，传感器是子坐标系；传感器在机身前方零点二米且轴方向相同，传感器前方一米的点在机身前方一点二米。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#316a59"/></marker></defs>
+<rect width="1080" height="710" rx="20" fill="#fff"/>
+<g font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#21473c">
+<text x="36" y="58" font-size="34" font-weight="bold" text-anchor="start" fill="#21473c">树的连接方向，与点的换算方向要分清</text>
+<rect x="36" y="92" width="426" height="120" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="56" y="136" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">base_link · 父</text>
+<text x="56" y="178" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">机身坐标系</text>
+<rect x="618" y="92" width="426" height="120" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="638" y="136" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">sensor_link · 子</text>
+<text x="638" y="178" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">固定安装；三条轴方向相同</text>
+<path d="M474 150 L602 150" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="537" y="115" font-size="26" font-weight="normal" text-anchor="middle" fill="#21473c">树</text>
+<text x="36" y="263" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">子原点在父坐标系中：t = (0.2, 0, 0) 米</text>
+<path d="M120 356 L1012 356" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<circle cx="120" cy="356" r="8" fill="#316a59"/>
+<circle cx="260" cy="356" r="8" fill="#316a59"/>
+<circle cx="960" cy="356" r="8" fill="#316a59"/>
+<text x="120" y="325" font-size="26" font-weight="normal" text-anchor="middle" fill="#21473c">机身原点</text>
+<text x="268" y="406" font-size="26" font-weight="normal" text-anchor="middle" fill="#21473c">传感器原点</text>
+<text x="896" y="325" font-size="28" font-weight="bold" text-anchor="middle" fill="#21473c">同一个点</text>
+<text x="162" y="448" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">0.2 米</text>
+<text x="574" y="406" font-size="27" font-weight="normal" text-anchor="middle" fill="#21473c">传感器量到 1.0 米</text>
+<text x="896" y="448" font-size="27" font-weight="normal" text-anchor="middle" fill="#21473c">机身中为 1.2 米</text>
+<rect x="36" y="489" width="1008" height="116" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="56" y="533" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">查询：目标在前，来源在后</text>
+<text x="56" y="575" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">lookup_transform(&quot;base_link&quot;, &quot;sensor_link&quot;, sample_time)</text>
+<text x="36" y="655" font-size="27" font-weight="normal" text-anchor="start" fill="#21473c">本例无旋转：1.0 + 0.2 = 1.2 米；动态关系还要核采样时间。</text>
+</g></svg>

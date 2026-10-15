@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="680" viewBox="0 0 1080 680" role="img" aria-labelledby="title desc">
+<title id="title">点模型的路径与真实机器人通道宽度</title>
+<desc id="desc">左侧 5 乘 5 栅格，中间墙体只有第三行有缺口，8 步路线通过缺口。右侧说明 0.50 米宽通道放不下直径 0.60 米的圆形机器人。</desc>
+<rect width="1080" height="680" rx="22" fill="#fbfcf9"/>
+<g font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#233e34">
+<text x="42" y="57" font-size="28" font-weight="700">地图上有一条点路线，还要检查机体能否通过</text>
+<text x="42" y="92" font-size="18" fill="#5a7066">四邻域，不能斜着穿墙；每一步代价相同</text>
+<rect x="70" y="145" width="290" height="290" fill="#f4f7f0" stroke="#83a08b" stroke-width="2"/>
+<g stroke="#b7c9b9" stroke-width="1"><path d="M128 145 V435 M186 145 V435 M244 145 V435 M302 145 V435 M70 203 H360 M70 261 H360 M70 319 H360 M70 377 H360"/></g>
+<g fill="#425c51"><rect x="186" y="145" width="58" height="58"/><rect x="186" y="203" width="58" height="58"/><rect x="186" y="319" width="58" height="58"/><rect x="186" y="377" width="58" height="58"/></g>
+<polyline points="99,174 157,174 157,232 157,290 215,290 273,290 331,290 331,232 331,174" stroke="#4f8764" stroke-width="7" stroke-linejoin="round" fill="none"/>
+<circle cx="99" cy="174" r="18" fill="#dcead9" stroke="#3c6c5b" stroke-width="2"/><circle cx="331" cy="174" r="18" fill="#dcead9" stroke="#3c6c5b" stroke-width="2"/>
+<text x="99" y="181" text-anchor="middle" font-size="19" font-weight="700">S</text><text x="331" y="181" text-anchor="middle" font-size="19" font-weight="700">G</text>
+<text x="70" y="128" font-size="20" font-weight="700">点模型：8 步到目标</text>
+<text x="70" y="475" font-size="19">第 3 行缺口：(row, col) = (2, 2)</text>
+<text x="70" y="511" font-size="19">行号向下，只是数组索引约定。</text>
+<text x="580" y="128" font-size="20" font-weight="700">圆形机体：直径大于通道宽度</text>
+<rect x="565" y="200" width="95" height="230" fill="#425c51"/><rect x="810" y="200" width="95" height="230" fill="#425c51"/>
+<circle cx="735" cy="302" r="90" fill="#dcead9" fill-opacity="0.9" stroke="#4f8764" stroke-width="3"/>
+<path d="M645 302 H825" stroke="#4f8764" stroke-width="3"/><text x="735" y="290" text-anchor="middle" font-size="19" font-weight="700">直径 0.60 米</text>
+<path d="M660 181 H810 M660 174 V189 M810 174 V189" stroke="#3c6c5b" stroke-width="2"/><text x="735" y="164" text-anchor="middle" font-size="18">宽 0.50 米</text>
+<text x="580" y="475" font-size="19">中心能穿过，机体却会碰到边界。</text>
+<text x="580" y="511" font-size="19">圆形近似之外，还需考虑朝向与余量。</text>
+<rect x="50" y="563" width="980" height="72" rx="14" fill="#e8f1e9"/>
+<text x="540" y="591" text-anchor="middle" font-size="20" font-weight="700">规划输出 ≠ 已经到达</text>
+<text x="540" y="619" text-anchor="middle" font-size="18">尺寸检查 → 轨迹与速度安排 → 跟踪反馈 → 更新附近障碍 → 判断任务结果</text>
+</g></svg>

@@ -1,130 +1,147 @@
 ---
- title: 首页
- hide:
-   - navigation
-   - toc
+title: 首页
+hide:
+  - navigation
+  - toc
 ---
 
-<div class="research-hero" markdown="1">
+<div class="research-hero home-hero" markdown="1">
+<div class="hero-copy" markdown="1">
 
 <p class="hero-kicker">VIKTOR / RESEARCH NOTEBOOK</p>
 
 # Viktor’s Research Notes
 
-这里记录我的科研与技术学习笔记。目前的研究方向是 **放牧机器人**，同时整理强化学习、机器人技术、计算机视觉与编程方面的学习内容。
+科研记录与技术学习笔记。
+
+目前的研究方向是 **放牧机器人**。从机器人、强化学习、现代 C++ 与视觉的基础问题开始，配合图解、算例和注释代码逐步学习。
 
 <div class="hero-actions" markdown="1">
 
-[放牧机器人研究 →](herding/index.md){ .hero-btn .hero-btn-primary }
-[浏览学习笔记](#learning-notes){ .hero-btn .hero-btn-outline }
+[选择学习路线 ↓](#learning-notes){ .hero-btn .hero-btn-primary }
+[放牧机器人研究 →](herding/index.md){ .hero-btn .hero-btn-outline }
 
 </div>
 
-<p class="hero-bottom">科研记录 · 学习笔记 · 论文阅读 · 开源资料</p>
+<p class="hero-bottom">先理解问题，再推演数字，最后对照代码。</p>
 
+</div>
+<div class="hero-course" markdown="1">
+
+<p class="hero-course-label">从零开始 · 推荐路线</p>
+<p class="hero-course-title">机器人技术入门</p>
+<p class="hero-course-description">从“我在哪里”，到读懂一个反馈闭环。</p>
+
+<ol class="hero-course-steps">
+  <li><span>01—04</span>认识机器人、观测与坐标</li>
+  <li><span>05—06</span>理解运动与反馈控制</li>
+  <li><span>07—10</span>读懂通信、结构与仿真</li>
+  <li><span>11—14</span>连接定位、规划与任务</li>
+</ol>
+
+[从第 01 课开始 →](robotics/start.md){ .hero-course-link }
+
+</div>
+</div>
+
+<div class="learning-metrics" aria-label="主要教程内容">
+  <div><strong>14<span>章</span></strong><p>机器人基础与实践</p></div>
+  <div><strong>12<span>种</span></strong><p>强化学习算法</p></div>
+  <div><strong>15<span>章</span></strong><p>C++ 与现代 C++</p></div>
 </div>
 
 <div class="section-heading" markdown="1">
 
-## 当前研究方向
+## 选一条路线，先完成一个小目标 {#learning-notes}
 
-放牧机器人：研究机器人如何引导羊群到达目标区域。
-
-</div>
-
-<div class="research-feature" markdown="1">
-
-<span class="eyebrow">放牧机器人</span>
-
-### 放牧机器人研究
-
-围绕羊群行为建模、仿真环境、放牧策略与机器人控制，整理研究思路、相关方法和实验记录。
-
-[查看研究问题与实验路线 →](herding/index.md)
+不必先学会所有工具。选一个你现在关心的问题，从第一步读起。
 
 </div>
 
-## 学习笔记 {#learning-notes}
+<div class="grid cards start-paths" markdown="1">
 
-第一次接触这些内容，先选一个目标，沿对应路线学习。每篇先读“要解决什么问题”，再跟图和小例子走完一遍；能说清输入、步骤、结果之后，再看完整程序和扩展内容。
+-   <span class="card-number">01 / 机器人技术</span>
 
-| 想先学什么 | 从哪里开始 | 第一遍的小目标 |
-| --- | --- | --- |
-| 从零学习 C++ | [保存并编译第一个程序](programming/cpp/setup.md) → [变量与循环](programming/cpp/basics.md) → [函数与引用](programming/cpp/functions.md) | 能预测三个距离经过判断后，计数为什么是 1 |
-| 看懂强化学习代码 | [Python 阅读入门](programming/python-reading.md) → [强化学习第一课](rl/start.md) → [TD 的代码](rl/code/td.md) | 找出环境给的奖励、算法的旧预测、这次更新的目标 |
-| 理解深度算法怎样学习 | [公共符号](rl/math/index.md) → [网络与梯度](rl/network-basics.md) → [DQN](rl/intuition/dqn.md) | 用纸笔计算一次预测、损失和参数更新 |
-| 了解放牧机器人任务 | [放牧研究概览](herding/index.md) → [坐标与控制](robotics/index.md) → [视觉输入](vision/index.md) | 画出机器人、羊群和目标区，说明单位、方向和成功条件 |
+    **机器人怎样知道自己在哪儿？**
 
-Python 和 C++ 是两条编程路线。阅读本站的 RL 代码从 Python 开始即可；C++ 路线则从基础语法逐步走到现代 C++ 与多文件项目。强化学习每种算法都有直觉、公式和代码三部分，可以围绕同一种算法来回对照。
+    从位置、时间与传感器出发，理解坐标变换，再把运动、控制和软件连接起来。
 
-### 每读完一小段，先检查这三件事
+    <span class="path-goal">第一个小目标：分清目标、观测和指令。</span>
 
-1. **能复述**：用自己的话说清它在解决哪个问题，例如“只数距离超过 3 米的羊”。
-2. **能推演**：先遮住结果，按步骤写下变量或公式中间值，再对照预期输出。
-3. **能解释一个改动**：只改一个条件，例如把“超过”换成“大于等于”，说明结果为什么变化。
+    [从机器人第一课开始 →](robotics/start.md)
 
-练习中的“完整文件”可以按标明的文件名保存；“修改片段”要先看放在哪个位置。先做完正文的最小例子，再尝试扩展，不必一次把所有代码框拼在一起。
+-   <span class="card-number">02 / 强化学习</span>
 
-<div class="grid cards" markdown="1">
+    **算法怎样根据结果调整判断？**
 
--   
+    先用走廊里的几步经历认识奖励与回报，再对照算法直觉、公式和 Python 代码。
 
-    **强化学习**
+    <span class="path-goal">第一个小目标：手算一次价值更新。</span>
 
-    算法直觉、公式讲解与 Python 实践，涵盖基础价值方法、策略梯度和连续控制。
+    [从强化学习第一课开始 →](rl/start.md)
 
-    [进入强化学习 →](rl/index.md)
+-   <span class="card-number">03 / C++ 与现代 C++</span>
 
--   
+    **代码写在哪里，怎样得到结果？**
 
-    **机器人技术**
+    从保存和编译第一个程序开始，逐步理解函数、容器、资源管理和多文件项目。
 
-    串联坐标系、仿真、导航和运动控制，建立从决策到执行的链路。
+    <span class="path-goal">第一个小目标：显示自己写的一行文字。</span>
 
-    [查看学习路线 →](robotics/index.md)
-
--   
-
-    **计算机视觉**
-
-    OpenCV、目标检测、图像分割、目标跟踪与相机标定。
-
-    [查看感知路线 →](vision/index.md)
-
--   
-
-    **智能放牧**
-
-    明确任务边界、设计仿真环境，并用统一指标比较放牧策略。
-
-    [进入研究专题 →](herding/index.md)
-
--   
-
-    **编程技术**
-
-    从 Python 代码阅读与第一个 C++ 程序开始，逐步学习函数、资源管理、现代 C++ 和 CMake。
-
-    [查看实践清单 →](programming/index.md)
-
--   
-
-    **论文阅读**
-
-    用问题、方法、证据和局限整理文献，让阅读服务于实验设计。
-
-    [使用阅读框架 →](papers/index.md)
+    [从第一个 C++ 程序开始 →](programming/cpp/setup.md)
 
 </div>
 
-<div class="resource-callout" markdown="1">
+## 浏览全部专题
 
-### 开源学习资料
+<div class="grid cards topic-cards" markdown="1">
 
-收集机器人、计算机视觉等领域的教程与开源项目，作为日常学习的参考。
+-   **机器人技术**
 
-[浏览开源学习资料 →](opensource/index.md)
+    位置、传感器、坐标、控制、ROS 2、仿真与导航。
+
+    [查看 14 章学习路线 →](robotics/index.md)
+
+-   **强化学习**
+
+    价值方法、策略梯度与连续控制，分直觉、公式、代码阅读。
+
+    [进入算法目录 →](rl/index.md)
+
+-   **编程技术**
+
+    Python 代码阅读、C++17/20/23、CMake 与数据处理。
+
+    [选择编程路线 →](programming/index.md)
+
+-   **计算机视觉**
+
+    从像素与检测框，到标定、跟踪和位置估计的学习概览。
+
+    [查看视觉学习概览 →](vision/index.md)
+
+-   **智能放牧**
+
+    梳理研究问题、羊群状态、机器人动作和实验指标。
+
+    [进入放牧研究专题 →](herding/index.md)
+
+-   **论文阅读**
+
+    用问题、方法、证据和局限整理阅读记录。
+
+    [查看论文阅读方法 →](papers/index.md)
 
 </div>
 
-笔记持续整理与更新。
+<div class="learning-method" markdown="1">
+
+### 一篇教程，可以分三次读
+
+**先说清问题**：输入是什么，想得到什么结果。**再推一次数字**：遮住答案，写下中间步骤。**最后改一个条件**：说明输出为什么改变。
+
+遇到代码先看它是“完整文件”还是“局部片段”，再按文字说明对照。Python 阅读入门可以随时查阅，阅读强化学习示例不需要创建 RL 环境。
+
+[查阅 Python 阅读入门 →](programming/python-reading.md) · [浏览开源学习资料 →](opensource/index.md)
+
+</div>

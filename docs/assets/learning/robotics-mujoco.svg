@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 690" role="img" aria-labelledby="title desc">
+<title id="title">MuJoCo：模型、状态和一步仿真</title><desc id="desc">MJCF 编译成 MjModel，MjData 保存当前角度和速度以及输入，每次先写 motor 力矩输入再调用 mj step，时间向前推进零点零一秒。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#316a59"/></marker></defs>
+<rect width="1080" height="690" rx="20" fill="#fff"/>
+<g font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#21473c">
+<text x="36" y="59" font-size="34" font-weight="bold" text-anchor="start" fill="#21473c">先读配置，再看状态怎样随时间改变</text>
+<rect x="36" y="109" width="292" height="178" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="56" y="153" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">MJCF 文本</text>
+<text x="56" y="195" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">形状和连接关系</text>
+<text x="56" y="233" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">质量与执行器</text>
+<text x="56" y="271" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">timestep = 0.01</text>
+<rect x="392" y="109" width="292" height="178" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="412" y="153" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">MjModel</text>
+<text x="412" y="195" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">编译后的模型</text>
+<text x="412" y="233" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">结构与仿真设置</text>
+<text x="412" y="271" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">nq = nv = nu = 1</text>
+<rect x="748" y="109" width="296" height="178" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="768" y="153" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">MjData</text>
+<text x="768" y="195" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">这一份当前状态</text>
+<text x="768" y="233" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">qpos：角度</text>
+<text x="768" y="271" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">qvel：角速度</text>
+<path d="M338 196 L382 196" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M694 196 L738 196" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="36" y="350" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">每一步：先指定输入，再计算物理与推进时间</text>
+<rect x="36" y="387" width="292" height="136" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="56" y="431" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">data.ctrl[0]</text>
+<text x="56" y="473" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">本例是力矩输入</text>
+<text x="56" y="511" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">由 motor 定义</text>
+<rect x="392" y="387" width="292" height="136" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="412" y="431" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">mj_step</text>
+<text x="412" y="473" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">推进 0.01 秒</text>
+<text x="412" y="511" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">计算下一步状态</text>
+<rect x="748" y="387" width="296" height="136" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="768" y="431" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">读取状态</text>
+<text x="768" y="473" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">角度 / 角速度</text>
+<text x="768" y="511" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">data.time</text>
+<path d="M338 455 L382 455" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M694 455 L738 455" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="36" y="586" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">0.1 N·m 输入 ≠ 0.1 rad/s 目标速度</text>
+<text x="36" y="643" font-size="27" font-weight="normal" text-anchor="start" fill="#21473c">零重力 + 零初始速度 + 零力矩：时间前进，角度仍可不变。</text>
+</g></svg>

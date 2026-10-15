@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+  <title id="title">传感器数据先检查，再统计</title>
+  <desc id="desc">虚构测距数据包括三个二米附近有效值、一个八米超量程值以及缺失和非有限数。逐条检查有效值、量程和时间后，三个保留值平均数与中位数都为二米；新鲜不等于准确。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#367660"/></marker></defs>
+  <rect width="1100" height="680" rx="22" fill="#fff"/>
+  <g font-family="'Microsoft YaHei','Noto Sans CJK SC',sans-serif" fill="#23463b">
+    <text x="42" y="58" font-size="32" font-weight="700">传感器数据：先检查能不能用，再问算出什么</text>
+    <text x="42" y="104" font-size="24" fill="#5d7269">教学量程 0.2～5.0 m · 最长年龄 0.2 s · 同一静止目标</text>
+    <g fill="#f5f8f5" stroke="#cedcd5" stroke-width="2"><rect x="44" y="146" width="400" height="225" rx="14"/>
+      <rect x="490" y="146" width="566" height="225" rx="14"/></g>
+    <text x="67" y="189" font-size="28" font-weight="700">原始记录</text>
+    <g font-size="26"><text x="67" y="233">2.00、2.02、1.98 m</text><text x="67" y="274">8.00 m；旧数据</text><text x="67" y="315">None；NaN；未来时间戳</text></g>
+    <path d="M 448 261 H 477" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="514" y="189" font-size="28" font-weight="700">逐条检查并保留原因</text>
+    <g font-size="26"><text x="514" y="233">① 有没有值？数值是否有限？</text><text x="514" y="274">② 是否在本例量程内？</text><text x="514" y="315">③ 同一时钟下，数据是否新鲜？</text></g>
+    <path d="M 770 378 V 419" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="44" y="433" width="1012" height="130" rx="14" fill="#e4f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="68" y="475" font-size="28" font-weight="700">保留 3 个有效值：2.00、2.02、1.98 m</text>
+    <text x="68" y="526" font-size="27">平均数 = 2.000 m；中位数 = 2.000 m</text>
+    <text x="44" y="620" font-size="24" fill="#5d7269">没有有效数据 ≠ 距离为 0；通过检查 ≠ 已证明准确。</text>
+  </g>
+</svg>

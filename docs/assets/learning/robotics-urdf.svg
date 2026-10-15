@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 730" role="img" aria-labelledby="title desc">
+<title id="title">URDF：底座与转臂</title><desc id="desc">零关节角的俯视图中，杆绕 z 轴转动，杆长零点四米，质心在杆坐标系 x 等于零点二米处；树由 base link 通过 revolute 关节连接 arm link。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#316a59"/></marker></defs>
+<rect width="1080" height="730" rx="20" fill="#fff"/>
+<g font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#21473c">
+<text x="36" y="57" font-size="34" font-weight="bold" text-anchor="start" fill="#21473c">两个零件，一个有角度限位的关节</text>
+<text x="36" y="99" font-size="27" font-weight="normal" text-anchor="start" fill="#21473c">俯视图：杆在底座上方，关节角 q = 0</text>
+<rect x="90" y="152" width="180" height="180" rx="7" fill="#d8e9df" stroke="#81ae96" stroke-width="2"/>
+<rect x="180" y="224" width="360" height="36" rx="5" fill="#316a59"/>
+<circle cx="180" cy="242" r="11" fill="#fff" stroke="#21473c" stroke-width="3"/>
+<circle cx="360" cy="242" r="9" fill="#def0ab" stroke="#fff" stroke-width="2"/>
+<text x="180" y="375" font-size="27" font-weight="normal" text-anchor="middle" fill="#21473c">转轴 / 杆原点</text>
+<text x="360" y="200" font-size="27" font-weight="normal" text-anchor="middle" fill="#21473c">杆质心</text>
+<text x="76" y="134" font-size="27" font-weight="normal" text-anchor="start" fill="#21473c">底座</text>
+<path d="M565 283 L625 283" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="630" y="290" font-size="28" font-weight="normal" text-anchor="start" fill="#21473c">x</text>
+<path d="M579 230 L579 159" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="592" y="165" font-size="28" font-weight="normal" text-anchor="start" fill="#21473c">y</text>
+<path d="M180 409 V429 H360 V409" fill="none" stroke="#316a59" stroke-width="2"/>
+<text x="270" y="471" font-size="27" font-weight="normal" text-anchor="middle" fill="#21473c">质心偏移 0.2 米</text>
+<rect x="699" y="120" width="345" height="103" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="719" y="164" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">base_link · 底座</text>
+<path d="M871 231 L871 301" fill="none" stroke="#316a59" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="859" y="273" font-size="27" font-weight="normal" text-anchor="end" fill="#21473c">revolute</text>
+<rect x="699" y="310" width="345" height="103" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="719" y="354" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">arm_link · 转臂</text>
+<text x="699" y="461" font-size="28" font-weight="normal" text-anchor="start" fill="#21473c">绕 z 轴，范围 ±π/2</text>
+<rect x="36" y="515" width="312" height="137" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="56" y="559" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">visual</text>
+<text x="56" y="601" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">显示的样子</text>
+<text x="56" y="639" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">完整杆长 0.4 米</text>
+<rect x="384" y="515" width="312" height="137" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="404" y="559" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">collision</text>
+<text x="404" y="601" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">碰撞使用的形状</text>
+<text x="404" y="639" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">本例与外观一致</text>
+<rect x="732" y="515" width="312" height="137" rx="15" fill="#f1f7f3" stroke="#a9c8b9" stroke-width="2"/>
+<text x="752" y="559" font-size="30" font-weight="bold" text-anchor="start" fill="#21473c">inertial</text>
+<text x="752" y="601" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">质量、质心、惯量</text>
+<text x="752" y="639" font-size="26" font-weight="normal" text-anchor="start" fill="#21473c">本例为均匀杆</text>
+<text x="36" y="698" font-size="27" font-weight="normal" text-anchor="start" fill="#21473c">杆质心相对杆原点：(+0.2, 0, 0)；关节高于底座中心 0.1 米。</text>
+</g></svg>

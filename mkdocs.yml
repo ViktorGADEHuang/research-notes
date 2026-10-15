@@ -98,7 +98,21 @@ nav:
       - 放牧研究概览: herding/index.md
 
   - 机器人技术:
-      - 机器人学习概览: robotics/index.md
+      - 学习路线与阅读方法: robotics/index.md
+      - 01 · 机器人怎样工作: robotics/start.md
+      - 02 · 位置、速度与时间: robotics/units.md
+      - 03 · 传感器与数据质量: robotics/sensors.md
+      - 04 · 坐标系与二维变换: robotics/frames.md
+      - 05 · 差速小车运动学: robotics/kinematics.md
+      - 06 · 反馈控制与 PID: robotics/control.md
+      - 07 · ROS 2 节点与话题: robotics/ros2.md
+      - 08 · tf2 与带时间的变换: robotics/tf2.md
+      - 09 · URDF 机器人结构: robotics/urdf.md
+      - 10 · MuJoCo 仿真基础: robotics/mujoco.md
+      - 11 · 定位与里程计: robotics/localization.md
+      - 12 · 路径规划与避障: robotics/planning.md
+      - 13 · 四足机器人与放牧任务: robotics/quadrupeds.md
+      - 14 · 最小闭环小项目: robotics/project.md
 
   - 计算机视觉:
       - 视觉学习概览: vision/index.md

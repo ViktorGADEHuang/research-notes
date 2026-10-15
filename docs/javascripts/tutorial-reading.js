@@ -5,6 +5,7 @@
     if (!article || article.querySelector(".reading-toolbar")) return;
     const figures = article.querySelectorAll("img.learning-figure, img.rl-figure");
     if (!figures.length) return;
+    const heading = article.querySelector("h1");
 
     const toolbar = document.createElement("div");
     toolbar.className = "reading-toolbar";
@@ -28,18 +29,69 @@
     if (article.querySelector(".highlight pre code")) {
       const wrap = document.createElement("button");
       wrap.type = "button";
-      wrap.textContent = "代码换行";
-      wrap.title = "长行在屏幕内换行显示，复制内容保持原样";
-      wrap.setAttribute("aria-pressed", "false");
+      wrap.setAttribute("data-reading-wrap", "");
+      // 手机上优先读完整注释；只改变显示方式，复制的代码不变。
+      const wrapByDefault = window.matchMedia("(max-width: 600px)").matches;
+      document.body.classList.toggle("code-wrap", wrapByDefault);
+      function describeWrap(active) {
+        wrap.textContent = active ? "关闭换行" : "代码换行";
+        wrap.title = active ? "恢复代码原始行，长行可横向滚动" : "长行按屏幕宽度换行，复制内容保持原样";
+        wrap.setAttribute("aria-pressed", String(active));
+      }
+      describeWrap(wrapByDefault);
       wrap.addEventListener("click", () => {
         const active = document.body.classList.toggle("code-wrap");
-        wrap.setAttribute("aria-pressed", String(active));
-        wrap.textContent = active ? "保留代码行" : "代码换行";
+        describeWrap(active);
       });
       actions.append(wrap);
     }
     toolbar.append(hint, actions);
-    article.querySelector("h1")?.after(toolbar);
+    heading?.after(toolbar);
+
+    const roboticsChapters = ["start", "units", "sensors", "frames", "kinematics",
+      "control", "ros2", "tf2", "urdf", "mujoco", "localization", "planning",
+      "quadrupeds", "project"];
+    const path = window.location.pathname.split("/").filter(Boolean);
+    const section = path.lastIndexOf("robotics");
+    const chapter = section < 0 ? "" : (path[section + 1] || "").replace(/\.html$/, "");
+    const chapterIndex = roboticsChapters.indexOf(chapter);
+    if (chapterIndex >= 0) {
+      article.classList.add("lesson-page");
+      const meta = document.createElement("nav");
+      meta.className = "lesson-meta";
+      meta.setAttribute("aria-label", "课程位置");
+      const course = document.createElement("a");
+      course.href = new URL("/" + path.slice(0, section + 1).join("/") + "/", window.location.href).href;
+      course.textContent = "机器人技术";
+      const position = document.createElement("span");
+      position.textContent = `第 ${String(chapterIndex + 1).padStart(2, "0")} / ${roboticsChapters.length} 章`;
+      meta.append(course, position);
+      heading?.after(meta);
+      meta.after(toolbar);
+    }
+
+    const sections = [...article.querySelectorAll("h2[id]")];
+    if (sections.length >= 3) {
+      const outline = document.createElement("details");
+      outline.className = "lesson-outline";
+      const summary = document.createElement("summary");
+      summary.textContent = "本页目录";
+      const nav = document.createElement("nav");
+      nav.setAttribute("aria-label", "本页章节");
+      sections.forEach(sectionHeading => {
+        const link = document.createElement("a");
+        link.href = "#" + encodeURIComponent(sectionHeading.id);
+        link.textContent = sectionHeading.textContent;
+        link.addEventListener("click", () => {
+          outline.open = false;
+          sectionHeading.tabIndex = -1;
+          requestAnimationFrame(() => sectionHeading.focus({ preventScroll: true }));
+        });
+        nav.append(link);
+      });
+      outline.append(summary, nav);
+      toolbar.after(outline);
+    }
 
     let dialog = document.querySelector(".figure-dialog");
     if (!dialog) {

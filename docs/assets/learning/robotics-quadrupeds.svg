@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="690" viewBox="0 0 1080 690" role="img" aria-labelledby="title desc">
+<title id="title">四足放牧任务：从引导点到高层与底层控制</title>
+<desc id="desc">放牧任务计算候选引导点，导航和高层控制计算速度，速度和变化限制之后由底层运动控制执行。状态与观测返回任务和控制。下方展示中心 2,1、目标 5,1、反方向 0.8 米的候选点 1.2,1。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10" fill="#3c6c5b"/></marker></defs>
+<rect width="1080" height="690" rx="22" fill="#fbfcf9"/>
+<g font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#233e34">
+<text x="42" y="57" font-size="28" font-weight="700">去哪儿、以多大速度、怎样迈腿：分别回答</text>
+<text x="42" y="92" font-size="18" fill="#5a7066">教学几何与高层指令计算；不连接机器人，不保证羊群响应</text>
+<g fill="#e8f1e9" stroke="#83a08b" stroke-width="2">
+<rect x="40" y="155" width="215" height="132" rx="15"/><rect x="305" y="155" width="215" height="132" rx="15"/>
+<rect x="570" y="155" width="215" height="132" rx="15"/><rect x="835" y="155" width="205" height="132" rx="15"/>
+</g>
+<g text-anchor="middle">
+<text x="147" y="191" font-size="21" font-weight="700">放牧任务</text><text x="147" y="229" font-size="18">羊群状态 → 引导点</text><text x="147" y="266" font-size="17">个体与目标也需检查</text>
+<text x="412" y="191" font-size="21" font-weight="700">导航 / 高层控制</text><text x="412" y="229" font-size="18">路线 → 机体速度</text><text x="412" y="266" font-size="17">坐标与时间要对齐</text>
+<text x="677" y="191" font-size="21" font-weight="700">动作约束</text><text x="677" y="229" font-size="18">合速度 / 变化限值</text><text x="677" y="266" font-size="17">转向还需单独处理</text>
+<text x="937" y="191" font-size="21" font-weight="700">底层运动控制</text><text x="937" y="229" font-size="18">姿态 / 接触 / 关节</text><text x="937" y="266" font-size="17">产生真实运动</text>
+</g>
+<g fill="none" stroke="#3c6c5b" stroke-width="3" marker-end="url(#arrow)"><path d="M255 220 H295"/><path d="M520 220 H560"/><path d="M785 220 H825"/><path d="M937 287 V347 H147 V297"/></g>
+<rect x="276" y="326" width="529" height="44" rx="12" fill="#fbfcf9"/><text x="540" y="354" text-anchor="middle" font-size="20" font-weight="700">新的状态与观测返回：命令和测量分别记录</text>
+<rect x="40" y="408" width="1000" height="225" rx="16" fill="#f0f3ec"/>
+<text x="65" y="446" font-size="21" font-weight="700">一个候选点：在目标反方向退开 0.8 米</text>
+<path d="M325 515 H855" stroke="#83a08b" stroke-width="2"/>
+<circle cx="330" cy="515" r="10" fill="#4f8764"/><circle cx="430" cy="515" r="12" fill="#233e34"/><circle cx="805" cy="515" r="12" fill="#4f8764"/>
+<path d="M450 491 H785" stroke="#3c6c5b" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="620" y="479" text-anchor="middle" font-size="18">羊群希望前往的方向</text>
+<text x="240" y="552" font-size="19">候选点 (1.2, 1)</text><text x="406" y="584" font-size="19">中心 (2, 1)</text><text x="742" y="552" font-size="19">目标 (5, 1)</text>
+<text x="65" y="612" font-size="18">候选点需要另外检查：路线、障碍、羊群分散、执行约束与任务结果。</text>
+</g></svg>

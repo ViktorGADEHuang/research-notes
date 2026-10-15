@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+  <title id="title">机器人从目标到执行，再读取反馈</title>
+  <desc id="desc">目标经规划与控制产生执行请求，执行造成实际运动；传感器获取观测，定位估计状态，再送回控制模块。请求、估计与实际运动需要区分。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#367660"/></marker></defs>
+  <rect width="1200" height="660" rx="22" fill="#fff"/>
+  <g font-family="'Microsoft YaHei','Noto Sans CJK SC',sans-serif" fill="#23463b">
+    <text x="44" y="58" font-size="32" font-weight="700">机器人怎样工作：请求发出去，还要看结果</text>
+    <text x="44" y="103" font-size="24" fill="#5d7269">一维教学例子 · 目标 2 米 · 不是四足机器人完整模型</text>
+    <g stroke="#367660" stroke-width="3" marker-end="url(#arrow)" fill="none">
+      <path d="M 270 224 H 314"/><path d="M 550 224 H 594"/><path d="M 830 224 H 874"/>
+      <path d="M 1000 294 V 350"/>
+      <path d="M 1012 483 V 509 H 160 V 489"/><path d="M 270 407 H 314"/>
+      <path d="M 440 350 V 323 H 720 V 300"/>
+    </g>
+    <g stroke="#cedcd5" stroke-width="2">
+      <rect x="50" y="160" width="220" height="134" rx="14" fill="#edf5eb"/>
+      <rect x="330" y="160" width="220" height="134" rx="14" fill="#f5f8f5"/>
+      <rect x="610" y="160" width="220" height="134" rx="14" fill="#e4f2eb"/>
+      <rect x="890" y="160" width="245" height="134" rx="14" fill="#f5f8f5"/>
+      <rect x="890" y="366" width="245" height="115" rx="14" fill="#e4f2eb"/>
+      <rect x="50" y="366" width="220" height="115" rx="14" fill="#f5f8f5"/>
+      <rect x="330" y="366" width="220" height="115" rx="14" fill="#e4f2eb"/>
+    </g>
+    <g font-size="28" font-weight="700" text-anchor="middle">
+      <text x="160" y="206">目标</text><text x="440" y="206">规划</text><text x="720" y="206">控制</text><text x="1012" y="206">执行</text>
+      <text x="1012" y="408">实际运动</text><text x="160" y="408">传感器</text><text x="440" y="408">定位 / 估计</text>
+    </g>
+    <g font-size="24" text-anchor="middle">
+      <text x="160" y="252">希望到 2 米</text><text x="440" y="252">安排怎样走</text><text x="720" y="252">按差距算请求</text><text x="1012" y="252">把请求变成动作</text>
+      <text x="1012" y="450">可能受打滑等影响</text><text x="160" y="450">再观察当前位置</text><text x="440" y="450">当前估计 1.5 米</text>
+      <text x="711" y="411" fill="#5d7269">运动产生新的观测</text>
+    </g>
+    <rect x="44" y="531" width="1112" height="91" rx="14" fill="#f1f5ef"/>
+    <text x="68" y="568" font-size="25" font-weight="700">把反馈接回来：实际位置 → 差距 → 新的速度请求</text>
+    <text x="68" y="604" font-size="24">目标是愿望，指令是请求；实际结果需要重新观测确认。</text>
+  </g>
+</svg>

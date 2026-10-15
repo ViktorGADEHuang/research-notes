@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="630" viewBox="0 0 1100 630" role="img" aria-labelledby="title desc">
+  <title id="title">采集时间、使用时间与平均速度</title>
+  <desc id="desc">第一次在十秒采集位置一米，第二次在十点二秒采集一点一米，平均速度为零点五米每秒。十点三五秒使用第二次观测，数据年龄为零点一五秒。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#367660"/></marker></defs>
+  <rect width="1100" height="630" rx="22" fill="#fff"/>
+  <g font-family="'Microsoft YaHei','Noto Sans CJK SC',sans-serif" fill="#23463b">
+    <text x="42" y="58" font-size="32" font-weight="700">时间戳：什么时候测到，比什么时候收到更关键</text>
+    <text x="42" y="105" font-size="24" fill="#5d7269">同一个世界 x 轴 · 所有时刻来自同一个实验时钟</text>
+    <path d="M 105 256 H 1000" stroke="#367660" stroke-width="4" marker-end="url(#arrow)"/>
+    <g stroke="#367660" stroke-width="3"><path d="M 190 242 V 272"/><path d="M 610 242 V 272"/><path d="M 925 242 V 272"/></g>
+    <g text-anchor="middle">
+      <g font-size="27" font-weight="700"><text x="190" y="173">第 1 次采集</text><text x="610" y="173">第 2 次采集</text><text x="925" y="173">使用第 2 次观测</text></g>
+      <g font-size="25"><text x="190" y="213">位置 1.00 m</text><text x="610" y="213">位置 1.10 m</text><text x="925" y="213">检查数据年龄</text>
+        <text x="190" y="311">10.00 s</text><text x="610" y="311">10.20 s</text><text x="925" y="311">10.35 s</text></g>
+    </g>
+    <g stroke="#cedcd5" stroke-width="2" fill="#edf5eb">
+      <rect x="44" y="371" width="485" height="145" rx="14"/><rect x="559" y="371" width="497" height="145" rx="14"/>
+    </g>
+    <g font-size="26" font-weight="700"><text x="66" y="410">平均速度：位移 ÷ 采集间隔</text><text x="582" y="410">数据年龄：使用时刻 − 采集时刻</text></g>
+    <g font-size="25"><text x="66" y="455">(1.10 − 1.00) ÷ (10.20 − 10.00)</text><text x="66" y="491">= 0.50 m/s</text>
+      <text x="582" y="455">10.35 − 10.20 = 0.15 s</text><text x="582" y="491">刚收到，也可能已经是旧观测。</text></g>
+    <text x="44" y="579" font-size="24" fill="#5d7269">速度用实际采集间隔计算；单位、时钟来源和方向都要明确。</text>
+  </g>
+</svg>
