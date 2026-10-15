@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+<title id="title">用三个独立算例理解神经网络的基础运算</title>
+<desc id="desc">加权求和与ReLU得到0.7；二乘二窗口和权重对应相乘后求和得到负3；独立指定的分类分数2和1经softmax得到0.7311和0.2689。三个示范不是连接起来的识别网络，训练与推理职责不同。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="720" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+<text x="44" y="60" font-size="30" font-weight="700">从像素数字到分类分数，先拆开计算</text>
+<text x="44" y="105" font-size="23" fill="#5d7269">以下三栏是独立教学算例，参数人为指定，不是一条完整识别网络。</text>
+
+<rect x="44" y="150" width="320" height="336" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="193" font-size="27" font-weight="700">① 加权与激活</text>
+<text x="66" y="241" font-size="23">输入：[0.2, 0.8]</text>
+<text x="66" y="279" font-size="23">权重：[−0.5, 1.0]</text>
+<text x="66" y="317" font-size="23">偏置：0</text>
+<text x="66" y="362" font-size="23">−0.5×0.2 + 1×0.8</text>
+<path d="M204 376 V405" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="66" y="423" width="276" height="44" rx="10" fill="#dcefe3"/>
+<text x="204" y="453" text-anchor="middle" font-size="24" font-weight="700">ReLU(0.7) = 0.7</text>
+
+<rect x="390" y="150" width="320" height="336" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="412" y="193" font-size="27" font-weight="700">② 一个局部窗口</text>
+<text x="412" y="235" font-size="23">图像小块</text>
+<text x="577" y="235" font-size="23">小权重表</text>
+<g fill="#fff" stroke="#b7cbbb" stroke-width="2">
+<rect x="414" y="251" width="112" height="92" rx="7"/>
+<rect x="575" y="251" width="112" height="92" rx="7"/>
+<path d="M470 251 V343 M414 297 H526 M631 251 V343 M575 297 H687"/>
+</g>
+<g font-size="24" text-anchor="middle">
+<text x="442" y="282">1</text><text x="498" y="282">2</text>
+<text x="442" y="328">3</text><text x="498" y="328">4</text>
+<text x="603" y="282">1</text><text x="659" y="282">0</text>
+<text x="603" y="328">0</text><text x="659" y="328">−1</text>
+</g>
+<text x="412" y="383" font-size="23">对应相乘，再全部相加</text>
+<rect x="412" y="423" width="276" height="44" rx="10" fill="#dcefe3"/>
+<text x="550" y="453" text-anchor="middle" font-size="24" font-weight="700">1 + 0 + 0 − 4 = −3</text>
+
+<rect x="736" y="150" width="320" height="336" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="758" y="193" font-size="27" font-weight="700">③ 分类输出</text>
+<text x="758" y="241" font-size="23">另行给定 logits：[2, 1]</text>
+<path d="M896 260 V291" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="896" y="330" text-anchor="middle" font-size="25">softmax</text>
+<text x="758" y="374" font-size="23">类别顺序：[羊, 草地]</text>
+<rect x="758" y="398" width="276" height="69" rx="10" fill="#dcefe3"/>
+<text x="896" y="427" text-anchor="middle" font-size="24" font-weight="700">[0.7311, 0.2689]</text>
+<text x="896" y="456" text-anchor="middle" font-size="23">本例取最大项：羊</text>
+
+<rect x="44" y="518" width="490" height="121" rx="14" fill="#e6f2eb" stroke="#cedcd5"/>
+<text x="66" y="558" font-size="25" font-weight="700">推理：参数固定，计算输出</text>
+<text x="66" y="602" font-size="23">输入新图，按配套预处理与类别表解释。</text>
+<rect x="566" y="518" width="490" height="121" rx="14" fill="#f4f8f5" stroke="#cedcd5"/>
+<text x="588" y="558" font-size="25" font-weight="700">训练：使用标注，调整参数</text>
+<text x="588" y="602" font-size="23">根据损失与梯度更新，不是只做一次乘加。</text>
+<text x="44" y="686" font-size="23" fill="#5d7269">分数高不自动等于真实正确率高；本图只解释数字运算，不具备真实图像识别能力。</text>
+</g></svg>

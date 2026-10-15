@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc"><title id="title">01 · 图像是像素表：位置与取数分开看</title><desc id="desc">四列三行的灰度小图，横向x向右，纵向y向下。坐标二、一对应列表image[1][2]，灰度为七十。像素数十二，总和七百八十，均值六十五。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">01 · 图像是像素表：位置与取数分开看</text>
+<text x="42" y="106" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">教学小图 · 索引从 0 开始 · 格子底色仅辅助定位</text>
+<rect x="32" y="140" width="550" height="445" rx="16" fill="#f2f7f2" stroke="#c9dbcf" stroke-width="2"/>
+<text x="62" y="184" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">每行 4 个值，共 3 行</text>
+<line x1="152" y1="215" x2="512" y2="215" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="343" y="204" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">x 向右</text>
+<line x1="127" y1="267" x2="127" y2="477" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="60" y="521" font-size="23" fill="#3b564a" font-weight="400" text-anchor="start">y 向下</text>
+<text x="195" y="246" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">列 0</text>
+<text x="286" y="246" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">列 1</text>
+<text x="377" y="246" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">列 2</text>
+<text x="468" y="246" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">列 3</text>
+<text x="61" y="307" font-size="23" fill="#3b564a" font-weight="400" text-anchor="start">行 0</text>
+<rect x="152" y="268" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="195" y="311" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">10</text>
+<rect x="243" y="268" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="286" y="311" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">20</text>
+<rect x="334" y="268" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="377" y="311" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">30</text>
+<rect x="425" y="268" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="468" y="311" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">40</text>
+<text x="61" y="380" font-size="23" fill="#3b564a" font-weight="400" text-anchor="start">行 1</text>
+<rect x="152" y="341" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="195" y="384" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">50</text>
+<rect x="243" y="341" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="286" y="384" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">60</text>
+<rect x="334" y="341" width="86" height="68" rx="8" fill="#bcdcc9" stroke="#c9dbcf" stroke-width="2"/>
+<text x="377" y="384" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">70</text>
+<rect x="425" y="341" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="468" y="384" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">80</text>
+<text x="61" y="453" font-size="23" fill="#3b564a" font-weight="400" text-anchor="start">行 2</text>
+<rect x="152" y="414" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="195" y="457" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">90</text>
+<rect x="243" y="414" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="286" y="457" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">100</text>
+<rect x="334" y="414" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="377" y="457" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">110</text>
+<rect x="425" y="414" width="86" height="68" rx="8" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="468" y="457" font-size="28" fill="#23463b" font-weight="400" text-anchor="middle">120</text>
+<text x="244" y="548" font-size="24" fill="#3b564a" font-weight="400" text-anchor="middle">宽 4 × 高 3 = 12 像素</text>
+<rect x="610" y="140" width="458" height="445" rx="16" fill="#f2f7f2" stroke="#c9dbcf" stroke-width="2"/>
+<text x="640" y="184" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">找到灰度 70</text>
+<text x="640" y="236" font-size="24" fill="#3b564a" font-weight="400" text-anchor="start">描述位置：</text>
+<text x="640" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">(x, y) = (2, 1)</text>
+<text x="640" y="340" font-size="24" fill="#3b564a" font-weight="400" text-anchor="start">取列表里的数：先行，再列</text>
+<text x="640" y="387" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">image[1][2] = 70</text>
+<line x1="640" y1="420" x2="1038" y2="420" stroke="#367660" stroke-width="3"/>
+<text x="640" y="463" font-size="25" fill="#3b564a" font-weight="400" text-anchor="start">总和 780；像素数 12</text>
+<text x="640" y="510" font-size="25" fill="#3b564a" font-weight="400" text-anchor="start">平均灰度 = 780 / 12 = 65</text>
+<text x="42" y="635" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">像素坐标描述画面里的位置；不能直接把它当成米制距离。</text>
+</g></svg>

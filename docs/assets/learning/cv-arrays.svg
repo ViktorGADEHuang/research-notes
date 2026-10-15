@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc"><title id="title">02 · 先取行、再取列，也要留意数据共享</title><desc id="desc">列表image先选择行索引一得到五十六十七十八十，再选择列索引二得到七十。直接赋值共享同一个对象；二维数值列表逐行复制可以独立修改。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">02 · 先取行、再取列，也要留意数据共享</text>
+<text x="42" y="106" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">本图只讨论由普通数字组成的二维列表</text>
+<rect x="32" y="140" width="1036" height="205" rx="16" fill="#f2f7f2" stroke="#c9dbcf" stroke-width="2"/>
+<rect x="62" y="183" width="210" height="102" rx="16" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="167" y="223" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">image</text>
+<text x="167" y="262" font-size="24" fill="#3b564a" font-weight="400" text-anchor="middle">装有 3 行</text>
+<line x1="290" y1="230" x2="395" y2="230" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="342" y="314" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">先选行 1</text>
+<rect x="413" y="183" width="295" height="102" rx="16" fill="#e4f0e7" stroke="#c9dbcf" stroke-width="2"/>
+<text x="560" y="223" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">image[1]</text>
+<text x="560" y="262" font-size="26" fill="#3b564a" font-weight="400" text-anchor="middle">[50, 60, 70, 80]</text>
+<line x1="728" y1="230" x2="826" y2="230" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="777" y="314" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">再选列 2</text>
+<rect x="844" y="183" width="194" height="102" rx="16" fill="#bcdcc9" stroke="#c9dbcf" stroke-width="2"/>
+<text x="941" y="226" font-size="34" fill="#23463b" font-weight="700" text-anchor="middle">70</text>
+<text x="941" y="264" font-size="23" fill="#3b564a" font-weight="400" text-anchor="middle">一个像素值</text>
+<rect x="32" y="374" width="500" height="226" rx="16" fill="#f2f7f2" stroke="#c9dbcf" stroke-width="2"/>
+<text x="62" y="417" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">赋值：alias = image</text>
+<text x="62" y="465" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">image</text>
+<text x="62" y="517" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">alias</text>
+<line x1="162" y1="457" x2="287" y2="480" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="162" y1="509" x2="287" y2="480" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="306" y="445" width="194" height="71" rx="10" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="403" y="489" font-size="24" fill="#3b564a" font-weight="400" text-anchor="middle">同一个列表</text>
+<text x="62" y="566" font-size="24" fill="#3b564a" font-weight="400" text-anchor="start">通过别名改值，原图也会变</text>
+<rect x="560" y="374" width="508" height="226" rx="16" fill="#f2f7f2" stroke="#c9dbcf" stroke-width="2"/>
+<text x="590" y="417" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">逐行复制：为每行建新列表</text>
+<rect x="590" y="444" width="202" height="74" rx="10" fill="#fff" stroke="#c9dbcf" stroke-width="2"/>
+<text x="691" y="474" font-size="24" fill="#3b564a" font-weight="400" text-anchor="middle">原图左上角</text>
+<text x="691" y="506" font-size="25" fill="#23463b" font-weight="700" text-anchor="middle">保持 99</text>
+<rect x="820" y="444" width="217" height="74" rx="10" fill="#e4f0e7" stroke="#c9dbcf" stroke-width="2"/>
+<text x="928" y="474" font-size="24" fill="#3b564a" font-weight="400" text-anchor="middle">副本左上角</text>
+<text x="928" y="506" font-size="25" fill="#23463b" font-weight="700" text-anchor="middle">可改为 0</text>
+<text x="590" y="566" font-size="24" fill="#3b564a" font-weight="400" text-anchor="start">[row[:] for row in image]</text>
+<text x="42" y="644" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">只复制外层仍会共享内层各行；更深的嵌套还需继续检查共享关系。</text>
+</g></svg>

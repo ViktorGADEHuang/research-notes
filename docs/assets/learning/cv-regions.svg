@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">连通区域：先选前景，再数相连的组</title>
+<desc id="desc">四行五列二值图采用四邻域。左上两行两列的四个前景像素组成区域一，质心为零点五、零点五；第四列下方三个前景像素组成区域二，质心为三、二。前景区域数量为二，不等同于识别物体数量。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">连通区域：先选前景，再数相连的组</text>
+<text x="42" y="104" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">0 表示背景，1 表示被选中的前景 · 四邻域不走对角线 · 下标从 0 开始</text>
+<rect x="44" y="140" width="605" height="420" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<rect x="681" y="140" width="375" height="192" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<rect x="681" y="355" width="375" height="205" rx="14" fill="#eef3e2" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="184" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">二值图：只沿上下左右探索</text>
+<text x="172" y="224" font-size="23" fill="#5d7269" font-weight="400" text-anchor="middle">列 0</text>
+<text x="250" y="224" font-size="23" fill="#5d7269" font-weight="400" text-anchor="middle">列 1</text>
+<text x="328" y="224" font-size="23" fill="#5d7269" font-weight="400" text-anchor="middle">列 2</text>
+<text x="406" y="224" font-size="23" fill="#5d7269" font-weight="400" text-anchor="middle">列 3</text>
+<text x="484" y="224" font-size="23" fill="#5d7269" font-weight="400" text-anchor="middle">列 4</text>
+<text x="72" y="276" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">行 0</text>
+<rect x="140" y="240" width="64" height="58" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="172" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="218" y="240" width="64" height="58" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="250" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="296" y="240" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="328" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="374" y="240" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="406" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="452" y="240" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="484" y="279" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<text x="72" y="346" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">行 1</text>
+<rect x="140" y="310" width="64" height="58" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="172" y="349" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="218" y="310" width="64" height="58" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="250" y="349" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="296" y="310" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="328" y="349" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="374" y="310" width="64" height="58" rx="8" fill="#dde8c5" stroke="#cedcd5" stroke-width="2"/>
+<text x="406" y="349" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="452" y="310" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="484" y="349" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<text x="72" y="416" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">行 2</text>
+<rect x="140" y="380" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="172" y="419" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="218" y="380" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="250" y="419" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="296" y="380" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="328" y="419" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="374" y="380" width="64" height="58" rx="8" fill="#dde8c5" stroke="#cedcd5" stroke-width="2"/>
+<text x="406" y="419" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="452" y="380" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="484" y="419" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<text x="72" y="486" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">行 3</text>
+<rect x="140" y="450" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="172" y="489" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="218" y="450" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="250" y="489" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="296" y="450" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="328" y="489" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<rect x="374" y="450" width="64" height="58" rx="8" fill="#dde8c5" stroke="#cedcd5" stroke-width="2"/>
+<text x="406" y="489" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">1</text>
+<rect x="452" y="450" width="64" height="58" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="484" y="489" font-size="28" fill="#23463b" font-weight="700" text-anchor="middle">0</text>
+<text x="705" y="182" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">区域 1 · 左上四格</text>
+<text x="705" y="232" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">面积：4 像素</text>
+<text x="705" y="283" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">质心：(0.5, 0.5)</text>
+<text x="705" y="398" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">区域 2 · 右侧三格</text>
+<text x="705" y="449" font-size="26" fill="#23463b" font-weight="400" text-anchor="start">面积：3 像素</text>
+<text x="705" y="500" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">质心：(3, 2)</text>
+<text x="44" y="607" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">前景区域共 2 块；这不等于已经识别出 2 个真实物体。</text>
+<text x="44" y="649" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">本例灰度严格大于 100 才记为 1；质心坐标按 (u=列, v=行) 表示。</text>
+</g></svg>

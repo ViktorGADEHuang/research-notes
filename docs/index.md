@@ -48,6 +48,7 @@ hide:
   <div><strong>14<span>章</span></strong><p>机器人基础与实践</p></div>
   <div><strong>12<span>种</span></strong><p>强化学习算法</p></div>
   <div><strong>15<span>章</span></strong><p>C++ 与现代 C++</p></div>
+  <div><strong>14<span>章</span></strong><p>计算机视觉基础</p></div>
 </div>
 
 <div class="section-heading" markdown="1">
@@ -90,6 +91,16 @@ hide:
 
     [从第一个 C++ 程序开始 →](programming/cpp/setup.md)
 
+-   <span class="card-number">04 / 计算机视觉</span>
+
+    **一张图，怎样变成有含义的数字？**
+
+    从像素、颜色与数组开始，再理解滤波、相机、检测、跟踪和评估。
+
+    <span class="path-goal">第一个小目标：找到一个像素，并解释它的坐标。</span>
+
+    [从视觉第一课开始 →](vision/images.md)
+
 </div>
 
 ## 浏览全部专题
@@ -116,9 +127,9 @@ hide:
 
 -   **计算机视觉**
 
-    从像素与检测框，到标定、跟踪和位置估计的学习概览。
+    14 章独立基础课，配图解、手算、中文注释和自测练习。
 
-    [查看视觉学习概览 →](vision/index.md)
+    [查看视觉学习路线 →](vision/index.md)
 
 -   **智能放牧**
 
@@ -142,6 +153,6 @@ hide:
 
 遇到代码先看它是“完整文件”还是“局部片段”，再按文字说明对照。Python 阅读入门可以随时查阅，阅读强化学习示例不需要创建 RL 环境。
 
-[查阅 Python 阅读入门 →](programming/python-reading.md) · [浏览开源学习资料 →](opensource/index.md)
+[查阅 Python 阅读入门 →](programming/python-reading.md) · [开源项目配套教程 →](opensource/tutorials/index.md) · [浏览开源学习资料 →](opensource/index.md)
 
 </div>

@@ -13,7 +13,7 @@ import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COURSE = ROOT / 'docs/vision/rm-cv-fans'
+COURSE = ROOT / 'docs/opensource/rm-cv-fans'
 
 
 def blocks(markdown, language):

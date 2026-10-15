@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">针孔模型：从已知三维点算像素</title>
+<desc id="desc">在理想无畸变针孔模型中，水平和竖直焦距参数均为五百像素，主点为三百二十、二百四十。相机坐标一点一、零点五、五米投影到四百二十、二百九十像素。同一视线上的二、一、十米也有同样投影，单个像素不能独自提供深度。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">针孔模型：从已知三维点算像素</text>
+<text x="42" y="104" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">理想无畸变模型 · fx = fy = 500 px · 主点 (cx, cy) = (320, 240) px</text>
+<rect x="44" y="140" width="300" height="340" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<rect x="388" y="140" width="320" height="340" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<rect x="752" y="140" width="304" height="340" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="185" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">空间点（单位：米）</text>
+<text x="74" y="251" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">X = 1</text>
+<text x="74" y="311" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">Y = 0.5</text>
+<rect x="64" y="338" width="260" height="70" rx="10" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="83" y="384" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">Z = 5</text>
+<text x="66" y="448" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">Z：沿光轴向前的深度</text>
+<path d="M 348 310 H 373" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="410" y="185" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">理想针孔公式</text>
+<text x="410" y="249" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">u = 500 × 1 ÷ 5 + 320</text>
+<text x="410" y="295" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">  = 420 px</text>
+<text x="410" y="356" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">v = 500 × 0.5 ÷ 5 + 240</text>
+<text x="410" y="402" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">  = 290 px</text>
+<path d="M 712 310 H 737" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="774" y="185" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">图像中的位置</text>
+<rect x="774" y="230" width="256" height="192" rx="4" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<path d="M 902 230 V 422" fill="none" stroke="#367660" stroke-width="3" stroke-dasharray="6 5"/>
+<path d="M 774 326 H 1030" fill="none" stroke="#367660" stroke-width="3" stroke-dasharray="6 5"/>
+<circle cx="902" cy="326" r="6" fill="#91b3a1"/>
+<circle cx="942" cy="346" r="8" fill="#23463b"/>
+<text x="796" y="283" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">主点</text>
+<path d="M 850 291 L 895 320" fill="none" stroke="#367660" stroke-width="3"/>
+<text x="791" y="393" font-size="23" fill="#23463b" font-weight="400" text-anchor="start">目标像素</text>
+<path d="M 895 382 L 936 353" fill="none" stroke="#367660" stroke-width="3"/>
+<text x="904" y="459" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">(420, 290) px</text>
+<rect x="44" y="515" width="1012" height="92" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="551" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">同一像素，不代表同一深度</text>
+<text x="66" y="586" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">点 (2, 1, 10) m 也会投影到 (420, 290) px。</text>
+<text x="44" y="649" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">Z 为光轴深度，不能直接用相机中心到点的直线距离代替。</text>
+</g></svg>

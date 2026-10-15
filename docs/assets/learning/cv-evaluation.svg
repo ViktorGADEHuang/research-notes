@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+<title id="title">按采集场次划分数据，再用明确计数评价检测</title>
+<desc id="desc">训练使用第1天两场，验证使用第2天一场，测试使用第3天一场，各场次不交叉。在固定匹配规则的简化例子中，5个真实目标中3个正确检出、2个漏掉，4个预测中1个误报。精确率是3除以4等于75%，召回率是3除以5等于60%。</desc>
+<rect width="1100" height="720" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+<text x="44" y="60" font-size="30" font-weight="700">评估先保证公平，再解释每一个数字</text>
+<text x="44" y="105" font-size="23" fill="#5d7269">按来源分组：同一次连续采集的帧放在同一部分，避免相邻画面跨集合。</text>
+
+<rect x="44" y="145" width="320" height="160" rx="16" fill="#e6f2eb" stroke="#b7cbbb" stroke-width="2"/>
+<text x="66" y="186" font-size="27" font-weight="700">训练集：学习参数</text>
+<text x="66" y="229" font-size="23">第 1 天上午、下午两场</text>
+<text x="66" y="271" font-size="23">教学记录：共 4 帧</text>
+<rect x="390" y="145" width="320" height="160" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="412" y="186" font-size="27" font-weight="700">验证集：开发时选择</text>
+<text x="412" y="229" font-size="23">第 2 天上午一场</text>
+<text x="412" y="271" font-size="23">教学记录：共 2 帧</text>
+<rect x="736" y="145" width="320" height="160" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="758" y="186" font-size="27" font-weight="700">测试集：独立报告</text>
+<text x="758" y="229" font-size="23">第 3 天上午一场</text>
+<text x="758" y="271" font-size="23">教学记录：共 2 帧</text>
+
+<rect x="44" y="340" width="490" height="255" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="382" font-size="26" font-weight="700">另一个计数例：5 个真实目标</text>
+<text x="66" y="423" font-size="23">先固定类别、分数门槛与 IoU 规则。</text>
+<g text-anchor="middle">
+<rect x="66" y="448" width="136" height="116" rx="12" fill="#dcefe3"/>
+<rect x="222" y="448" width="136" height="116" rx="12" fill="#f8f2e7"/>
+<rect x="378" y="448" width="134" height="116" rx="12" fill="#e8eef0"/>
+<text x="134" y="482" font-size="24" font-weight="700">TP 正确</text>
+<text x="290" y="482" font-size="24" font-weight="700">FP 多报</text>
+<text x="445" y="482" font-size="24" font-weight="700">FN 漏掉</text>
+<text x="134" y="537" font-size="34" font-weight="700">3</text>
+<text x="290" y="537" font-size="34" font-weight="700">1</text>
+<text x="445" y="537" font-size="34" font-weight="700">2</text>
+</g>
+
+<rect x="566" y="340" width="490" height="255" rx="16" fill="#e6f2eb" stroke="#b7cbbb" stroke-width="2"/>
+<text x="588" y="382" font-size="26" font-weight="700">两个问题，各看一个分母</text>
+<text x="588" y="427" font-size="23">报出来的有多少是真的？</text>
+<text x="588" y="468" font-size="27" font-weight="700">精确率 P = 3 / (3+1) = 75%</text>
+<text x="588" y="518" font-size="23">实际存在的有多少找到了？</text>
+<text x="588" y="559" font-size="27" font-weight="700">召回率 R = 3 / (3+2) = 60%</text>
+
+<text x="44" y="644" font-size="23" fill="#5d7269">IoU 衡量一对框的重叠；AP 按指定协议汇总精确率—召回率关系。</text>
+<text x="44" y="685" font-size="23" fill="#5d7269">本图只教分组与计数，不代表完整 AP 计算；一只真实目标最多正确匹配一次。</text>
+</g></svg>

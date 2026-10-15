@@ -98,6 +98,18 @@ for path, page in pages.items():
                   f'{path.relative_to(ROOT)}: 缺少锚点 {link}')
 
 rendered_code_count = 0
+# Every previously published project lesson must retain a usable old address.
+for source in (DOCS / 'opensource/rm-cv-fans').glob('*.md'):
+    section = Path() if source.stem == 'index' else Path(source.stem)
+    legacy = (SITE / 'vision/rm-cv-fans' / section / 'index.html').resolve()
+    destination = (SITE / 'opensource/rm-cv-fans' / section / 'index.html').resolve()
+    check(legacy in pages, f'旧教程地址缺少跳转: {legacy.relative_to(SITE)}')
+    if legacy in pages:
+        targets = {(legacy.parent / unquote(urlsplit(link).path)).resolve()
+                   for link in pages[legacy].links if urlsplit(link).path}
+        targets = {path / 'index.html' if path.is_dir() else path for path in targets}
+        check(destination in targets, f'旧教程跳转未指向迁移后的页面: {source.name}')
+
 for p in DOCS.rglob('*.md'):
     text = p.read_text(encoding='utf-8')
     check(text.count('```') % 2 == 0, f'{p}: 未闭合代码围栏')

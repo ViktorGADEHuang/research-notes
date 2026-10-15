@@ -42,6 +42,7 @@ plugins:
 # 内容变动时自动更新资源地址，避免浏览器继续使用旧样式。
 hooks:
   - hooks/asset_versions.py
+  - hooks/course_redirects.py
 
 nav:
   - 首页: index.md
@@ -115,23 +116,40 @@ nav:
       - 14 · 最小闭环小项目: robotics/project.md
 
   - 计算机视觉:
-      - 视觉学习概览: vision/index.md
+      - 学习路线与阅读方法: vision/index.md
+      - 01 · 图像、像素与坐标: vision/images.md
+      - 02 · Python 与数组阅读: vision/arrays.md
+      - 03 · 颜色、亮度与数值范围: vision/color.md
+      - 04 · 裁剪、缩放与插值: vision/transforms.md
+      - 05 · 滤波与边缘: vision/filtering.md
+      - 06 · 二值图与连通区域: vision/regions.md
+      - 07 · 特征与匹配: vision/features.md
+      - 08 · 相机成像与标定: vision/camera.md
+      - 09 · 网络与图像分类: vision/networks.md
+      - 10 · 目标检测: vision/detection.md
+      - 11 · 目标关联与跟踪: vision/tracking.md
+      - 12 · 数据集与评估: vision/evaluation.md
+      - 13 · 视觉数据检查小项目: vision/project.md
+      - 14 · 放牧视觉的应用与限制: vision/herding.md
+
+  - 开源资料教程:
+      - 项目教程路线: opensource/tutorials/index.md
       - rm.cv.fans 阅读入门:
-          - 学习路线与版本说明: vision/rm-cv-fans/index.md
-          - 01 · 仓库与文件: vision/rm-cv-fans/repository.md
-          - 02 · C++ 第一眼: vision/rm-cv-fans/cpp-basics.md
-          - 03 · 类型与所有权: vision/rm-cv-fans/cpp-types.md
-          - 04 · 图像其实是数字: vision/rm-cv-fans/images.md
-          - 05 · 矩阵与误差: vision/rm-cv-fans/math.md
-          - 06 · 参数与共享对象: vision/rm-cv-fans/configuration.md
-          - 07 · 测量与滤波: vision/rm-cv-fans/estimation.md
-          - 08 · 带着问题读源码: vision/rm-cv-fans/reading-lab.md
-          - 09 · 头文件、类与接口精读: vision/rm-cv-fans/cpp-source-basics.md
-          - 10 · 模板、转发与 Lambda: vision/rm-cv-fans/cpp-source-templates.md
-          - 11 · 容器、对象与锁: vision/rm-cv-fans/cpp-source-objects.md
-          - 12 · OpenCV 代码精读: vision/rm-cv-fans/opencv-reading.md
-          - 13 · 图像采样与插值: vision/rm-cv-fans/vision-sampling.md
-          - 14 · 源码中的视觉方法: vision/rm-cv-fans/vision-algorithms.md
+          - 学习路线与版本说明: opensource/rm-cv-fans/index.md
+          - 01 · 仓库与文件: opensource/rm-cv-fans/repository.md
+          - 02 · C++ 第一眼: opensource/rm-cv-fans/cpp-basics.md
+          - 03 · 类型与所有权: opensource/rm-cv-fans/cpp-types.md
+          - 04 · 图像其实是数字: opensource/rm-cv-fans/images.md
+          - 05 · 矩阵与误差: opensource/rm-cv-fans/math.md
+          - 06 · 参数与共享对象: opensource/rm-cv-fans/configuration.md
+          - 07 · 测量与滤波: opensource/rm-cv-fans/estimation.md
+          - 08 · 带着问题读源码: opensource/rm-cv-fans/reading-lab.md
+          - 09 · 头文件、类与接口精读: opensource/rm-cv-fans/cpp-source-basics.md
+          - 10 · 模板、转发与 Lambda: opensource/rm-cv-fans/cpp-source-templates.md
+          - 11 · 容器、对象与锁: opensource/rm-cv-fans/cpp-source-objects.md
+          - 12 · OpenCV 代码精读: opensource/rm-cv-fans/opencv-reading.md
+          - 13 · 图像采样与插值: opensource/rm-cv-fans/vision-sampling.md
+          - 14 · 源码中的视觉方法: opensource/rm-cv-fans/vision-algorithms.md
 
   - 编程技术:
       - 编程学习概览: programming/index.md

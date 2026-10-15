@@ -188,13 +188,14 @@
 .hero-course-steps span { color: #bfd0c5; font-size: .58rem; font-variant-numeric: tabular-nums; }
 .md-typeset .hero-course-link { display: block; margin-top: .9rem; padding-top: .75rem; border-top: 1px solid #688574; color: #e2efcf; font-size: .71rem; font-weight: 650; }
 .md-typeset .hero-course-link:hover { color: #fff; text-decoration: underline; }
-.learning-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: -.85rem 0 2.1rem; border: 1px solid var(--research-border); border-radius: 12px; background: var(--research-card); box-shadow: var(--research-shadow); }
+.learning-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: -.85rem 0 2.1rem; border: 1px solid var(--research-border); border-radius: 12px; background: var(--research-card); box-shadow: var(--research-shadow); }
 .learning-metrics > div { display: flex; align-items: center; gap: 1rem; min-width: 0; padding: .85rem 1.3rem; border-right: 1px solid var(--research-border); }
 .learning-metrics > div:last-child { border-right: 0; }
 .learning-metrics strong { color: var(--research-accent); font-size: 1.45rem; font-weight: 750; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .learning-metrics strong span { margin-left: .2rem; font-size: .64rem; font-weight: 500; }
 .learning-metrics p { margin: 0; font-size: .68rem; color: var(--research-muted); }
 .md-typeset .grid.cards.start-paths > ul > li { border-top: 3px solid var(--research-accent); padding: 1.15rem 1.2rem; box-shadow: var(--research-shadow); }
+.md-typeset .grid.cards.start-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .md-typeset .start-paths .card-number { padding-block: .15rem .6rem; }
 .md-typeset .start-paths strong { line-height: 1.55; }
 .md-typeset .path-goal { display: block; padding: .6rem .7rem; margin-block: .85rem .5rem; border-radius: 7px; background: var(--research-surface); color: var(--research-accent); font-size: .65rem; line-height: 1.7; }
@@ -241,6 +242,10 @@
   .lesson-outline nav a { line-height: 1.65; }
 }
 @media screen and (max-width: 600px) {
+  .md-typeset .grid.cards.start-paths { grid-template-columns: 1fr; }
+  .learning-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .learning-metrics > div:nth-child(2n) { border-right: 0; }
+  .learning-metrics > div:nth-child(-n+2) { border-bottom: 1px solid var(--research-border); }
   .md-typeset .home-hero { padding: 1.3rem 1.05rem 1.1rem; border-radius: 13px; }
   .md-typeset .home-hero h1 { font-size: 1.6rem; margin-block: .65rem .85rem; }
   .md-typeset .hero-copy > p:not([class]) { font-size: .74rem; }

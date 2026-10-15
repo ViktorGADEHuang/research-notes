@@ -1,7 +1,7 @@
 # rm.cv.fans：从 C++ 语法读到视觉算法
 
 <div class="course-intro" markdown="1">
-<p class="course-label">开源项目阅读课 · 零基础路线</p>
+<p class="course-label">开源资料教程 · 项目源码阅读 · 零基础路线</p>
 
 第一次打开一个视觉工程，满屏的英文、尖括号和公式很容易让人失去方向。这套课分为基础八课与源码精读六课：先认数据与语法，再重点拆解源码里的类、模板、Lambda、容器和共享对象，并学习图像表示、插值及视觉方法的职责。
 
@@ -86,4 +86,4 @@
 
 本次没有构建或运行原工程，也没有连接硬件。原仓库的[模块说明](https://github.com/julyfun/rm.cv.fans/blob/6abd1bf359356d1d603766c4b3bcabbb1d6432b2/aimer/auto_aim/README.md)保留了已知问题与历史记录；阅读时需区分当前实现、旧版记录与作者设想。第一课会具体说明构建材料的边界。
 
-[返回视觉概览](../index.md) · [前往第一课：仓库与文件 →](repository.md)
+[返回开源资料教程](../tutorials/index.md) · [学习通用计算机视觉](../../vision/index.md) · [前往第一课：仓库与文件 →](repository.md)

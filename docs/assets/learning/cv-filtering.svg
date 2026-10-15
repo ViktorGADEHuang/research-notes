@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+<title id="title">滤波与边缘：先分清在算什么</title>
+<desc id="desc">左侧九个灰度中八个为十、中心为九十，均值约十八点八八九，中位数为十。右侧三行都是十、十、九十，用本课未缩放三乘三Sobel横向核，响应为三百二十，竖向为零；左右反转响应变负。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="680" rx="22" fill="#ffffff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">滤波与边缘：先分清在算什么</text>
+<text x="42" y="104" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">两组独立 3×3 教学窗口 · 平滑减弱局部波动 · 梯度观察变化方向</text>
+<rect x="44" y="140" width="490" height="430" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<rect x="566" y="140" width="490" height="430" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="185" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">平滑：邻居一起决定新值</text>
+<text x="588" y="185" font-size="27" fill="#23463b" font-weight="700" text-anchor="start">变化：Sobel 比较明暗差</text>
+<rect x="80" y="220" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="112.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="155" y="220" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="187.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="230" y="220" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="262.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="80" y="284" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="112.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="155" y="284" width="65" height="56" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="187.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">90</text>
+<rect x="230" y="284" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="262.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="80" y="348" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="112.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="155" y="348" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="187.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="230" y="348" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="262.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="602" y="220" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="634.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="677" y="220" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="709.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="752" y="220" width="65" height="56" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="784.5" y="257" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">90</text>
+<rect x="602" y="284" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="634.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="677" y="284" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="709.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="752" y="284" width="65" height="56" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="784.5" y="321" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">90</text>
+<rect x="602" y="348" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="634.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="677" y="348" width="65" height="56" rx="8" fill="#ffffff" stroke="#cedcd5" stroke-width="2"/>
+<text x="709.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">10</text>
+<rect x="752" y="348" width="65" height="56" rx="8" fill="#d6eadf" stroke="#cedcd5" stroke-width="2"/>
+<text x="784.5" y="385" font-size="27" fill="#23463b" font-weight="700" text-anchor="middle">90</text>
+<text x="330" y="256" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">总和 170</text>
+<text x="330" y="301" font-size="25" fill="#23463b" font-weight="400" text-anchor="start">170 ÷ 9</text>
+<text x="330" y="347" font-size="28" fill="#23463b" font-weight="700" text-anchor="start">= 18.889</text>
+<text x="66" y="458" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">排序后第 5 个数 = 10</text>
+<text x="66" y="508" font-size="25" fill="#5d7269" font-weight="400" text-anchor="start">均值做混合；中位数先排序</text>
+<text x="850" y="256" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">80 + 160</text>
+<text x="850" y="300" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">+ 80</text>
+<text x="850" y="347" font-size="29" fill="#23463b" font-weight="700" text-anchor="start">= 320</text>
+<text x="588" y="458" font-size="26" fill="#23463b" font-weight="700" text-anchor="start">Gx = 320，Gy = 0</text>
+<text x="588" y="508" font-size="25" fill="#5d7269" font-weight="400" text-anchor="start">左右反转后：Gx = −320</text>
+<text x="44" y="621" font-size="24" fill="#5d7269" font-weight="400" text-anchor="start">本图只算窗口中心；边界、输出类型与核缩放需要另行说明。</text>
+</g></svg>

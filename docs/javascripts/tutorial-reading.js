@@ -52,6 +52,9 @@
       { key: "robotics", label: "机器人技术", chapters: [
         "start", "units", "sensors", "frames", "kinematics", "control", "ros2",
         "tf2", "urdf", "mujoco", "localization", "planning", "quadrupeds", "project"] },
+      { key: "vision", label: "计算机视觉", chapters: [
+        "images", "arrays", "color", "transforms", "filtering", "regions", "features",
+        "camera", "networks", "detection", "tracking", "evaluation", "project", "herding"] },
       { key: "rm-cv-fans", label: "rm.cv.fans 阅读入门", chapters: [
         "repository", "cpp-basics", "cpp-types", "images", "math",
         "configuration", "estimation", "reading-lab", "cpp-source-basics",

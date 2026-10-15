@@ -98,7 +98,8 @@
 
 每课都有图解、数字例子、中文解释与练习。语法精读拆开头文件、类、模板、转发、Lambda、容器与所有权。完整独立程序、OpenCV API 阅读片段和原实现分别标注；滤波用静态温度补基础，专用瞄准、弹道和发射控制部分仅辨认职责。
 
-[进入配套教程 →](../vision/rm-cv-fans/index.md){ .md-button .md-button--primary }
+[进入配套教程 →](rm-cv-fans/index.md){ .md-button .md-button--primary }
+[查看开源资料教程栏目](tutorials/index.md){ .md-button }
 [查看原仓库](https://github.com/julyfun/rm.cv.fans){ .md-button }
 </div>
 

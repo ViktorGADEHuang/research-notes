@@ -38,6 +38,9 @@ jobs:
       - name: Check tutorial formatting and inline examples
         run: python scripts/check_tutorials.py
 
+      - name: Check standard-library vision teaching examples
+        run: python scripts/check_vision_examples.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

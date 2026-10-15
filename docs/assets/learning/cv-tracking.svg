@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+<title id="title">用曼哈顿距离比较两条轨迹的两种关联方案</title>
+<desc id="desc">旧位置A为0、0，B为3、0，检测d0为2、0，d1为0、2。曼哈顿代价矩阵是2、2和1、5。按A先处理且并列选检测下标较小者的贪心得到总成本7，穷举两个完整方案得到最小总成本3。最小代价不是身份正确的证明，实际跟踪还需允许不匹配。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="720" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+<text x="44" y="60" font-size="30" font-weight="700">跟踪要建立对应关系，不能照抄列表下标</text>
+<text x="44" y="105" font-size="23" fill="#5d7269">教学代价：曼哈顿距离 d = |Δu| + |Δv|，不是欧氏直线距离。</text>
+
+<rect x="44" y="150" width="470" height="290" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="192" font-size="27" font-weight="700">代价矩阵：每个候选都比较</text>
+<rect x="66" y="220" width="426" height="195" rx="10" fill="#fff" stroke="#cedcd5"/>
+<path d="M66 285 H492 M66 350 H492 M236 220 V415 M364 220 V415" stroke="#cedcd5" stroke-width="2"/>
+<rect x="237" y="286" width="126" height="63" fill="#e6f2eb"/>
+<rect x="365" y="286" width="126" height="63" fill="#e6f2eb"/>
+<g font-size="25" text-anchor="middle">
+<text x="151" y="262">旧轨迹</text><text x="300" y="262">d0</text><text x="428" y="262">d1</text>
+<text x="151" y="327" font-weight="700">A</text><text x="300" y="327">2</text><text x="428" y="327">2</text>
+<text x="151" y="392" font-weight="700">B</text><text x="300" y="392">1</text><text x="428" y="392">5</text>
+</g>
+
+<rect x="546" y="150" width="510" height="290" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="568" y="192" font-size="27" font-weight="700">先把点与单位写清楚</text>
+<text x="568" y="241" font-size="24">旧位置：A(0, 0)，B(3, 0)</text>
+<text x="568" y="285" font-size="24">当前：d0(2, 0)，d1(0, 2)</text>
+<text x="568" y="333" font-size="23">B 到 d1：|3−0| + |0−2| = 5</text>
+<text x="568" y="373" font-size="23">仅比较图像位置，没有预测运动。</text>
+<text x="568" y="410" font-size="23">每行、每列各选一次，才能一对一。</text>
+
+<rect x="44" y="472" width="490" height="155" rx="16" fill="#f8f2e7" stroke="#dbc9a8" stroke-width="2"/>
+<text x="66" y="511" font-size="26" font-weight="700" fill="#876129">按指定顺序贪心：总成本 7</text>
+<text x="66" y="553" font-size="24">A → d0：2；B → d1：5</text>
+<text x="66" y="596" font-size="23">先 A；并列时选检测下标较小者。</text>
+
+<rect x="566" y="472" width="490" height="155" rx="16" fill="#e6f2eb" stroke="#b7cbbb" stroke-width="2"/>
+<text x="588" y="511" font-size="26" font-weight="700">比较两个完整方案：最小为 3</text>
+<text x="588" y="553" font-size="24">A → d1：2；B → d0：1</text>
+<text x="588" y="596" font-size="23">这是本代价与强制配对假设下的最优。</text>
+<text x="44" y="672" font-size="23" fill="#5d7269">最小代价不证明真实身份；换顺序可能改变贪心结果，实际跟踪还需允许不匹配。</text>
+</g></svg>

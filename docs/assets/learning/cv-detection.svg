@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+<title id="title">目标检测框的交并比：交集60除以并集140</title>
+<desc id="desc">A框为0、0、10、10，B框为4、0、14、10。两框面积各100，交叠宽6高10，交集60，并集140，IoU约0.4286。检测分数与IoU门槛需要区分，一只真实对象最多匹配一个正确预测。</desc>
+<rect width="1100" height="720" rx="22" fill="#fff"/>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+<text x="44" y="60" font-size="30" font-weight="700">框的位置、预测分数和 IoU，是三回事</text>
+<text x="44" y="105" font-size="23" fill="#5d7269">坐标约定为（左、上、右、下）；本例按连续边界差计算面积，不加 1。</text>
+
+<rect x="44" y="145" width="512" height="407" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="66" y="186" font-size="25" font-weight="700">两个 10 × 10 的框</text>
+<text x="66" y="225" font-size="23">A：(0, 0, 10, 10)</text>
+<text x="66" y="260" font-size="23">B：(4, 0, 14, 10)</text>
+<rect x="84" y="302" width="250" height="205" fill="#e1efe6" stroke="#367660" stroke-width="3"/>
+<rect x="184" y="302" width="250" height="205" fill="#f6f0df" fill-opacity="0.75" stroke="#a77b35" stroke-width="3"/>
+<rect x="184" y="302" width="150" height="205" fill="#8bc6a3" fill-opacity="0.85"/>
+<path d="M84 302 H334 V507 H84 Z" stroke="#367660" stroke-width="3" fill="none"/>
+<path d="M184 302 H434 V507 H184 Z" stroke="#a77b35" stroke-width="3" fill="none"/>
+<text x="115" y="349" font-size="27" font-weight="700">A</text>
+<text x="387" y="349" font-size="27" font-weight="700" fill="#876129">B</text>
+<text x="259" y="398" font-size="24" text-anchor="middle" font-weight="700">交集</text>
+<text x="259" y="435" font-size="24" text-anchor="middle">6 × 10</text>
+<text x="259" y="475" font-size="26" text-anchor="middle" font-weight="700">60</text>
+<text x="84" y="537" font-size="23">示意图；数值计算以坐标为准。</text>
+
+<rect x="588" y="145" width="468" height="407" rx="16" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="610" y="186" font-size="26" font-weight="700">四步算清楚</text>
+<text x="610" y="239" font-size="24">① 两框面积：各 100</text>
+<text x="610" y="286" font-size="24">② 交集：6 × 10 = 60</text>
+<text x="610" y="333" font-size="24">③ 并集：100 + 100 − 60</text>
+<text x="646" y="372" font-size="24">= 140（重叠只算一次）</text>
+<rect x="610" y="399" width="424" height="66" rx="11" fill="#dcefe3"/>
+<text x="822" y="440" font-size="27" font-weight="700" text-anchor="middle">④ IoU = 60 / 140 ≈ 0.4286</text>
+<text x="610" y="504" font-size="23">若匹配门槛为 0.5：这对框未达标。</text>
+<text x="610" y="536" font-size="23">这是几何比较，不是模型的预测分数。</text>
+
+<rect x="44" y="584" width="1012" height="91" rx="14" fill="#e6f2eb" stroke="#cedcd5"/>
+<text x="66" y="622" font-size="25" font-weight="700">评价要一对一：同一只羊，不能被重复记成多次正确检测。</text>
+<text x="66" y="656" font-size="23">两个预测都围住一只羊，最多记 1 个正确；还需满足类别与规定的匹配规则。</text>
+</g></svg>

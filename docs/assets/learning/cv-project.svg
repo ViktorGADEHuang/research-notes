@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">小项目：先检查一帧记录，再统计图像位置</title><desc id="desc">一帧宽100高80的图像里，前两个合法框中心为20,20和75,35像素；第三框超出边界被拒绝。有效中心均值47.5,27.5像素，不表示真实羊群三维重心。</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="40" y="60" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">小项目：先检查一帧记录，再统计图像位置</text>
+<text x="40" y="106" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">手工构造的框记录 · 时间年龄 0.1 s · 本例接受范围 0～0.2 s</text>
+<text x="60" y="157" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">图像边界：100 × 80 px</text>
+<rect x="60" y="180" width="500" height="400" rx="12" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<path d="M310 180 V580" stroke="#b6cfc2" stroke-width="2" stroke-dasharray="7 7"/>
+<text x="309" y="610" font-size="23" font-weight="400" fill="#23463b" text-anchor="middle">中线 u = 50</text>
+<rect x="110" y="230" width="100" height="100" rx="12" fill="#e6f2eb" stroke="#367660" stroke-width="2"/>
+<circle cx="160" cy="280" r="6" fill="#23463b"/>
+<text x="114" y="220" font-size="23" font-weight="700" fill="#23463b" text-anchor="start">记录 1</text>
+<rect x="360" y="280" width="150" height="150" rx="12" fill="#e6f2eb" stroke="#367660" stroke-width="2"/>
+<circle cx="435" cy="355" r="6" fill="#23463b"/>
+<text x="364" y="270" font-size="23" font-weight="700" fill="#23463b" text-anchor="start">记录 2</text>
+<rect x="535" y="230" width="75" height="100" rx="12" fill="none" stroke="#b45545" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="532" y="361" font-size="22" font-weight="700" fill="#a34537" text-anchor="start">3：越界</text>
+<rect x="659" y="180" width="401" height="184" rx="12" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="682" y="225" font-size="23" font-weight="700" fill="#23463b" text-anchor="start">1：中心 (20, 20) → 左半区</text>
+<text x="682" y="275" font-size="23" font-weight="700" fill="#23463b" text-anchor="start">2：中心 (75, 35) → 右半区</text>
+<text x="682" y="325" font-size="22" font-weight="700" fill="#a34537" text-anchor="start">3：右边界 110 &gt; 100 → 拒绝</text>
+<rect x="659" y="393" width="401" height="187" rx="12" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="682" y="438" font-size="25" font-weight="700" fill="#23463b" text-anchor="start">有效框：2；左 / 右：1 / 1</text>
+<text x="682" y="486" font-size="25" font-weight="700" fill="#23463b" text-anchor="start">均值：(47.5, 27.5) px</text>
+<text x="682" y="535" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">只统计通过检查的框中心</text>
+<text x="40" y="663" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">框在图像内 ≠ 框里一定是羊；图像中的中心 ≠ 已知真实三维位置。</text>
+</g></svg>
