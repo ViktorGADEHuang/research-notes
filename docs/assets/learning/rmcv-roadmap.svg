@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
-<title id="title">rm.cv.fans：先补基础，再读真实代码</title><desc id="desc">按编号阅读八课。仓库导航之后学习语法、所有权、图像和矩阵，最后阅读参数模块并完成独立记录。</desc>
+<title id="title">rm.cv.fans：先补基础，再读真实代码</title><desc id="desc">先按编号完成基础八课，认识语法、所有权、图像、矩阵和参数。随后进入第九至十四课，精读C++语法与通用视觉方法。</desc>
 <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#367660"/></marker></defs>
 <rect width="1100" height="680" rx="22" fill="#fff"/>
 <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
 <text x="42" y="59" font-size="31" fill="#23463b" font-weight="700" text-anchor="start">rm.cv.fans：先补基础，再读真实代码</text>
-<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">按编号 01 → 08 阅读 · 一次只解决一个问题 · 无需先运行原工程</text>
+<text x="42" y="105" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">先读基础 01 → 08 · 再读源码专题 09 → 14 · 无需运行原工程</text>
 <rect x="42" y="155" width="236" height="165" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
 <text x="62" y="195" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">01 仓库</text>
 <text x="62" y="235" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">认识文件职责</text>
@@ -37,5 +37,6 @@
 <text x="842" y="405" font-size="25" fill="#23463b" font-weight="700" text-anchor="start">08 阅读</text>
 <text x="842" y="445" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">找证据、写记录</text>
 <text x="842" y="479" font-size="22" fill="#5d7269" font-weight="400" text-anchor="start">复述数据去向</text>
-<text x="44" y="619" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">源码事实有固定版本链接；本站小程序另行编写，明确输入、假设和输出。</text>
+<text x="44" y="593" font-size="24" fill="#23463b" font-weight="400" text-anchor="start">09～11：C++ 语法精读 · 12～14：OpenCV、插值与视觉方法</text>
+<text x="44" y="640" font-size="23" fill="#5d7269" font-weight="400" text-anchor="start">每个例子都说明输入、假设和输出；源码事实链接到固定版本。</text>
 </g></svg>

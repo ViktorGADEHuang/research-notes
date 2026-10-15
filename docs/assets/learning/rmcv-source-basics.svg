@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">读一个类：先找类型，再找对象与接口</title><desc id="desc">头文件描述类型和接口，构造函数建立初始状态，成员函数操作对象，const成员函数提供受限制的只读访问。</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">读一个类：先找类型，再找对象与接口</text>
+<text x="42" y="105" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">语法阅读地图 · 类型像设计图，对象是按设计图创建的一份实例</text>
+<rect x="44" y="160" width="302" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="200" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">头文件与命名空间</text>
+<text x="64" y="243" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">防止重复包含</text>
+<text x="64" y="279" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">为名字分组</text>
+<rect x="399" y="160" width="302" height="155" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="419" y="200" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">类与构造函数</text>
+<text x="419" y="243" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">定义数据和接口</text>
+<text x="419" y="279" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">初始化成员状态</text>
+<rect x="754" y="160" width="302" height="155" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="774" y="200" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">创建对象并调用</text>
+<text x="774" y="243" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">每份对象有状态</text>
+<text x="774" y="279" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">通过接口访问成员</text>
+<path d="M358 238 L385 238" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<path d="M713 238 L740 238" stroke="#367660" stroke-width="3" fill="none" marker-end="url(#a)"/>
+<rect x="44" y="388" width="478" height="165" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="428" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">接口：能怎样使用</text>
+<text x="64" y="471" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">public：对外开放的操作</text>
+<text x="64" y="507" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">const 成员函数：限制自身修改</text>
+<rect x="578" y="388" width="478" height="165" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="428" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">内部：怎样保存数据</text>
+<text x="598" y="471" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">private：类内部的实现细节</text>
+<text x="598" y="507" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">初始化列表：先初始化再进函数体</text>
+<text x="44" y="638" font-size="24" font-weight="400" fill="#23463b" text-anchor="start">explicit 限制隐式转换；尾置返回类型仍在声明类型，不是延迟执行。</text>
+</g></svg>

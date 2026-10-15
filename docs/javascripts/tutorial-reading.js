@@ -54,7 +54,9 @@
         "tf2", "urdf", "mujoco", "localization", "planning", "quadrupeds", "project"] },
       { key: "rm-cv-fans", label: "rm.cv.fans 阅读入门", chapters: [
         "repository", "cpp-basics", "cpp-types", "images", "math",
-        "configuration", "estimation", "reading-lab"] }
+        "configuration", "estimation", "reading-lab", "cpp-source-basics",
+        "cpp-source-templates", "cpp-source-objects", "opencv-reading",
+        "vision-sampling", "vision-algorithms"] }
     ];
     const path = window.location.pathname.split("/").filter(Boolean);
     const currentCourse = courses.find(item => path.includes(item.key));

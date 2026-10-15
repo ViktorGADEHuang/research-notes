@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">cv::Mat：矩阵头与像素存储分开理解</title><desc id="desc">矩阵头描述行列和类型。原图与ROI共享像素，而clone保存独立副本。修改ROI后原图改变，副本保留原值。</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">cv::Mat：矩阵头与像素存储分开理解</text>
+<text x="42" y="105" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">合成两行三列灰度图 · ROI 选择右侧两列 · 不涉及相机或识别模型</text>
+<rect x="44" y="155" width="478" height="190" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="195" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">先检查数据描述</text>
+<text x="64" y="238" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">rows=2，cols=3</text>
+<text x="64" y="274" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">CV_8UC1：8 位无符号 / 单通道</text>
+<text x="64" y="310" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">位深 depth 不表示米制深度</text>
+<rect x="578" y="155" width="478" height="190" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="195" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">再检查访问顺序</text>
+<text x="598" y="238" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">at&lt;类型&gt;(行, 列)</text>
+<text x="598" y="274" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">Size(宽, 高)</text>
+<text x="598" y="310" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">Rect(x, y, 宽, 高)</text>
+<rect x="44" y="397" width="1012" height="174" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="68" y="438" font-size="28" font-weight="700" fill="#23463b" text-anchor="start">通过 ROI 把对应像素从 60 改成 90</text>
+<text x="68" y="490" font-size="28" font-weight="700" fill="#23463b" text-anchor="start">原图：90</text>
+<text x="370" y="490" font-size="28" font-weight="700" fill="#23463b" text-anchor="start">ROI 视图：90</text>
+<text x="710" y="490" font-size="28" font-weight="700" fill="#23463b" text-anchor="start">clone 副本：60</text>
+<text x="68" y="538" font-size="24" font-weight="400" fill="#23463b" text-anchor="start">视图共享数据；独立副本复制的是像素，而不仅是矩阵头。</text>
+<text x="44" y="644" font-size="24" font-weight="400" fill="#23463b" text-anchor="start">数值类型转换 ≠ 自动归一化；三通道 ≠ 已经规定 BGR / RGB 顺序。</text>
+</g></svg>

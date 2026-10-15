@@ -126,6 +126,12 @@ nav:
           - 06 · 参数与共享对象: vision/rm-cv-fans/configuration.md
           - 07 · 测量与滤波: vision/rm-cv-fans/estimation.md
           - 08 · 带着问题读源码: vision/rm-cv-fans/reading-lab.md
+          - 09 · 头文件、类与接口精读: vision/rm-cv-fans/cpp-source-basics.md
+          - 10 · 模板、转发与 Lambda: vision/rm-cv-fans/cpp-source-templates.md
+          - 11 · 容器、对象与锁: vision/rm-cv-fans/cpp-source-objects.md
+          - 12 · OpenCV 代码精读: vision/rm-cv-fans/opencv-reading.md
+          - 13 · 图像采样与插值: vision/rm-cv-fans/vision-sampling.md
+          - 14 · 源码中的视觉方法: vision/rm-cv-fans/vision-algorithms.md
 
   - 编程技术:
       - 编程学习概览: programming/index.md

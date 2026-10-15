@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">模板、转发与 Lambda：分别解决不同问题</title><desc id="desc">模板按类型等参数生成具体版本；参数包接收可变数量实参；转发保留值类别；Lambda是一种可调用对象。</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">模板、转发与 Lambda：分别解决不同问题</text>
+<text x="42" y="105" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">先做小数字例子，再认源码写法；不要把所有尖括号都读成比较符号</text>
+<rect x="44" y="156" width="478" height="190" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="196" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">模板与参数包</text>
+<text x="64" y="239" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">T：一种待确定的类型</text>
+<text x="64" y="275" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">Ts...：一组待确定的类型</text>
+<text x="64" y="311" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">sizeof...(Ts)：参数包长度</text>
+<rect x="578" y="156" width="478" height="190" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="196" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">if constexpr</text>
+<text x="598" y="239" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">编译时选择分支</text>
+<text x="598" y="275" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">依赖模板参数的分支按规则实例化</text>
+<text x="598" y="311" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">不同于运行时根据输入判断</text>
+<rect x="44" y="393" width="478" height="190" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="433" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">转发引用与 std::forward</text>
+<text x="64" y="476" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">只在满足条件的模板推导中成立</text>
+<text x="64" y="512" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">传递实参原来的值类别</text>
+<text x="64" y="548" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">不等于每次都复制或都移动</text>
+<rect x="578" y="393" width="478" height="190" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="433" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">Lambda 与 variant</text>
+<text x="598" y="476" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">Lambda：小型可调用对象</text>
+<text x="598" y="512" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">variant：当前保存一种候选类型</text>
+<text x="598" y="548" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">visit：按所存类型调用访问器</text>
+<text x="44" y="652" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">先问“类型何时确定、数据由谁持有、调用时发生什么”，再逐词读长表达式。</text>
+</g></svg>

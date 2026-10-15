@@ -6,7 +6,7 @@
 
 !!! tip "想学着阅读一个真实 C++ 视觉项目？"
 
-    新增 [rm.cv.fans 零基础阅读课](rm-cv-fans/index.md)：8 课串起仓库导航、C++ 语法、图像、矩阵、参数和测量估计。先用带注释的小例子补基础，再阅读真实的通用配置模块；不要求安装或运行原工程。
+    [rm.cv.fans 零基础阅读课](rm-cv-fans/index.md)已有 14 课，重点增加 [C++ 源码语法精读](rm-cv-fans/cpp-source-basics.md)、[OpenCV 图像代码](rm-cv-fans/opencv-reading.md)、[采样与插值](rm-cv-fans/vision-sampling.md)及[源码算法地图](rm-cv-fans/vision-algorithms.md)。逐词解释语法，用小数字讲原理，再对照真实文件；不要求安装或运行原工程。
 
 
 ## 看图梳理

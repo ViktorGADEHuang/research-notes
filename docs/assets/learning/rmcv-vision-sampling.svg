@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">双线性插值：先横向混合，再纵向混合</title><desc id="desc">四角灰度为零、一百、一百、二百。在横向四分之一纵向二分之一位置，上边混合为二十五，下边一百二十五，再混合为七十五。</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">双线性插值：先横向混合，再纵向混合</text>
+<text x="42" y="105" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">独立小图内采样 · u=0.25，v=0.5 · 不是某个缩放接口的整图复现</text>
+<rect x="44" y="155" width="478" height="395" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<circle cx="153" cy="230" r="9" fill="#367660"/>
+<text x="153" y="206" font-size="29" font-weight="700" fill="#23463b" text-anchor="middle">0</text>
+<circle cx="411" cy="230" r="9" fill="#367660"/>
+<text x="411" y="206" font-size="29" font-weight="700" fill="#23463b" text-anchor="middle">100</text>
+<circle cx="153" cy="471" r="9" fill="#367660"/>
+<text x="153" y="447" font-size="29" font-weight="700" fill="#23463b" text-anchor="middle">100</text>
+<circle cx="411" cy="471" r="9" fill="#367660"/>
+<text x="411" y="447" font-size="29" font-weight="700" fill="#23463b" text-anchor="middle">200</text>
+<path d="M153 230 H411 V471 H153 Z" fill="none" stroke="#8caba0" stroke-width="2"/>
+<path d="M217.5 230 V471 M153 350.5 H411" fill="none" stroke="#8caba0" stroke-width="2" stroke-dasharray="7 7"/>
+<circle cx="217.5" cy="350.5" r="10" fill="#23463b"/>
+<text x="241" y="358" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">采样位置</text>
+<rect x="578" y="155" width="478" height="115" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="195" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">① 上边：横向比例 0.25</text>
+<text x="598" y="238" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">0.75×0 + 0.25×100 = 25</text>
+<rect x="578" y="304" width="478" height="115" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="344" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">② 下边：同样比例</text>
+<text x="598" y="387" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">0.75×100 + 0.25×200 = 125</text>
+<rect x="578" y="453" width="478" height="115" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="598" y="493" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">③ 纵向比例 0.5</text>
+<text x="598" y="536" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">0.5×25 + 0.5×125 = 75</text>
+<text x="44" y="647" font-size="24" font-weight="400" fill="#23463b" text-anchor="start">插值决定“取什么数”；输出网格映射决定“去哪里采样”，两者要分开。</text>
+</g></svg>

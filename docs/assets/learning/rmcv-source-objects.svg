@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">容器保存记录，所有权决定对象能活多久</title><desc id="desc">按名字找容器中的项，检查迭代器是否有效；共享指针拥有对象，弱指针观察对象，互斥锁管理临界区。</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#367660"/></marker></defs>
+<rect width="1100" height="700" rx="22" fill="#fff"/><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<text x="42" y="58" font-size="30" font-weight="700" fill="#23463b" text-anchor="start">容器保存记录，所有权决定对象能活多久</text>
+<text x="42" y="105" font-size="23" font-weight="400" fill="#5d7269" text-anchor="start">三层概念要分清：容器位置、对象寿命、并发访问</text>
+<rect x="44" y="157" width="302" height="160" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="64" y="197" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">容器查找</text>
+<text x="64" y="240" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">find：找到某一项</text>
+<text x="64" y="276" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">end：末尾标志，不可取值</text>
+<rect x="399" y="157" width="302" height="160" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="419" y="197" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">共享所有者</text>
+<text x="419" y="240" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">shared_ptr 持有对象</text>
+<text x="419" y="276" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">最后一位释放后销毁</text>
+<rect x="754" y="157" width="302" height="160" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+<text x="774" y="197" font-size="26" font-weight="700" fill="#23463b" text-anchor="start">弱观察者</text>
+<text x="774" y="240" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">weak_ptr 不维持寿命</text>
+<text x="774" y="276" font-size="23" font-weight="400" fill="#23463b" text-anchor="start">lock() 尝试取得所有权</text>
+<rect x="44" y="387" width="1012" height="176" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+<text x="68" y="431" font-size="28" font-weight="700" fill="#23463b" text-anchor="start">RAII 互斥锁：进入作用域时持锁，离开作用域时自动释放</text>
+<text x="68" y="480" font-size="25" font-weight="400" fill="#23463b" text-anchor="start">锁住注册表查找，不等于已经锁住对象所有字段的读写。</text>
+<text x="68" y="526" font-size="25" font-weight="400" fill="#23463b" text-anchor="start">weak_ptr::lock() 不是 mutex.lock()；名字相同，职责不同。</text>
+<text x="44" y="642" font-size="24" font-weight="400" fill="#23463b" text-anchor="start">原项目的查找表是 unordered_map；教学中使用 map 时会明确说明简化。</text>
+</g></svg>
