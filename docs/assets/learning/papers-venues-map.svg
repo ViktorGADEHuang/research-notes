@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="740" viewBox="0 0 1100 740" role="img" aria-labelledby="title desc">
+  <title id="title">从放牧问题出发，沿三条线读文献</title>
+  <desc id="desc">围绕机器人怎样把羊引到目标区域，从行为与感知、引导与决策、系统与应用三条可以交叉的研究线索查找文献。三个方向并列，不代表先后步骤或期刊排名。</desc>
+  <rect width="1100" height="740" rx="22" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+    <text x="40" y="58" font-size="30" font-weight="700">从放牧问题出发，沿三条线读文献</text>
+    <text x="40" y="103" font-size="23" fill="#5d7269">带着具体问题找论文，再逐步认识相关算法与发表渠道。</text>
+
+    <rect x="100" y="140" width="900" height="76" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="550" y="188" font-size="27" font-weight="700" text-anchor="middle">机器人怎样把羊引到目标区域？</text>
+    <path d="M550 218 L550 244 M202 244 L898 244 M202 244 L202 270 M550 244 L550 270 M898 244 L898 270" fill="none" stroke="#9cb9ab" stroke-width="3"/>
+
+    <rect x="40" y="284" width="324" height="302" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="62" y="330" font-size="27" font-weight="700">01 · 行为与感知</text>
+    <text x="62" y="383" font-size="24">羊群怎样运动？</text>
+    <text x="62" y="424" font-size="24">相机看到了什么？</text>
+    <text x="62" y="478" font-size="23" fill="#367660">关键词</text>
+    <text x="62" y="519" font-size="24">flocking</text>
+    <text x="62" y="560" font-size="24">livestock vision</text>
+
+    <rect x="388" y="284" width="324" height="302" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="410" y="330" font-size="27" font-weight="700">02 · 引导与决策</text>
+    <text x="410" y="383" font-size="24">机器人该去哪里？</text>
+    <text x="410" y="424" font-size="23">规则、规划、控制、学习</text>
+    <text x="410" y="478" font-size="23" fill="#367660">关键词</text>
+    <text x="410" y="519" font-size="24">robotic shepherding</text>
+
+    <rect x="736" y="284" width="324" height="302" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="758" y="330" font-size="27" font-weight="700">03 · 系统与应用</text>
+    <text x="758" y="383" font-size="24">真实环境怎样验证？</text>
+    <text x="758" y="424" font-size="24">传感、执行、任务评价</text>
+    <text x="758" y="478" font-size="23" fill="#367660">关键词</text>
+    <text x="758" y="519" font-size="24">field robotics</text>
+
+    <rect x="40" y="620" width="1020" height="92" rx="14" fill="#fff4d9"/>
+    <text x="62" y="656" font-size="24" font-weight="700">先读相关论文，再查发表渠道。</text>
+    <text x="62" y="693" font-size="23">三个方向可以交叉；图中的编号用于定位，不表示先后步骤或期刊排名。</text>
+  </g>
+</svg>

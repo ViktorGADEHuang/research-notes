@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="740" viewBox="0 0 1100 740" role="img" aria-labelledby="title desc">
+  <title id="title">同一篇论文，要分别问六个问题</title>
+  <desc id="desc">六张卡片区分发表载体、学会组织、检索阅读平台、收录索引、评价指标与目录、全文访问方式。Science 是期刊，SCI 和 SCIE 是索引，不能混为一谈。</desc>
+  <rect width="1100" height="740" rx="22" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+    <text x="40" y="58" font-size="30" font-weight="700">同一篇论文，要分别问六个问题</text>
+    <text x="40" y="103" font-size="23" fill="#5d7269">先分清这些名词在回答什么，再查具体论文的信息。</text>
+
+    <rect x="40" y="140" width="324" height="234" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="62" y="182" font-size="27" font-weight="700">01 · 载体</text>
+    <text x="62" y="226" font-size="23" fill="#367660">论文发表或公开在哪里？</text>
+    <text x="62" y="267" font-size="24">期刊</text>
+    <text x="62" y="305" font-size="24">会议论文集</text>
+    <text x="62" y="343" font-size="24">预印本</text>
+
+    <rect x="388" y="140" width="324" height="234" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="410" y="182" font-size="27" font-weight="700">02 · 组织</text>
+    <text x="410" y="226" font-size="23" fill="#367660">谁组织学术活动？</text>
+    <text x="410" y="267" font-size="24">IEEE、ACM、CCF</text>
+    <text x="410" y="305" font-size="23">这些名称指学术组织</text>
+    <text x="410" y="343" font-size="23">另查具体出版职责</text>
+
+    <rect x="736" y="140" width="324" height="234" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="758" y="182" font-size="27" font-weight="700">03 · 平台</text>
+    <text x="758" y="226" font-size="23" fill="#367660">从哪里检索或阅读？</text>
+    <text x="758" y="267" font-size="24">IEEE Xplore</text>
+    <text x="758" y="305" font-size="24">Web of Science</text>
+    <text x="758" y="343" font-size="23">查记录或进入论文页</text>
+
+    <rect x="40" y="398" width="324" height="234" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="62" y="440" font-size="27" font-weight="700">04 · 索引</text>
+    <text x="62" y="484" font-size="23" fill="#367660">是否被数据库收录？</text>
+    <text x="62" y="525" font-size="24">SCIE</text>
+    <text x="62" y="563" font-size="24">Ei Compendex</text>
+    <text x="62" y="601" font-size="23">核实范围与收录年份</text>
+
+    <rect x="388" y="398" width="324" height="234" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="410" y="440" font-size="27" font-weight="700">05 · 指标与目录</text>
+    <text x="410" y="484" font-size="23" fill="#367660">采用哪一种评价口径？</text>
+    <text x="410" y="525" font-size="23">JIF / JCR 分区</text>
+    <text x="410" y="563" font-size="23">中科院分区 / CCF 推荐</text>
+    <text x="410" y="601" font-size="23">评价对象与口径不同</text>
+
+    <rect x="736" y="398" width="324" height="234" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="758" y="440" font-size="27" font-weight="700">06 · 访问方式</text>
+    <text x="758" y="484" font-size="23" fill="#367660">全文怎样获取？</text>
+    <text x="758" y="525" font-size="24">开放获取（OA）</text>
+    <text x="758" y="563" font-size="24">机构订阅等</text>
+    <text x="758" y="601" font-size="23">看具体论文与访问权限</text>
+
+    <rect x="40" y="656" width="1020" height="56" rx="12" fill="#fff4d9"/>
+    <text x="62" y="692" font-size="24" font-weight="700">Science 是期刊；SCI / SCIE 是索引。两者不是同一个东西。</text>
+  </g>
+</svg>

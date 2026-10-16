@@ -26,7 +26,7 @@
 .md-header { box-shadow: 0 1px 0 rgba(255,255,255,.12); }
 .md-tabs { border-top: 1px solid rgba(255,255,255,.09); }
 .md-typeset { line-height: 1.9; font-size: .82rem; }
-.md-typeset h1 { font-weight: 750; letter-spacing: -.035em; color: var(--md-default-fg-color); }
+.md-typeset h1 { font-weight: 750; letter-spacing: -.035em; color: var(--md-default-fg-color); text-wrap: balance; }
 .md-typeset h2 { font-weight: 700; letter-spacing: -.02em; margin-top: 2.1em; line-height: 1.45; }
 .md-typeset h3 { font-weight: 650; }
 .md-typeset > p { max-width: 78ch; }
@@ -89,6 +89,9 @@
 .md-typeset .arithmatex mjx-container { max-width: 100%; }
 .md-typeset .rl-sections > ul > li { background: var(--research-surface); }
 .md-typeset .md-button { border-radius: 7px; font-size: .72rem; }
+[data-md-color-scheme="slate"] .md-typeset .md-button { color: var(--research-accent); border-color: var(--research-accent); }
+[data-md-color-scheme="slate"] .md-typeset .md-button--primary { background: var(--research-accent); color: #192d29; }
+[data-md-color-scheme="slate"] .md-typeset .md-button:is(:hover, :focus) { background: #bee7d5; border-color: #bee7d5; color: #192d29; }
 
 /* Precise teaching illustrations and one-step learning calculators. */
 .md-typeset img.rl-figure { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--research-border); margin: 1.1rem 0; }
@@ -209,7 +212,7 @@
 /* 课程入口和正文保持同一套安静的阅读层次。 */
 .md-typeset .course-intro { padding: 1rem 1.3rem; margin: 0 0 1.7rem; border: 1px solid var(--research-border); border-left: 4px solid var(--research-accent); border-radius: 12px; background: var(--research-surface); }
 .md-typeset .course-label { margin-top: .1rem; color: var(--research-accent); font-size: .64rem; font-weight: 650; letter-spacing: .05em; }
-.course-intro .md-button { margin-block: .4rem; }
+.course-intro .md-button { margin-block: .4rem; margin-inline-end: .35rem; }
 .md-typeset .course-stages > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; list-style: none; padding: 0; margin: .8rem 0 1.8rem; }
 .md-typeset .course-stages > ul > li { display: flex; flex-direction: column; min-width: 0; margin: 0; padding: .9rem; border: 1px solid var(--research-border); border-radius: 10px; background: var(--research-card); font-size: .71rem; }
 .md-typeset .course-stages p { margin-block: .35rem; }

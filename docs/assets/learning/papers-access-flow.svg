@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="740" viewBox="0 0 1100 740" role="img" aria-labelledby="title desc">
+  <title id="title">找到原文，再核对版本</title>
+  <desc id="desc">用标题、作者和 DOI 查找出版社论文页，再分别检查开放获取全文、学校图书馆已订购的范围、作者公开稿或预印本。获取后核对标题、作者、年份及版本，记录 DOI 和引用。不同版本可能有差异，链接不一定提供 PDF。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#367660"/></marker>
+  </defs>
+  <rect width="1100" height="740" rx="22" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#23463b">
+    <text x="40" y="58" font-size="30" font-weight="700">找到原文，再核对版本</text>
+    <text x="40" y="103" font-size="23" fill="#5d7269">先确认是哪一篇论文，再检查可用的全文获取方式。</text>
+
+    <rect x="260" y="136" width="580" height="62" rx="12" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="550" y="176" font-size="25" font-weight="700" text-anchor="middle">标题、作者、DOI</text>
+    <path d="M550 200 L550 230" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="260" y="244" width="580" height="62" rx="12" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="550" y="284" font-size="25" font-weight="700" text-anchor="middle">出版社论文页</text>
+
+    <path d="M550 308 L550 330 M202 330 L898 330 M202 330 L202 358 M550 330 L550 358 M898 330 L898 358" fill="none" stroke="#367660" stroke-width="3"/>
+    <path d="M202 350 L202 365" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M550 350 L550 365" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M898 350 L898 365" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="40" y="380" width="324" height="128" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="202" y="423" font-size="25" font-weight="700" text-anchor="middle">开放获取全文</text>
+    <text x="202" y="467" font-size="23" text-anchor="middle">查看页面的全文入口</text>
+
+    <rect x="388" y="380" width="324" height="128" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="550" y="423" font-size="25" font-weight="700" text-anchor="middle">学校图书馆</text>
+    <text x="550" y="467" font-size="23" text-anchor="middle">核实已订购范围与登录</text>
+
+    <rect x="736" y="380" width="324" height="128" rx="14" fill="#f4f8f5" stroke="#cedcd5" stroke-width="2"/>
+    <text x="898" y="423" font-size="25" font-weight="700" text-anchor="middle">作者公开稿 / 预印本</text>
+    <text x="898" y="467" font-size="23" text-anchor="middle">查看作者页或公开仓库</text>
+
+    <path d="M202 510 L202 536 L898 536 L898 510 M550 510 L550 536 L550 562" fill="none" stroke="#367660" stroke-width="3"/>
+    <path d="M550 552 L550 570" fill="none" stroke="#367660" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="100" y="580" width="900" height="88" rx="14" fill="#e6f2eb" stroke="#cedcd5" stroke-width="2"/>
+    <text x="550" y="617" font-size="25" font-weight="700" text-anchor="middle">核对标题、作者、年份、版本</text>
+    <text x="550" y="650" font-size="23" text-anchor="middle">记录 DOI 与引用信息</text>
+    <text x="40" y="710" font-size="23" fill="#5d7269">不同版本的内容可能有差异；论文页可能提供网页全文，也可能提供 PDF。</text>
+  </g>
+</svg>

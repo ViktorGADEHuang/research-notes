@@ -173,7 +173,10 @@ nav:
           - 15 · 放牧数据处理小项目: programming/cpp/project.md
 
   - 论文阅读:
-      - 论文阅读记录: papers/index.md
+      - 阅读方法与记录模板: papers/index.md
+      - 01 · 期刊、会议与分区入门: papers/publication-basics.md
+      - 02 · 机器人与放牧相关期刊、会议: papers/venues.md
+      - 03 · 检索与获取论文全文: papers/access.md
 
   - 开源资料: opensource/index.md
 
